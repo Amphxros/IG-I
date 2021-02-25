@@ -65,3 +65,31 @@ void Poligono::render(glm::dmat4 const& modelViewMat) const
 		glColor4d(1.0, 1.0, 1.0, 1.0);
 	}
 }
+
+
+TrianguloSierpinsky::TrianguloSierpinsky(GLdouble rd,GLdouble numP)
+{
+	mMesh= Mesh::generaSierpinski(rd, numP);
+}
+
+TrianguloSierpinsky::~TrianguloSierpinsky()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void TrianguloSierpinsky::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+		glPointSize(2);
+		glColor3d(mColor.r, mColor.g, mColor.b);
+
+		mMesh->render();
+
+		//default
+		glPointSize(1);
+		glColor4d(1.0, 1.0, 1.0, 1.0);
+	}
+}

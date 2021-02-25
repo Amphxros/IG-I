@@ -19,7 +19,7 @@ public:
 	Abs_Entity& operator=(const Abs_Entity& e) = delete;  // no copy assignment
 
 	virtual void render(glm::dmat4 const& modelViewMat) const = 0;  // abstract method
-
+	void setColor(glm::dvec3 color) { mColor = glm::dvec4( color.r, color.g,color.b,1 ); }
 	// modeling matrix
 	glm::dmat4 const& modelMat() const { return mModelMat; };
 	void setModelMat(glm::dmat4 const& aMat) { mModelMat = aMat; };
@@ -50,7 +50,14 @@ public:
 	explicit Poligono(GLdouble numL, GLdouble rd);
 	~Poligono();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
-	void setColor(glm::dvec3 color) { mColor = glm::dvec4( color.r, color.g,color.b,1 ); }
+};
+
+class TrianguloSierpinsky : public Abs_Entity
+{
+public:
+	explicit TrianguloSierpinsky(GLdouble rd, GLdouble numP);
+	~TrianguloSierpinsky();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
 

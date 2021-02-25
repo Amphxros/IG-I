@@ -86,3 +86,39 @@ Mesh* Mesh::generaPoligono(GLuint numL, GLdouble rd)
 	
 	return mesh;
 }
+
+Mesh* Mesh::generaSierpinski(GLdouble rd, GLuint numP)
+{
+	Mesh* mesh = new Mesh();
+	mesh->mPrimitive = GL_POINTS;
+	mesh->mNumVertices = numP;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+
+	Mesh * triangulo = generaPoligono(3, rd); //triangulo de inicio
+
+	//pasamos los vertices a nuestra mesh
+	for (int i = 0; i < triangulo->mNumVertices; i++)
+	{
+		mesh->vVertices.emplace_back(triangulo->vVertices[i]);
+	}
+	//calculamos el resto de puntos
+	for (int i = 2; i < mesh->mNumVertices; i++)
+	{
+		glm::dvec3 pA = mesh->vVertices[i]; //punto A desde donde empezamos a calcular
+		glm::dvec3 pB = mesh->vVertices[rand() % 3]; //punto B random
+	
+		glm::dvec3 pM; //punto medio
+		pM.x= (pA.x + pB.x )/2;
+		pM.y = (pA.y + pB.y) / 2;
+		pM.z = (pA.z + pB.z) / 2;
+
+		mesh->vVertices.emplace_back(pM );
+
+	}
+	
+	//borramos el triangulo porque ya no nos interesa
+	delete triangulo;
+	triangulo = nullptr;
+
+	return mesh;
+}

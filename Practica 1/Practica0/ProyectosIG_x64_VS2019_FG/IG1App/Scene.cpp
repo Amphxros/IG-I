@@ -24,6 +24,10 @@ void Scene::init()
 	Poligono* circ = new Poligono(100, 150);
 	circ->setColor({1, 0, 1});
 	gObjects.push_back(circ);
+
+	TrianguloSierpinsky* triSierp = new TrianguloSierpinsky(300, 10000);
+	triSierp->setColor({ 1, 1, 0 });
+	gObjects.push_back(triSierp);
 }
 //-------------------------------------------------------------------------
 void Scene::free() 
