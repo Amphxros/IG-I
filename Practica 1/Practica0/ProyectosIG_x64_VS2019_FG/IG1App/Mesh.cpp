@@ -73,7 +73,7 @@ Mesh* Mesh::generaPoligono(GLuint numL, GLdouble rd)
 	mesh->vVertices.reserve(mesh->mNumVertices);
 	
 	glm::dvec2 centro = { 0.0, 0.0 };
-	double ang=90;
+	double ang= 3.1416 / 2;
 	for(int i=0; i < mesh->mNumVertices; i++)
 	{		
 		double x,y;
