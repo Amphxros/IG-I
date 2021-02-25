@@ -37,5 +37,31 @@ void EjesRGB::render(dmat4 const& modelViewMat) const
 		glLineWidth(1);
 	}
 }
-//-------------------------------------------------------------------------
- 
+//---------------------------------------------------------------------
+
+Poligono::Poligono(GLdouble numL, GLdouble rd)
+{
+	mMesh = Mesh::generaPoligono(numL, rd);
+}
+
+Poligono::~Poligono()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void Poligono::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+		glLineWidth(2);
+		glColor3d(mColor.r, mColor.g, mColor.b);
+
+		mMesh->render();
+
+		//default
+		glLineWidth(1);
+		glColor4d(1.0, 1.0, 1.0, 1.0);
+	}
+}

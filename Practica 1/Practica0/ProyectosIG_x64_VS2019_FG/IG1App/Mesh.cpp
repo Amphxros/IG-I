@@ -1,6 +1,7 @@
 #include "Mesh.h"
 #include "CheckML.h"
 #include <fstream>
+#include<glm.hpp>
 using namespace std;
 using namespace glm;
 
@@ -63,5 +64,25 @@ Mesh * Mesh::createRGBAxes(GLdouble l)
  
   return mesh;
 }
-//-------------------------------------------------------------------------
 
+Mesh* Mesh::generaPoligono(GLuint numL, GLdouble rd)
+{
+	Mesh* mesh = new Mesh();
+	mesh->mPrimitive = GL_LINE_LOOP;
+	mesh->mNumVertices = numL;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	
+	glm::dvec2 centro = { 0.0, 0.0 };
+	double ang=90;
+	for(int i=0; i < mesh->mNumVertices; i++)
+	{		
+		double x,y;
+		ang += (2 * 3.1416)/  numL ;
+		x = centro.x + rd * cos(ang);
+		y = centro.y + rd * sin(ang);
+		
+		mesh->vVertices.emplace_back(x, y, 0.0);
+	}
+	
+	return mesh;
+}

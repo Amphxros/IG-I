@@ -16,7 +16,14 @@ void Scene::init()
 
     // Graphics objects (entities) of the scene
 	gObjects.push_back(new EjesRGB(400.0));
-	
+
+	Poligono* p = new Poligono(3, 300);
+	p->setColor({1,1,0});
+	gObjects.push_back(p);
+
+	Poligono* circ = new Poligono(100, 150);
+	circ->setColor({1, 0, 1});
+	gObjects.push_back(circ);
 }
 //-------------------------------------------------------------------------
 void Scene::free() 
@@ -53,5 +60,3 @@ void Scene::render(Camera const& cam) const
 	}
 }
 //-------------------------------------------------------------------------
-
-

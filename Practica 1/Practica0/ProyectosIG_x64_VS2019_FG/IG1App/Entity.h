@@ -28,7 +28,8 @@ protected:
 
 	Mesh* mMesh = nullptr;   // the mesh
 	glm::dmat4 mModelMat;    // modeling matrix
-	
+	glm::dvec4 mColor;    // modeling matrix
+
 	// transfers modelViewMat to the GPU
 	virtual void upload(glm::dmat4 const& mModelViewMat) const; 
 };
@@ -42,6 +43,15 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
-//-------------------------------------------------------------------------
+class Poligono : public Abs_Entity
+{
+
+public:
+	explicit Poligono(GLdouble numL, GLdouble rd);
+	~Poligono();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+	void setColor(glm::dvec3 color) { mColor = glm::dvec4( color.r, color.g,color.b,1 ); }
+};
+
 
 #endif //_H_Entities_H_
