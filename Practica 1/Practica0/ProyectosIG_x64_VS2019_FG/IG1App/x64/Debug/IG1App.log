@@ -1,1 +1,2 @@
-﻿LINK : fatal error LNK1168: no se puede abrir C:\Users\ampac\Documents\git_Repositorios\UCM_Repos\IG-I\Practica 1\Practica0\ProyectosIG_x64_VS2019_FG\bin\IG1AppDebug.exe para escritura
+﻿  IG1App.cpp
+  IG1App.vcxproj -> C:\Users\ampac\Documents\git_Repositorios\UCM_Repos\IG-I\Practica 1\Practica0\ProyectosIG_x64_VS2019_FG\bin\IG1AppDebug.exe

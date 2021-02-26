@@ -19,17 +19,17 @@ public:
 	Abs_Entity& operator=(const Abs_Entity& e) = delete;  // no copy assignment
 
 	virtual void render(glm::dmat4 const& modelViewMat) const = 0;  // abstract method
-	void setColor(glm::dvec3 color) { mColor = glm::dvec4( color.r, color.g,color.b,1 ); }
+	virtual void update() {}
 	// modeling matrix
 	glm::dmat4 const& modelMat() const { return mModelMat; };
 	void setModelMat(glm::dmat4 const& aMat) { mModelMat = aMat; };
-	
+	void setColor(glm::dvec3 color) { mColor = glm::dvec4(color.r, color.g, color.b, 1); }	
 protected:
 
 	Mesh* mMesh = nullptr;   // the mesh
 	glm::dmat4 mModelMat;    // modeling matrix
-	glm::dvec4 mColor;    // modeling matrix
 
+	glm::dvec4 mColor;    // modeling matrix
 	// transfers modelViewMat to the GPU
 	virtual void upload(glm::dmat4 const& mModelViewMat) const; 
 };
@@ -49,7 +49,9 @@ class Poligono : public Abs_Entity
 public:
 	explicit Poligono(GLdouble numL, GLdouble rd);
 	~Poligono();
+	
 	virtual void render(glm::dmat4 const& modelViewMat) const;
+
 };
 
 class TrianguloSierpinsky : public Abs_Entity
@@ -57,8 +59,28 @@ class TrianguloSierpinsky : public Abs_Entity
 public:
 	explicit TrianguloSierpinsky(GLdouble rd, GLdouble numP);
 	~TrianguloSierpinsky();
+
 	virtual void render(glm::dmat4 const& modelViewMat) const;
+	
 };
 
+class TrianguloRGB : public Abs_Entity
+{
+public:
+	explicit TrianguloRGB(GLdouble rd);
+	~TrianguloRGB();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+	virtual void update();
+};
+
+class RectanguloRGB : public Abs_Entity
+{
+public:
+	explicit RectanguloRGB(GLdouble w, GLdouble h);
+	~RectanguloRGB();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+	
+
+};
 
 #endif //_H_Entities_H_

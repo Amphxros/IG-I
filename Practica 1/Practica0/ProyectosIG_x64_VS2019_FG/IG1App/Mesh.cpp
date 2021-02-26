@@ -73,7 +73,9 @@ Mesh* Mesh::generaPoligono(GLuint numL, GLdouble rd)
 	mesh->vVertices.reserve(mesh->mNumVertices);
 	
 	glm::dvec2 centro = { 0.0, 0.0 };
-	double ang= 3.1416 / 2;
+	double ang= 3.1416 / 2; //angulo inicial 
+
+	//bucle que calcula n puntos 
 	for(int i=0; i < mesh->mNumVertices; i++)
 	{		
 		double x,y;
@@ -96,7 +98,7 @@ Mesh* Mesh::generaSierpinski(GLdouble rd, GLuint numP)
 
 	Mesh * triangulo = generaPoligono(3, rd); //triangulo de inicio
 
-	//pasamos los vertices a nuestra mesh
+	//pasamos los vertices del triangulo a nuestra mesh
 	for (int i = 0; i < triangulo->mNumVertices; i++)
 	{
 		mesh->vVertices.emplace_back(triangulo->vVertices[i]);
@@ -119,6 +121,53 @@ Mesh* Mesh::generaSierpinski(GLdouble rd, GLuint numP)
 	//borramos el triangulo porque ya no nos interesa
 	delete triangulo;
 	triangulo = nullptr;
+
+	return mesh;
+}
+
+Mesh* Mesh::generaTrianguloRGB(GLdouble rd)
+{
+	Mesh * mesh = generaPoligono(3, rd); //generamos un triangulo
+	mesh->mPrimitive = GL_TRIANGLES;
+	mesh->vColors.reserve(mesh->mNumVertices);
+		
+	// vector de colores
+	mesh->vColors.emplace_back(1.0,0.0,0.0,1.0);
+	mesh->vColors.emplace_back(0.0,1.0,0.0,1.0);
+	mesh->vColors.emplace_back(0.0,0.0,1.0,1.0);
+
+	return mesh; 
+}
+
+Mesh* Mesh::generaRectangulo(GLdouble w, GLdouble h)
+{
+	//w/2 y h/2 para que este centrado
+	GLdouble w_ = w / 2;
+	GLdouble h_ = h / 2;
+	
+	Mesh* mesh = new Mesh();
+	mesh->mPrimitive = GL_TRIANGLE_STRIP;
+	mesh->mNumVertices = 4;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+
+	//como la primitiva es triangle strip tenemos que dar los vertices en diferente orden
+	mesh->vVertices.emplace_back(-w_, h_, 0.0);
+	mesh->vVertices.emplace_back(-w_, -h_, 0.0);
+	mesh->vVertices.emplace_back(w_, h_, 0.0);
+	mesh->vVertices.emplace_back(w_, -h_, 0.0);
+
+	return mesh;
+}
+
+Mesh* Mesh::generaRectanguloRGB(GLdouble w, GLdouble h)
+{
+	Mesh* mesh = generaRectangulo(w, h);
+	mesh->vColors.reserve(mesh->mNumVertices);
+
+	mesh->vColors.emplace_back(0.0, 0.0, 1.0, 1.0);
+	mesh->vColors.emplace_back(1.0, 0.0, 0.0, 1.0);
+	mesh->vColors.emplace_back(0.0, 1.0, 0.0, 1.0);
+	mesh->vColors.emplace_back(0.0, 0.0, 1.0, 1.0);
 
 	return mesh;
 }

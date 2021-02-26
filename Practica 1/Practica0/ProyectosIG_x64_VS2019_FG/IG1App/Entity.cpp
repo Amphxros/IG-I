@@ -93,3 +93,65 @@ void TrianguloSierpinsky::render(glm::dmat4 const& modelViewMat) const
 		glColor4d(1.0, 1.0, 1.0, 1.0);
 	}
 }
+
+TrianguloRGB::TrianguloRGB(GLdouble rd)
+{
+	mMesh = Mesh::generaTrianguloRGB(rd);
+}
+
+TrianguloRGB::~TrianguloRGB()
+{
+	delete mMesh;
+}
+
+void TrianguloRGB::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+		glPolygonMode(GL_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT, GL_FILL);
+		mMesh->render();
+
+		//default
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4d(1.0, 1.0, 1.0, 1.0);
+	}
+}
+
+void TrianguloRGB::update()
+{
+	setModelMat(glm::translate(modelMat(), dvec3(10, 0, 0)));
+	setModelMat(glm::rotate(modelMat(), radians(-25.0), dvec3(0, 0, 1)));
+}
+
+RectanguloRGB::RectanguloRGB(GLdouble w, GLdouble h)
+{
+	mMesh = Mesh::generaRectanguloRGB(w, h);
+}
+
+RectanguloRGB::~RectanguloRGB()
+{
+	delete mMesh; mMesh = nullptr;
+
+}
+
+void RectanguloRGB::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+		glPolygonMode(GL_BACK, GL_POINT);
+		
+		glPolygonMode(GL_FRONT, GL_LINES);
+		
+		mMesh->render();
+
+		//default
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4d(1.0, 1.0, 1.0, 1.0);
+		
+	}
+}

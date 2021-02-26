@@ -24,6 +24,10 @@ public:
 	void init();
 
     void render(Camera const& cam) const;
+
+	void update();
+	void setUpdate() { can_update = !can_update; }
+	
 	
 protected:
 	void free();
@@ -31,6 +35,7 @@ protected:
 	void resetGL();
 
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
+	bool can_update=true;
 };
 //-------------------------------------------------------------------------
 

@@ -26,8 +26,10 @@ void IG1App::run()   // enters the main event processing loop
 {
 	if (mWinId == 0) { // if not initialized
 		init();       // initialize the application 
+	
 		glutMainLoop();      // enters the main event processing loop 
 		mStop = true;  // main loop has stopped  
+		
 	}
 }
 //-------------------------------------------------------------------------
@@ -92,7 +94,6 @@ void IG1App::display() const
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clears the back buffer
 
 	mScene->render(*mCamera);  // uploads the viewport and camera to the GPU
-	
 	glutSwapBuffers();	// swaps the front and back buffer
 }
 //-------------------------------------------------------------------------
@@ -127,6 +128,9 @@ void IG1App::key(unsigned char key, int x, int y)
 		break;
 	case 'o':
 		mCamera->set2D();
+		break;
+	case 'u':
+		mScene->setUpdate();
 		break;
 	default:
 		need_redisplay = false;
