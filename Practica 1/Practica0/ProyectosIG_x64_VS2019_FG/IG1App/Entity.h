@@ -71,6 +71,9 @@ public:
 	~TrianguloRGB();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 	virtual void update();
+private:
+	double angleC, angleR; //angle es par
+
 };
 
 class RectanguloRGB : public Abs_Entity

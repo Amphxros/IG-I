@@ -15,6 +15,24 @@ void Scene::init()
 	// Textures
 
 	// Graphics objects (entities) of the scene
+	gObjects.clear();
+	switch(mId)
+	{
+	case 0:
+		escena2D();
+		break;
+	case 1:
+		break;
+	default:
+		escena2D();
+		break;
+	}
+
+
+	//gObjects.push_back(new Rectangulo(100, 100));
+}
+
+void Scene::escena2D() {
 	gObjects.push_back(new EjesRGB(400.0));
 
 	Poligono* p = new Poligono(3, 300);
@@ -31,15 +49,12 @@ void Scene::init()
 
 	TrianguloRGB* rgb = new TrianguloRGB(30);
 	rgb->setModelMat(glm::translate(rgb->modelMat(), dvec3(150, 0, 0)));
-	rgb->setModelMat(glm::rotate(rgb->modelMat(), radians(-25.0),dvec3(0, 0, 1)));
+	rgb->setModelMat(glm::rotate(rgb->modelMat(), radians(-25.0), dvec3(0, 0, 1)));
 	gObjects.push_back(rgb);
 
 	RectanguloRGB* r = new RectanguloRGB(1200, 800);
-	r->setModelMat(glm::translate(r->modelMat(),dvec3(150,0,0)));
+	r->setModelMat(glm::translate(r->modelMat(), dvec3(150, 0, 0)));
 	gObjects.push_back(r);
-
-
-	//gObjects.push_back(new Rectangulo(100, 100));
 }
 //-------------------------------------------------------------------------
 void Scene::free() 
@@ -84,5 +99,11 @@ void Scene::update()
 			el->update();
 		}
 	}
+}
+
+void Scene::changeScene(int id)
+{
+	mId = id;
+	init();
 }
 //-------------------------------------------------------------------------

@@ -94,7 +94,7 @@ void TrianguloSierpinsky::render(glm::dmat4 const& modelViewMat) const
 	}
 }
 
-TrianguloRGB::TrianguloRGB(GLdouble rd)
+TrianguloRGB::TrianguloRGB(GLdouble rd): angleC(0), angleR(0)
 {
 	mMesh = Mesh::generaTrianguloRGB(rd);
 }
@@ -122,8 +122,13 @@ void TrianguloRGB::render(glm::dmat4 const& modelViewMat) const
 
 void TrianguloRGB::update()
 {
-	setModelMat(glm::translate(modelMat(), dvec3(10, 0, 0)));
-	setModelMat(glm::rotate(modelMat(), radians(-25.0), dvec3(0, 0, 1)));
+	glm::dmat4 id = glm::dmat4(1.0);
+	angleC += 5;
+	angleR -= 5;
+	double angleX = 150 * glm::cos(glm::radians(angleC));
+	double angleY = 150 * glm::sin(glm::radians(angleC));
+	setModelMat(glm::translate(id, dvec3(angleX, angleY, 0)));
+	setModelMat(glm::rotate(modelMat(), radians(angleR), dvec3(0, 0, 1)));
 }
 
 RectanguloRGB::RectanguloRGB(GLdouble w, GLdouble h)

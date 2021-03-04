@@ -132,21 +132,26 @@ void IG1App::key(unsigned char key, int x, int y)
 	case 'u':
 		mScene->setUpdate();
 		break;
-	default:
-		need_redisplay = false;
+	case '0':
+		mScene->changeScene(0);
+		break;
+	case '1':
+		mScene->changeScene(1);
 		break;
 	} //switch
 
-	if (need_redisplay)
+	if (need_redisplay) {
 		glutPostRedisplay(); // marks the window as needing to be redisplayed -> calls to display()
+		mScene->update();
+	}
 }
 //-------------------------------------------------------------------------
 
-void IG1App::specialKey(int key, int x, int y) 
+void IG1App::specialKey(int key, int x, int y)
 {
 	bool need_redisplay = true;
 	int mdf = glutGetModifiers(); // returns the modifiers (Shift, Ctrl, Alt)
-	
+
 	switch (key) {
 	case GLUT_KEY_RIGHT:
 		if (mdf == GLUT_ACTIVE_CTRL)
@@ -156,8 +161,8 @@ void IG1App::specialKey(int key, int x, int y)
 		break;
 	case GLUT_KEY_LEFT:
 		if (mdf == GLUT_ACTIVE_CTRL)
-		    mCamera->yaw(1);      // rotates 1 on the Y axis 
-		else 
+			mCamera->yaw(1);      // rotates 1 on the Y axis 
+		else
 			mCamera->yaw(-1);     // rotate -1 on the Y axis 
 		break;
 	case GLUT_KEY_UP:
@@ -166,13 +171,12 @@ void IG1App::specialKey(int key, int x, int y)
 	case GLUT_KEY_DOWN:
 		mCamera->roll(-1);   // rotates -1 on the Z axis
 		break;
-	default:
-		need_redisplay = false;
-		break;
 	}//switch
 
-	if (need_redisplay)
+	if (need_redisplay) {
 		glutPostRedisplay(); // marks the window as needing to be redisplayed -> calls to display()
+		mScene->update();
+	}
 }
 //-------------------------------------------------------------------------
 

@@ -23,6 +23,7 @@ public:
 		
 	void init();
 
+	void changeScene(int id); //elimina la escena actual y genera la nueva
     void render(Camera const& cam) const;
 
 	void update();
@@ -34,8 +35,11 @@ protected:
 	void setGL();
 	void resetGL();
 
+	void escena2D();
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
 	bool can_update=true;
+
+	int mId = 0; //identificador de escena
 };
 //-------------------------------------------------------------------------
 
