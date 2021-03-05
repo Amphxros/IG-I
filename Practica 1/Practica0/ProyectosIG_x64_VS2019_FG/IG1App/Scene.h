@@ -27,6 +27,7 @@ public:
     void render(Camera const& cam) const;
 
 	void update();
+	void updateTriangle();
 	void setUpdate() { can_update = !can_update; }
 	
 	

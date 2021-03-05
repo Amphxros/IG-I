@@ -74,6 +74,7 @@ void IG1App::iniWinOpenGL()
 	glutKeyboardFunc(s_key);
 	glutSpecialFunc(s_specialKey);
 	glutDisplayFunc(s_display);
+	glutIdleFunc(s_update);
 	
 	cout << glGetString(GL_VERSION) << '\n';
 	cout << glGetString(GL_VENDOR) << '\n';
@@ -129,20 +130,27 @@ void IG1App::key(unsigned char key, int x, int y)
 	case 'o':
 		mCamera->set2D();
 		break;
-	case 'u':
+	case 'U':
 		mScene->setUpdate();
 		break;
+	case 'u':
+		mScene->updateTriangle();
+		break;
 	case '0':
+		mCamera->set2D();
 		mScene->changeScene(0);
 		break;
 	case '1':
+		mCamera->set3D();
 		mScene->changeScene(1);
+		break;
+	default:
+		need_redisplay = false;
 		break;
 	} //switch
 
 	if (need_redisplay) {
 		glutPostRedisplay(); // marks the window as needing to be redisplayed -> calls to display()
-		mScene->update();
 	}
 }
 //-------------------------------------------------------------------------
@@ -171,12 +179,25 @@ void IG1App::specialKey(int key, int x, int y)
 	case GLUT_KEY_DOWN:
 		mCamera->roll(-1);   // rotates -1 on the Z axis
 		break;
+	default:
+		need_redisplay = false;
+		break;
 	}//switch
 
 	if (need_redisplay) {
 		glutPostRedisplay(); // marks the window as needing to be redisplayed -> calls to display()
-		mScene->update();
 	}
 }
 //-------------------------------------------------------------------------
 
+void IG1App::update()
+{
+	mLastUpdateTime += glutGet(GLUT_ELAPSED_TIME);
+
+	if (mLastUpdateTime % 30000 == 0)
+	{
+		mScene->update();
+		glutPostRedisplay();
+		mLastUpdateTime = 0;
+	}
+}

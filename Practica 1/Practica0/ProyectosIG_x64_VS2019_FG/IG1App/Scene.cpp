@@ -22,6 +22,7 @@ void Scene::init()
 		escena2D();
 		break;
 	case 1:
+		gObjects.push_back(new EjesRGB(100));
 		break;
 	default:
 		escena2D();
@@ -98,6 +99,14 @@ void Scene::update()
 		{
 			el->update();
 		}
+	}
+}
+
+void Scene::updateTriangle()
+{
+	for (Abs_Entity* el : gObjects)
+	{
+		el->update();
 	}
 }
 
