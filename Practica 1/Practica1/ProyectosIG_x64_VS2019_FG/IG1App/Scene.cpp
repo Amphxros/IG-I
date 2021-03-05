@@ -22,7 +22,7 @@ void Scene::init()
 		escena2D();
 		break;
 	case 1:
-		gObjects.push_back(new EjesRGB(100));
+		escena3D();
 		break;
 	default:
 		escena2D();
@@ -31,6 +31,13 @@ void Scene::init()
 
 
 	//gObjects.push_back(new Rectangulo(100, 100));
+}
+
+void Scene::escena3D() {
+	gObjects.push_back(new EjesRGB(400.0));
+	gObjects.push_back(new Estrella(100, 16, 30));
+	//gObjects.push_back(new Estrella(100, 16, 30));
+	/// TODO: rotar este último
 }
 
 void Scene::escena2D() {

@@ -171,3 +171,37 @@ Mesh* Mesh::generaRectanguloRGB(GLdouble w, GLdouble h)
 
 	return mesh;
 }
+
+Mesh* Mesh::generaEstrella3D(GLdouble re, GLuint np, GLdouble h)
+{
+	Mesh* mesh = new Mesh();
+	mesh->mPrimitive = GL_TRIANGLE_FAN;
+	mesh->mNumVertices = 2* (np +1);
+
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	mesh->vColors.reserve(mesh->mNumVertices);
+
+	mesh->vColors.push_back(dvec4(1.0, 1.0, 0.0, 1.0));
+	mesh->vVertices.push_back(dvec3(0,0,0));
+	GLdouble ri = re / 2; //ri= radio interior
+	double ang= 3.1416 / 2; //angulo inicial 
+	for(int i=0; i<mesh->mNumVertices-2; i++){
+		double x,y;
+		ang += (2 * 3.1416)/(mesh->mNumVertices-2);
+		if(i%2==0){ // circunferencia grande
+			x = re * cos(ang);
+			y = re * sin(ang);
+		}
+		else{ // circunferencia pequeña
+			x = ri * cos(ang);
+			y = ri * sin(ang);
+		}
+
+		mesh->vVertices.push_back(dvec3(x, y, h));
+		mesh->vColors.push_back(dvec4(1.0, 1.0, 0.0, 1.0));
+	}
+	mesh->vVertices.push_back(mesh->vVertices[1]);
+	mesh->vColors.push_back(dvec4(1.0, 1.0, 0.0, 1.0));
+
+	return mesh;
+}

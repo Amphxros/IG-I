@@ -65,8 +65,6 @@ void Poligono::render(glm::dmat4 const& modelViewMat) const
 		glColor4d(1.0, 1.0, 1.0, 1.0);
 	}
 }
-
-
 TrianguloSierpinsky::TrianguloSierpinsky(GLdouble rd,GLdouble numP)
 {
 	mMesh= Mesh::generaSierpinski(rd, numP);
@@ -139,7 +137,6 @@ RectanguloRGB::RectanguloRGB(GLdouble w, GLdouble h)
 RectanguloRGB::~RectanguloRGB()
 {
 	delete mMesh; mMesh = nullptr;
-
 }
 
 void RectanguloRGB::render(glm::dmat4 const& modelViewMat) const
@@ -157,6 +154,34 @@ void RectanguloRGB::render(glm::dmat4 const& modelViewMat) const
 		//default
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glColor4d(1.0, 1.0, 1.0, 1.0);
+	}
+}
+
+Estrella::Estrella(GLdouble w, GLuint np, GLdouble h)
+{
+	mMesh = Mesh::generaEstrella3D(w, np, h);
+}
+
+Estrella::~Estrella()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void Estrella::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
 		
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glLineWidth(2);
+
+		mMesh->render();
+
+		//default
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4d(1.0, 1.0, 1.0, 1.0);
+		glLineWidth(1);
 	}
 }

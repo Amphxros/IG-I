@@ -37,6 +37,7 @@ protected:
 	void resetGL();
 
 	void escena2D();
+	void escena3D();
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
 	bool can_update=true;
 

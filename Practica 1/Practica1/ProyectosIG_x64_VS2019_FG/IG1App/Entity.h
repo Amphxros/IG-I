@@ -82,8 +82,14 @@ public:
 	explicit RectanguloRGB(GLdouble w, GLdouble h);
 	~RectanguloRGB();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
-	
+};
 
+class Estrella : public Abs_Entity
+{
+public:
+	explicit Estrella(GLdouble re, GLuint np, GLdouble h);
+	~Estrella();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
 #endif //_H_Entities_H_
