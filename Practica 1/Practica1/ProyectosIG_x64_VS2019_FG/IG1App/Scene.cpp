@@ -78,14 +78,16 @@ void Scene::setGL()
 {
 	// OpenGL basic setting
 	glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)
-	glEnable(GL_DEPTH_TEST);  // enable Depth test 
+	glEnable(GL_DEPTH_TEST);  // enable Depth test
+	glEnable(GL_TEXTURE_2D); // activar el uso de texturas
 
 }
 //-------------------------------------------------------------------------
 void Scene::resetGL() 
 {
 	glClearColor(.0, .0, .0, .0);  // background color (alpha=1 -> opaque)
-	glDisable(GL_DEPTH_TEST);  // disable Depth test 	
+	glDisable(GL_DEPTH_TEST);  // disable Depth test
+	glDisable(GL_TEXTURE_2D); // desactivar el uso de texturas
 }
 //-------------------------------------------------------------------------
 
