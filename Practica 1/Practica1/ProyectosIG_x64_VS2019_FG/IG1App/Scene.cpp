@@ -13,6 +13,10 @@ void Scene::init()
 	// allocate memory and load resources
 	// Lights
 	// Textures
+	gTextures.clear();
+	Texture* tex1 = new Texture();
+	tex1->load("../BmpsP1/baldosaC", 1);
+	gTextures.push_back(tex1);
 
 	// Graphics objects (entities) of the scene
 	gObjects.clear();
@@ -69,6 +73,11 @@ void Scene::free()
 { // release memory and resources   
 
 	for (Abs_Entity* el : gObjects)
+	{
+		delete el;  el = nullptr;
+	}
+
+	for (Texture* el : gTextures)
 	{
 		delete el;  el = nullptr;
 	}

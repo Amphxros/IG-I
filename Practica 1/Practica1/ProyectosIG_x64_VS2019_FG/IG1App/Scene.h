@@ -10,6 +10,8 @@
 
 #include <vector>
 
+#include "Texture.h"
+
 //-------------------------------------------------------------------------
 
 class Scene	
@@ -38,6 +40,7 @@ protected:
 
 	void escena2D();
 	void escena3D();
+	std::vector<Texture*> gTextures;
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
 	bool can_update=true;
 

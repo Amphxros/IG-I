@@ -7,12 +7,14 @@
 
 #include "Mesh.h"
 
+#include "Texture.h"
+
 //-------------------------------------------------------------------------
 
 class Abs_Entity  // abstract class
 {
 public:
-	Abs_Entity(): mModelMat(1.0) {};  // 4x4 identity matrix
+	Abs_Entity() : mModelMat(1.0) {};  // 4x4 identity matrix
 	virtual ~Abs_Entity() {};
 
 	Abs_Entity(const Abs_Entity& e) = delete;  // no copy constructor
@@ -23,10 +25,11 @@ public:
 	// modeling matrix
 	glm::dmat4 const& modelMat() const { return mModelMat; };
 	void setModelMat(glm::dmat4 const& aMat) { mModelMat = aMat; };
-	void setColor(glm::dvec3 color) { mColor = glm::dvec4(color.r, color.g, color.b, 1); }	
+	void setColor(glm::dvec3 color) { mColor = glm::dvec4(color.r, color.g, color.b, 1); }
+	void setTexture(Texture* tex) { mTexture = tex; }; // establecer textura
 protected:
-
 	Mesh* mMesh = nullptr;   // the mesh
+	Texture* mTexture = nullptr; // atributo para la textura
 	glm::dmat4 mModelMat;    // modeling matrix
 
 	glm::dvec4 mColor;    // modeling matrix
