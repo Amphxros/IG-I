@@ -6,6 +6,16 @@
 using namespace glm;
 //-------------------------------------------------------------------------
 
+Scene::Scene(){
+
+	gTextures.reserve(10);
+	
+	Texture* tex1 = new Texture();
+	tex1->load("../BmpsP1/baldosaP.bmp");
+	gTextures.push_back(tex1);
+
+}
+
 void Scene::init()
 {
 	setGL();  // OpenGL settings
@@ -13,11 +23,7 @@ void Scene::init()
 	// allocate memory and load resources
 	// Lights
 	// Textures
-	gTextures.clear();
-	Texture* tex1 = new Texture();
-	tex1->load("../BmpsP1/baldosaC", 1);
-	gTextures.push_back(tex1);
-
+	
 	// Graphics objects (entities) of the scene
 	gObjects.clear();
 	switch(mId)
@@ -39,9 +45,11 @@ void Scene::init()
 
 void Scene::escena3D() {
 	gObjects.push_back(new EjesRGB(400.0));
-	gObjects.push_back(new Estrella(100, 16, 30));
-	//gObjects.push_back(new Estrella(100, 16, 30));
-	/// TODO: rotar este último
+
+	Estrella* st = new Estrella(100, 8, 80,0,0);
+	st->setModelMat(glm::translate(st->modelMat(), dvec3(150, 100, 150)));
+	st->setTexture(gTextures[0]);
+	gObjects.push_back(st);
 }
 
 void Scene::escena2D() {
@@ -71,16 +79,17 @@ void Scene::escena2D() {
 //-------------------------------------------------------------------------
 void Scene::free() 
 { // release memory and resources   
+	for (Texture* el : gTextures)
+	{
+		delete el;  el = nullptr;
+	}
+	gTextures.clear();
 
 	for (Abs_Entity* el : gObjects)
 	{
 		delete el;  el = nullptr;
 	}
-
-	for (Texture* el : gTextures)
-	{
-		delete el;  el = nullptr;
-	}
+	gObjects.clear();
 }
 //-------------------------------------------------------------------------
 void Scene::setGL() 

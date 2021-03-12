@@ -196,6 +196,7 @@ void IG1App::update()
 
 	if (mLastUpdateTime % 30000 == 0)
 	{
+
 		mScene->update();
 		glutPostRedisplay();
 		mLastUpdateTime = 0;

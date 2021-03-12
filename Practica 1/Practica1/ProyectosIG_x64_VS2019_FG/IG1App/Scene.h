@@ -17,12 +17,12 @@
 class Scene	
 { 
 public:
-	Scene() {};
-	~Scene() { free(); resetGL(); };
+	Scene();
 
 	Scene(const Scene& s) = delete;  // no copy constructor
 	Scene& operator=(const Scene& s) = delete;  // no copy assignment
 		
+	~Scene() { free();  resetGL(); }
 	void init();
 
 	void changeScene(int id); //elimina la escena actual y genera la nueva
@@ -40,7 +40,8 @@ protected:
 
 	void escena2D();
 	void escena3D();
-	std::vector<Texture*> gTextures;
+
+	std::vector<Texture*> gTextures;	//vector de texturas
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
 	bool can_update=true;
 

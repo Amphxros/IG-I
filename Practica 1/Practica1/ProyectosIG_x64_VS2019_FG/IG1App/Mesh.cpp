@@ -19,15 +19,24 @@ void Mesh::render() const
     // transfer the coordinates of the vertices
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_DOUBLE, 0, vVertices.data());  // number of coordinates per vertex, type of each coordinate, stride, pointer 
-    if (vColors.size() > 0) { // transfer colors
+    
+if (vColors.size() > 0) { // transfer colors
       glEnableClientState(GL_COLOR_ARRAY);
       glColorPointer(4, GL_DOUBLE, 0, vColors.data());  // components number (rgba=4), type of each component, stride, pointer  
     }
+	if (vTextures.size() > 0) {
+		// activar array de coordenadas de textura
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glTexCoordPointer(2, GL_DOUBLE, 0, vTextures.data());
+	}
 
 	draw();
 
+	//Desactivamos TODO
     glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
   }
 }
 //-------------------------------------------------------------------------
@@ -180,28 +189,41 @@ Mesh* Mesh::generaEstrella3D(GLdouble re, GLuint np, GLdouble h)
 
 	mesh->vVertices.reserve(mesh->mNumVertices);
 	mesh->vColors.reserve(mesh->mNumVertices);
+	mesh->vTextures.reserve(mesh->mNumVertices);
 
 	mesh->vColors.push_back(dvec4(1.0, 1.0, 0.0, 1.0));
 	mesh->vVertices.push_back(dvec3(0,0,0));
+	mesh->vTextures.push_back(dvec2(0.5, 0.5));
+
 	GLdouble ri = re / 2; //ri= radio interior
-	double ang= 3.1416 / 2; //angulo inicial 
+	double ang= 3.1416 / 2; //angulo inicial
+
+	double r_texture=0.5; // radio para la textura
+ 
 	for(int i=0; i<mesh->mNumVertices-2; i++){
 		double x,y;
 		ang += (2 * 3.1416)/(mesh->mNumVertices-2);
 		if(i%2==0){ // circunferencia grande
 			x = re * cos(ang);
 			y = re * sin(ang);
+			r_texture = 0.5;
 		}
 		else{ // circunferencia pequeña
 			x = ri * cos(ang);
 			y = ri * sin(ang);
+			r_texture=0.25;
+
 		}
+		double x_tex = 0.5 + r_texture * cos(ang);
+		double y_tex = 0.5 + r_texture * sin(ang);
 
 		mesh->vVertices.push_back(dvec3(x, y, h));
 		mesh->vColors.push_back(dvec4(1.0, 1.0, 0.0, 1.0));
-	}
+		mesh->vTextures.push_back(dvec2(x_tex, y_tex));
+}
 	mesh->vVertices.push_back(mesh->vVertices[1]);
 	mesh->vColors.push_back(dvec4(1.0, 1.0, 0.0, 1.0));
+	mesh->vTextures.push_back(mesh->vTextures[1]);
 
 	return mesh;
 }

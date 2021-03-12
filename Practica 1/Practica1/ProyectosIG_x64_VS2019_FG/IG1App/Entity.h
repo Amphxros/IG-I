@@ -27,6 +27,7 @@ public:
 	void setModelMat(glm::dmat4 const& aMat) { mModelMat = aMat; };
 	void setColor(glm::dvec3 color) { mColor = glm::dvec4(color.r, color.g, color.b, 1); }
 	void setTexture(Texture* tex) { mTexture = tex; }; // establecer textura
+
 protected:
 	Mesh* mMesh = nullptr;   // the mesh
 	Texture* mTexture = nullptr; // atributo para la textura
@@ -42,7 +43,7 @@ class EjesRGB : public Abs_Entity
 {
 public:
 	explicit EjesRGB(GLdouble l);
-	~EjesRGB();
+	~EjesRGB() { delete mMesh; delete mTexture; };
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
@@ -51,7 +52,7 @@ class Poligono : public Abs_Entity
 
 public:
 	explicit Poligono(GLdouble numL, GLdouble rd);
-	~Poligono();
+	~Poligono(){ delete mMesh; }
 	
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 
@@ -61,38 +62,41 @@ class TrianguloSierpinsky : public Abs_Entity
 {
 public:
 	explicit TrianguloSierpinsky(GLdouble rd, GLdouble numP);
-	~TrianguloSierpinsky();
+	~TrianguloSierpinsky() {delete mMesh; }
 
 	virtual void render(glm::dmat4 const& modelViewMat) const;
-	
 };
 
 class TrianguloRGB : public Abs_Entity
 {
 public:
 	explicit TrianguloRGB(GLdouble rd);
-	~TrianguloRGB();
+	~TrianguloRGB() {delete mMesh; };
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 	virtual void update();
 private:
 	double angleC, angleR; //angle es par
-
 };
 
 class RectanguloRGB : public Abs_Entity
 {
 public:
 	explicit RectanguloRGB(GLdouble w, GLdouble h);
-	~RectanguloRGB();
+	~RectanguloRGB() { delete mMesh; };
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
 class Estrella : public Abs_Entity
 {
 public:
-	explicit Estrella(GLdouble re, GLuint np, GLdouble h);
-	~Estrella();
+	explicit Estrella(GLdouble re, GLuint np, GLdouble h, double angle_y, double angle_z);
+	~Estrella() { delete mMesh; };
 	virtual void render(glm::dmat4 const& modelViewMat) const;
+	virtual void update();
+
+private:
+	double angleY, angleZ;
+
 };
 
 #endif //_H_Entities_H_
