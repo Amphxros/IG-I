@@ -235,26 +235,36 @@ Mesh* Mesh::generaContCubo(GLdouble ld)
 	mesh->mNumVertices = 10;
 
 	mesh->vVertices.reserve(mesh->mNumVertices);
-	mesh->vColors.reserve(mesh->mNumVertices);
+	//mesh->vColors.reserve(mesh->mNumVertices);
 	mesh->vTextures.reserve(mesh->mNumVertices);
 
 	GLdouble l=ld/2;
 
 	//1º cara (Z positiva)
 	mesh->vVertices.push_back(dvec3(-l,l,l)); //V0
+	mesh->vTextures.push_back(dvec2(0.0, 1.0));
 	mesh->vVertices.push_back(dvec3(-l,-l,l)); //V1
+	mesh->vTextures.push_back(dvec2(0.0, 0.0));
 	mesh->vVertices.push_back(dvec3(l,l,l)); //V2
+	mesh->vTextures.push_back(dvec2(1.0, 1.0));
 	mesh->vVertices.push_back(dvec3(l,-l,l)); //V3
+	mesh->vTextures.push_back(dvec2(1.0, 0.0));
 
 	//2º cara (Z negativa)
 	mesh->vVertices.push_back(dvec3(l,l,-l)); //V4
+	mesh->vTextures.push_back(dvec2(2.0, 1.0));
 	mesh->vVertices.push_back(dvec3(l,-l,-l)); //V5
+	mesh->vTextures.push_back(dvec2(2.0, 0.0));
 	mesh->vVertices.push_back(dvec3(-l,l,-l)); //V6
+	mesh->vTextures.push_back(dvec2(3.0, 1.0));
 	mesh->vVertices.push_back(dvec3(-l,-l,-l)); //V7
+	mesh->vTextures.push_back(dvec2(3.0, 0.0));
 
 	//luego enlazamos con los del principio con 2 vertices mas
 	mesh->vVertices.push_back(dvec3(-l,l,l)); //V0
+	mesh->vTextures.push_back(dvec2(4.0, 1.0));
 	mesh->vVertices.push_back(dvec3(-l,-l,l)); //V1
+	mesh->vTextures.push_back(dvec2(4.0, 0.0));
 
 	return mesh;
 }
