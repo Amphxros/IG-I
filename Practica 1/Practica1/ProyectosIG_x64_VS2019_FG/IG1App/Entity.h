@@ -43,7 +43,7 @@ class EjesRGB : public Abs_Entity
 {
 public:
 	explicit EjesRGB(GLdouble l);
-	~EjesRGB() { delete mMesh; delete mTexture; };
+	~EjesRGB() { delete mMesh; };
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
@@ -96,7 +96,14 @@ public:
 
 private:
 	double angleY, angleZ;
+};
 
+class Caja : public Abs_Entity
+{
+public:
+	explicit Caja(GLdouble ld);
+	~Caja() { delete mMesh; };
+	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
 #endif //_H_Entities_H_

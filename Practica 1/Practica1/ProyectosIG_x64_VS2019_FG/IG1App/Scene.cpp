@@ -7,13 +7,47 @@ using namespace glm;
 //-------------------------------------------------------------------------
 
 Scene::Scene(){
-
 	gTextures.reserve(10);
 	
 	Texture* tex1 = new Texture();
-	tex1->load("../BmpsP1/baldosaP.bmp");
+	tex1->load("../BmpsP1/baldosaC.bmp");
 	gTextures.push_back(tex1);
 
+	Texture* tex2 = new Texture();
+	tex2->load("../BmpsP1/baldosaF.bmp");
+	gTextures.push_back(tex2);
+
+	Texture* tex3 = new Texture();
+	tex3->load("../BmpsP1/baldosaP.bmp");
+	gTextures.push_back(tex3);
+
+	Texture* tex4 = new Texture();
+	tex4->load("../BmpsP1/container.bmp");
+	gTextures.push_back(tex4);
+
+	Texture* tex5 = new Texture();
+	tex5->load("../BmpsP1/grass.bmp");
+	gTextures.push_back(tex5);
+
+	Texture* tex6 = new Texture();
+	tex6->load("../BmpsP1/noche.bmp");
+	gTextures.push_back(tex6);
+
+	Texture* tex7 = new Texture();
+	tex7->load("../BmpsP1/papelC.bmp");
+	gTextures.push_back(tex7);
+
+	Texture* tex8 = new Texture();
+	tex8->load("../BmpsP1/papelE.bmp");
+	gTextures.push_back(tex8);
+
+	Texture* tex9 = new Texture();
+	tex9->load("../BmpsP1/windowC.bmp");
+	gTextures.push_back(tex9);
+
+	Texture* tex10 = new Texture();
+	tex10->load("../BmpsP1/windowV.bmp");
+	gTextures.push_back(tex10);
 }
 
 void Scene::init()
@@ -48,8 +82,12 @@ void Scene::escena3D() {
 
 	Estrella* st = new Estrella(100, 8, 80,0,0);
 	st->setModelMat(glm::translate(st->modelMat(), dvec3(150, 100, 150)));
-	st->setTexture(gTextures[0]);
+	st->setTexture(gTextures[2]);
 	gObjects.push_back(st);
+
+	Caja* caj = new Caja(500);
+	caj->setTexture(gTextures[3]);
+	gObjects.push_back(caj);
 }
 
 void Scene::escena2D() {

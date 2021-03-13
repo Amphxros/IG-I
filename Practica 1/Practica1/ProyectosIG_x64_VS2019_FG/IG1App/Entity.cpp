@@ -163,7 +163,7 @@ void Estrella::render(glm::dmat4 const& modelViewMat) const
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glColor4d(1.0, 1.0, 1.0, 1.0);
 		glLineWidth(1);
-		mTexture->unbind();
+		if (mTexture != nullptr) mTexture->unbind();
 	}
 }
 
@@ -173,4 +173,34 @@ void Estrella::update()
 	angleZ -= 0.01;
 	setModelMat(glm::rotate(mModelMat, angleY, dvec3(0.0, 1.0, 0.0)));
 	angleY += 0.01;
+}
+
+Caja::Caja(GLdouble ld){
+	mMesh = Mesh::generaContCubo(ld);
+}
+
+void Caja::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINES);
+		glLineWidth(2);
+
+		if (mTexture != nullptr) {
+			mTexture->bind(GL_REPLACE);
+		}
+
+		mMesh->render();
+
+		//default
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4d(1.0, 1.0, 1.0, 1.0);
+		glLineWidth(1);
+		if(mTexture!=nullptr){
+		mTexture->unbind();
+		}
+	}
 }

@@ -227,3 +227,34 @@ Mesh* Mesh::generaEstrella3D(GLdouble re, GLuint np, GLdouble h)
 
 	return mesh;
 }
+Mesh* Mesh::generaContCubo(GLdouble ld)
+{
+	Mesh* mesh= new Mesh();
+	
+	mesh->mPrimitive = GL_TRIANGLE_STRIP;
+	mesh->mNumVertices = 10;
+
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	mesh->vColors.reserve(mesh->mNumVertices);
+	mesh->vTextures.reserve(mesh->mNumVertices);
+
+	GLdouble l=ld/2;
+
+	//1º cara (Z positiva)
+	mesh->vVertices.push_back(dvec3(-l,l,l)); //V0
+	mesh->vVertices.push_back(dvec3(-l,-l,l)); //V1
+	mesh->vVertices.push_back(dvec3(l,l,l)); //V2
+	mesh->vVertices.push_back(dvec3(l,-l,l)); //V3
+
+	//2º cara (Z negativa)
+	mesh->vVertices.push_back(dvec3(l,l,-l)); //V4
+	mesh->vVertices.push_back(dvec3(l,-l,-l)); //V5
+	mesh->vVertices.push_back(dvec3(-l,l,-l)); //V6
+	mesh->vVertices.push_back(dvec3(-l,-l,-l)); //V7
+
+	//luego enlazamos con los del principio con 2 vertices mas
+	mesh->vVertices.push_back(dvec3(-l,l,l)); //V0
+	mesh->vVertices.push_back(dvec3(-l,-l,l)); //V1
+
+	return mesh;
+}
