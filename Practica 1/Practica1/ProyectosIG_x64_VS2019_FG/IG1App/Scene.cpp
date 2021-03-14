@@ -80,14 +80,22 @@ void Scene::init()
 void Scene::escena3D() {
 	gObjects.push_back(new EjesRGB(400.0));
 
-	Estrella* st = new Estrella(100, 8, 80,0,0);
-	st->setModelMat(glm::translate(st->modelMat(), dvec3(150, 100, 150)));
+	Estrella* st = new Estrella(80, 8, 80,0,0);
+	
+	st->setModelMat(glm::translate(st->modelMat(), dvec3(150, 300, 150)));
 	st->setTexture(gTextures[2]);
 	gObjects.push_back(st);
 
-	Caja* caj = new Caja(500);
+	Caja* caj = new Caja(50);
+	caj->setModelMat(glm::translate(caj->modelMat(),dvec3(0, 25, 0)));
 	caj->setTexture(gTextures[3]);
+	caj->setTexture2(gTextures[7]);
 	gObjects.push_back(caj);
+
+	Suelo* suelo = new Suelo(600, 600, 10, 10);
+	suelo->setColor(dvec3(1.0,1.0,0));
+	suelo->setTexture(gTextures[0]);
+	gObjects.push_back(suelo);
 }
 
 void Scene::escena2D() {

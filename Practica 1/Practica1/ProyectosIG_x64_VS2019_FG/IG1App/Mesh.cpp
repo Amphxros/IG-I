@@ -181,49 +181,14 @@ Mesh* Mesh::generaRectanguloRGB(GLdouble w, GLdouble h)
 	return mesh;
 }
 
-Mesh* Mesh::generaEstrella3D(GLdouble re, GLuint np, GLdouble h)
-{
-	Mesh* mesh = new Mesh();
-	mesh->mPrimitive = GL_TRIANGLE_FAN;
-	mesh->mNumVertices = 2* (np +1);
-
-	mesh->vVertices.reserve(mesh->mNumVertices);
-	mesh->vColors.reserve(mesh->mNumVertices);
+Mesh* Mesh::generaRectanguloConTextura(GLdouble w,GLdouble h,GLuint rw,GLuint rh ){
+	Mesh* mesh = generaRectangulo(w,h);
 	mesh->vTextures.reserve(mesh->mNumVertices);
 
-	mesh->vColors.push_back(dvec4(1.0, 1.0, 0.0, 1.0));
-	mesh->vVertices.push_back(dvec3(0,0,0));
-	mesh->vTextures.push_back(dvec2(0.5, 0.5));
-
-	GLdouble ri = re / 2; //ri= radio interior
-	double ang= 3.1416 / 2; //angulo inicial
-
-	double r_texture=0.5; // radio para la textura
- 
-	for(int i=0; i<mesh->mNumVertices-2; i++){
-		double x,y;
-		ang += (2 * 3.1416)/(mesh->mNumVertices-2);
-		if(i%2==0){ // circunferencia grande
-			x = re * cos(ang);
-			y = re * sin(ang);
-			r_texture = 0.5;
-		}
-		else{ // circunferencia pequeña
-			x = ri * cos(ang);
-			y = ri * sin(ang);
-			r_texture=0.25;
-
-		}
-		double x_tex = 0.5 + r_texture * cos(ang);
-		double y_tex = 0.5 + r_texture * sin(ang);
-
-		mesh->vVertices.push_back(dvec3(x, y, h));
-		mesh->vColors.push_back(dvec4(1.0, 1.0, 0.0, 1.0));
-		mesh->vTextures.push_back(dvec2(x_tex, y_tex));
-}
-	mesh->vVertices.push_back(mesh->vVertices[1]);
-	mesh->vColors.push_back(dvec4(1.0, 1.0, 0.0, 1.0));
-	mesh->vTextures.push_back(mesh->vTextures[1]);
+	mesh->vTextures.push_back(dvec2(0,0));
+	mesh->vTextures.push_back(dvec2(0,rh));
+	mesh->vTextures.push_back(dvec2(rw,0));
+	mesh->vTextures.push_back(dvec2(rw,rh));
 
 	return mesh;
 }
@@ -268,3 +233,86 @@ Mesh* Mesh::generaContCubo(GLdouble ld)
 
 	return mesh;
 }
+
+Mesh* Mesh::generaEstrella3D(GLdouble re, GLuint np, GLdouble h)
+{
+	Mesh* mesh = new Mesh();
+	mesh->mPrimitive = GL_TRIANGLE_FAN;
+	mesh->mNumVertices = 2* (np +1);
+
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	mesh->vVertices.push_back(dvec3(0,0,0));
+	
+
+	GLdouble ri = re / 2; //ri= radio interior
+	double ang= 3.1416 / 2; //angulo inicial
+
+ 
+	for(int i=0; i<mesh->mNumVertices-2; i++)
+	{
+		double x,y;
+		ang += (2 * 3.1416)/(mesh->mNumVertices-2);
+		if(i%2==0){ // circunferencia grande
+			x = re * cos(ang);
+			y = re * sin(ang);
+		}
+		else{ // circunferencia pequeña
+			x = ri * cos(ang);
+			y = ri * sin(ang);
+			
+
+		}
+		mesh->vVertices.push_back(dvec3(x, y, h));
+			
+	}
+	mesh->vVertices.push_back(mesh->vVertices[1]);
+	
+	return mesh;
+}
+Mesh* Mesh::generaEstrella3DconTextura(GLdouble re, GLuint np, GLdouble h)
+{
+	Mesh* mesh = new Mesh();
+	mesh->mPrimitive = GL_TRIANGLE_FAN;
+	mesh->mNumVertices = 2* (np +1);
+
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	mesh->vColors.reserve(mesh->mNumVertices);
+	mesh->vTextures.reserve(mesh->mNumVertices);
+
+	mesh->vColors.push_back(dvec4(1.0, 1.0, 0.0, 1.0));
+	mesh->vVertices.push_back(dvec3(0,0,0));
+	mesh->vTextures.push_back(dvec2(0.5, 0.5));
+
+	GLdouble ri = re / 2; //ri= radio interior
+	double ang= 3.1416 / 2; //angulo inicial
+
+	double r_texture=0.5; // radio para la textura
+ 
+	for(int i=0; i<mesh->mNumVertices-2; i++){
+		double x,y;
+		ang += (2 * 3.1416)/(mesh->mNumVertices-2);
+		if(i%2==0){ // circunferencia grande
+			x = re * cos(ang);
+			y = re * sin(ang);
+			r_texture = 0.5;
+		}
+		else{ // circunferencia pequeña
+			x = ri * cos(ang);
+			y = ri * sin(ang);
+			r_texture=0.25;
+
+		}
+		double x_tex = 0.5 + r_texture * cos(ang);
+		double y_tex = 0.5 + r_texture * sin(ang);
+
+		mesh->vVertices.push_back(dvec3(x, y, h));
+		mesh->vColors.push_back(dvec4(1.0, 1.0, 0.0, 1.0));
+		mesh->vTextures.push_back(dvec2(x_tex, y_tex));
+	}
+	mesh->vVertices.push_back(mesh->vVertices[1]);
+	mesh->vColors.push_back(dvec4(1.0, 1.0, 0.0, 1.0));
+	mesh->vTextures.push_back(mesh->vTextures[1]);
+
+	return mesh;
+}
+

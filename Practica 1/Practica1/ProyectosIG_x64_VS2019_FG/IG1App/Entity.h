@@ -27,10 +27,12 @@ public:
 	void setModelMat(glm::dmat4 const& aMat) { mModelMat = aMat; };
 	void setColor(glm::dvec3 color) { mColor = glm::dvec4(color.r, color.g, color.b, 1); }
 	void setTexture(Texture* tex) { mTexture = tex; }; // establecer textura
+	void setTexture2(Texture* tex) { mTextureAlt = tex; }; // establecer textura
 
 protected:
 	Mesh* mMesh = nullptr;   // the mesh
-	Texture* mTexture = nullptr; // atributo para la textura
+	Texture* mTexture = nullptr; // atributo para la textura principal
+	Texture* mTextureAlt = nullptr; // atributo para la textura alternativa
 	glm::dmat4 mModelMat;    // modeling matrix
 
 	glm::dvec4 mColor;    // modeling matrix
@@ -103,6 +105,14 @@ class Caja : public Abs_Entity
 public:
 	explicit Caja(GLdouble ld);
 	~Caja() { delete mMesh; };
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
+class Suelo : public Abs_Entity
+{
+public:
+	explicit Suelo(GLdouble w, GLdouble h, GLuint rw, GLuint rh);
+	~Suelo() { delete mMesh; };
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 

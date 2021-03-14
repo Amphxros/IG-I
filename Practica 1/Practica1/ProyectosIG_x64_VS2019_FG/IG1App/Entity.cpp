@@ -136,7 +136,7 @@ void RectanguloRGB::render(glm::dmat4 const& modelViewMat) const
 
 Estrella::Estrella(GLdouble w, GLuint np, GLdouble h, double angle_y, double angle_z): angleY(angle_y), angleZ(angle_z)
 {
-	mMesh = Mesh::generaEstrella3D(w, np, h);
+	mMesh = Mesh::generaEstrella3DconTextura(w, np, h);
 }
 
 
@@ -149,6 +149,7 @@ void Estrella::render(glm::dmat4 const& modelViewMat) const
 		
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINES);
 		glLineWidth(2);
+		glColor3d(mColor.r, mColor.g, mColor.b);
 		if(mTexture!=nullptr){
 			mTexture->bind(GL_REPLACE);
 		}
@@ -158,7 +159,7 @@ void Estrella::render(glm::dmat4 const& modelViewMat) const
 		bMat= modelViewMat*bMat;
 		upload(bMat);
 		mMesh->render();
-		
+
 		//default
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glColor4d(1.0, 1.0, 1.0, 1.0);
@@ -167,13 +168,26 @@ void Estrella::render(glm::dmat4 const& modelViewMat) const
 	}
 }
 
-void Estrella::update()
+void Estrella::update() /// TODO: PREGUTAR A LA PROFE
 {
+
+	dmat4 rot1 = glm::rotate(dmat4(1.0), angleZ, dvec3(0.0, 0.0, 1.0));
+	angleZ -= 0.01;
+	dmat4 rot2 = glm::rotate(dmat4(1.0), angleY, dvec3(0.0, 1.0, 0.0));
+	angleY += 0.01;
+	dmat4 rot = rot2 * rot1;
+	setModelMat(rot);
+	//setModelMat(glm::translate(modelMat(), dvec3(150, 300, 150)));
+
+
+	/*
+	setModelMat(glm::translate(modelMat(), dvec3(150, 300, 150)));
 	setModelMat(glm::rotate(dmat4(1.0), angleZ, dvec3(0.0, 0.0, 1.0)));
 	angleZ -= 0.01;
-	setModelMat(glm::rotate(mModelMat, angleY, dvec3(0.0, 1.0, 0.0)));
+	setModelMat(glm::rotate(dmat4(1.0), angleY, dvec3(0.0, 1.0, 0.0)));
 	angleY += 0.01;
-}
+	*/
+}	
 
 Caja::Caja(GLdouble ld){
 	mMesh = Mesh::generaContCubo(ld);
@@ -183,16 +197,30 @@ void Caja::render(glm::dmat4 const& modelViewMat) const
 {
 	if (mMesh != nullptr)
 	{
+		
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
+
 		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
 		upload(aMat);
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINES);
+		glPolygonMode(GL_FRONT, GL_LINES);
+		glColor3d(mColor.r, mColor.g, mColor.b);
 		glLineWidth(2);
 
 		if (mTexture != nullptr) {
 			mTexture->bind(GL_REPLACE);
 		}
 
+		mMesh->render();
+	
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_BACK, GL_LINES);
+		glColor3d(mColor.r, mColor.g, mColor.b);
+		glLineWidth(2);
+		if (mTextureAlt != nullptr) {
+			mTextureAlt->bind(GL_REPLACE);
+		}
 		mMesh->render();
 
 		//default
@@ -201,6 +229,40 @@ void Caja::render(glm::dmat4 const& modelViewMat) const
 		glLineWidth(1);
 		if(mTexture!=nullptr){
 		mTexture->unbind();
+		}
+		if (mTextureAlt != nullptr) {
+			mTextureAlt->unbind();
+		}
+		glDisable(GL_CULL_FACE);
+	}
+}
+
+Suelo::Suelo(GLdouble w, GLdouble h, GLuint rw, GLuint rh) {
+	mMesh = Mesh::generaRectanguloConTextura(w, h, rw, rh);
+	mModelMat = rotate(glm::dmat4(1), glm::radians(90.0), glm::dvec3(1.0, 0.0, 0.0));
+}
+
+void Suelo::render(glm::dmat4 const& modelViewMat) const {
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor3d(mColor.r, mColor.g, mColor.b);
+		glLineWidth(2);
+
+		if (mTexture != nullptr) {
+			mTexture->bind(GL_MODULATE);
+		}
+
+		mMesh->render();
+
+		//default
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4d(1.0, 1.0, 1.0, 1.0);
+		glLineWidth(1);
+		if (mTexture != nullptr) {
+			mTexture->unbind();
 		}
 	}
 }
