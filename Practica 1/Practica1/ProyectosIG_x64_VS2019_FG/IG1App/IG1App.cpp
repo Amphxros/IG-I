@@ -194,7 +194,7 @@ void IG1App::update()
 {
 	mLastUpdateTime += glutGet(GLUT_ELAPSED_TIME);
 
-	if (mLastUpdateTime % 30000 == 0)
+	if (mLastUpdateTime % 30000 == 0 && mScene->getmID()==0)
 	{
 
 		mScene->update();

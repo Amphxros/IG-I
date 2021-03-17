@@ -170,23 +170,14 @@ void Estrella::render(glm::dmat4 const& modelViewMat) const
 
 void Estrella::update() /// TODO: PREGUTAR A LA PROFE
 {
+	setModelMat(glm::translate(dmat4(1.0), dvec3(150, 300, 150)));
+	setModelMat(glm::rotate(mModelMat, angleY, dvec3(0.0, 1.0, 0.0)));
+	angleY += 0.1;
 
-	dmat4 rot1 = glm::rotate(dmat4(1.0), angleZ, dvec3(0.0, 0.0, 1.0));
-	angleZ -= 0.01;
-	dmat4 rot2 = glm::rotate(dmat4(1.0), angleY, dvec3(0.0, 1.0, 0.0));
-	angleY += 0.01;
-	dmat4 rot = rot2 * rot1;
-	setModelMat(rot);
-	//setModelMat(glm::translate(modelMat(), dvec3(150, 300, 150)));
+	setModelMat(glm::rotate(mModelMat, angleZ, dvec3(0.0, 0.0, 1.0)));
+	angleZ += 0.1;			 
+	
 
-
-	/*
-	setModelMat(glm::translate(modelMat(), dvec3(150, 300, 150)));
-	setModelMat(glm::rotate(dmat4(1.0), angleZ, dvec3(0.0, 0.0, 1.0)));
-	angleZ -= 0.01;
-	setModelMat(glm::rotate(dmat4(1.0), angleY, dvec3(0.0, 1.0, 0.0)));
-	angleY += 0.01;
-	*/
 }	
 
 Caja::Caja(GLdouble ld){
