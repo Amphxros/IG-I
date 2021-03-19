@@ -31,7 +31,7 @@ public:
 	void update();
 	void updateTriangle();
 	void setUpdate() { can_update = !can_update; }
-	
+	inline int getmID() { return mId; }
 	
 protected:
 	void free();

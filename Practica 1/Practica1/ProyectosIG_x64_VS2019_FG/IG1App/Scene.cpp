@@ -85,6 +85,8 @@ void Scene::escena3D() {
 	st->setModelMat(glm::translate(st->modelMat(), dvec3(150, 300, 150)));
 	st->setTexture(gTextures[2]);
 	gObjects.push_back(st);
+	
+
 
 	Caja* caj = new Caja(50);
 	caj->setModelMat(glm::translate(caj->modelMat(),dvec3(0, 25, 0)));
