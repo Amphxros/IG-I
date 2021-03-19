@@ -27,7 +27,7 @@ public:
 	void setModelMat(glm::dmat4 const& aMat) { mModelMat = aMat; };
 	void setColor(glm::dvec3 color) { mColor = glm::dvec4(color.r, color.g, color.b, 1); }
 	void setTexture(Texture* tex) { mTexture = tex; }; // establecer textura
-	void setTexture2(Texture* tex) { mTextureAlt = tex; }; // establecer textura
+	void setTextureAlt(Texture* tex) { mTextureAlt = tex; }; // establecer textura
 
 protected:
 	Mesh* mMesh = nullptr;   // the mesh
@@ -112,6 +112,7 @@ class Suelo : public Abs_Entity
 {
 public:
 	explicit Suelo(GLdouble w, GLdouble h, GLuint rw, GLuint rh);
+	explicit Suelo(GLdouble w, GLdouble h);
 	~Suelo() { delete mMesh; };
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };

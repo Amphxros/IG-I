@@ -134,7 +134,8 @@ void RectanguloRGB::render(glm::dmat4 const& modelViewMat) const
 	}
 }
 
-Estrella::Estrella(GLdouble w, GLuint np, GLdouble h, double angle_y, double angle_z): angleY(angle_y), angleZ(angle_z)
+Estrella::Estrella(GLdouble w, GLuint np, GLdouble h, double angle_y, double angle_z): 
+	angleY(angle_y), angleZ(angle_z)
 {
 	mMesh = Mesh::generaEstrella3DconTextura(w, np, h);
 }
@@ -227,6 +228,11 @@ void Caja::render(glm::dmat4 const& modelViewMat) const
 
 Suelo::Suelo(GLdouble w, GLdouble h, GLuint rw, GLuint rh) {
 	mMesh = Mesh::generaRectanguloConTextura(w, h, rw, rh);
+	mModelMat = rotate(glm::dmat4(1), glm::radians(90.0), glm::dvec3(1.0, 0.0, 0.0));
+}
+
+Suelo::Suelo(GLdouble w, GLdouble h) {
+	mMesh = Mesh::generaRectanguloConTextura(w, h, (int)(w/10), (int)(h/10));
 	mModelMat = rotate(glm::dmat4(1), glm::radians(90.0), glm::dvec3(1.0, 0.0, 0.0));
 }
 

@@ -91,10 +91,11 @@ void Scene::escena3D() {
 	Caja* caj = new Caja(50);
 	caj->setModelMat(glm::translate(caj->modelMat(),dvec3(0, 25, 0)));
 	caj->setTexture(gTextures[3]);
-	caj->setTexture2(gTextures[7]);
+	caj->setTextureAlt(gTextures[7]);
 	gObjects.push_back(caj);
 
-	Suelo* suelo = new Suelo(600, 600, 10, 10);
+	Suelo* suelo = new Suelo(600, 600, 7, 7);
+	//Suelo* suelo = new Suelo(70, 70);
 	suelo->setColor(dvec3(1.0,1.0,0));
 	suelo->setTexture(gTextures[0]);
 	gObjects.push_back(suelo);
