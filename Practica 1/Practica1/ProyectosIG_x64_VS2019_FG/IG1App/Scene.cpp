@@ -99,6 +99,10 @@ void Scene::escena3D() {
 	suelo->setColor(dvec3(1.0,1.0,0));
 	suelo->setTexture(gTextures[0]);
 	gObjects.push_back(suelo);
+
+	Foto* foto = new Foto(60, 60);
+	foto->setTexture(gTextures[4]);
+	gObjects.push_back(foto);
 }
 
 void Scene::escena2D() {

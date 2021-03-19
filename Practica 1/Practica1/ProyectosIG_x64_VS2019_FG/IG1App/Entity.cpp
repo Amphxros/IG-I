@@ -2,7 +2,7 @@
 
 #include <gtc/matrix_transform.hpp>  
 #include <gtc/type_ptr.hpp>
-
+#include "IG1App.h"
 using namespace glm;
 
 //-------------------------------------------------------------------------
@@ -259,4 +259,43 @@ void Suelo::render(glm::dmat4 const& modelViewMat) const {
 			mTexture->unbind();
 		}
 	}
+}
+
+Foto::Foto(GLdouble w, GLdouble h) {
+	mMesh = Mesh::generaRectanguloConTextura(w, h, 1,1);
+	
+	mModelMat=glm::translate(glm::dmat4(1),dvec3(40, 1, 40));
+	mModelMat = rotate(modelMat(), glm::radians(90.0), glm::dvec3(1.0, 0.0, 0.0));
+}
+
+void Foto::render(glm::dmat4 const& modelViewMat) const {
+	if (mMesh != nullptr)
+	{
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor3d(mColor.r, mColor.g, mColor.b);
+		glLineWidth(2);
+
+		if (mTexture != nullptr) {
+			mTexture->bind(GL_REPLACE);
+		}
+
+		mMesh->render();
+
+		//default
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4d(1.0, 1.0, 1.0, 1.0);
+		glLineWidth(1);
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+	}
+}
+
+void Foto::update()
+{
+
+	mTexture->loadColorBuffer(IG1App::s_ig1app.getWidth(), IG1App::s_ig1app.getHeight(), GL_FRONT);
 }

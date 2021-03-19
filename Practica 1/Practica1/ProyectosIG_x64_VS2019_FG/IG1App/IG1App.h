@@ -35,6 +35,10 @@ public:
 	void run();    // the main event processing loop
 	void close();  // the application
 	
+	inline int getWidth() { return mWinW; };
+	inline int getHeight() { return mWinH; };
+
+
 protected:
 
 	IG1App() {};

@@ -117,4 +117,13 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
+class Foto : public Abs_Entity
+{
+public:
+	explicit Foto(GLdouble w, GLdouble h);
+	~Foto() { delete mMesh; };
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+	virtual void update();
+};
+
 #endif //_H_Entities_H_

@@ -25,8 +25,12 @@ public:
 
   GLuint width() const { return mWidth; };
   GLuint height() const { return mHeight; };
+
+
+
   
   void setWrap(GLuint wp);  // GL_REPEAT, GL_CLAMP 
+  void loadColorBuffer(GLdouble width,GLdouble height, GLenum buffer);
 
 protected:
 
