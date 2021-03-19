@@ -179,7 +179,6 @@ void Estrella::update() /// TODO: PREGUTAR A LA PROFE
 	setModelMat(rot);
 	//setModelMat(glm::translate(modelMat(), dvec3(150, 300, 150)));
 
-
 	/*
 	setModelMat(glm::translate(modelMat(), dvec3(150, 300, 150)));
 	setModelMat(glm::rotate(dmat4(1.0), angleZ, dvec3(0.0, 0.0, 1.0)));
@@ -187,7 +186,7 @@ void Estrella::update() /// TODO: PREGUTAR A LA PROFE
 	setModelMat(glm::rotate(dmat4(1.0), angleY, dvec3(0.0, 1.0, 0.0)));
 	angleY += 0.01;
 	*/
-}	
+}
 
 Caja::Caja(GLdouble ld){
 	mMesh = Mesh::generaContCubo(ld);
@@ -197,24 +196,21 @@ void Caja::render(glm::dmat4 const& modelViewMat) const
 {
 	if (mMesh != nullptr)
 	{
-		
 		glEnable(GL_CULL_FACE);
-		glCullFace(GL_FRONT);
 
 		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
 		upload(aMat);
 
+		glCullFace(GL_BACK);
 		glPolygonMode(GL_FRONT, GL_LINES);
 		glColor3d(mColor.r, mColor.g, mColor.b);
 		glLineWidth(2);
-
 		if (mTexture != nullptr) {
 			mTexture->bind(GL_REPLACE);
 		}
-
 		mMesh->render();
 	
-		glCullFace(GL_BACK);
+		glCullFace(GL_FRONT);
 		glPolygonMode(GL_BACK, GL_LINES);
 		glColor3d(mColor.r, mColor.g, mColor.b);
 		glLineWidth(2);
