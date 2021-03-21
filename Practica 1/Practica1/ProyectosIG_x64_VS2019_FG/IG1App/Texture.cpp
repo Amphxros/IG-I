@@ -76,3 +76,17 @@ void Texture::loadColorBuffer(GLdouble width, GLdouble height, GLenum buffer)
 	glCopyTexImage2D(GL_TEXTURE_2D, lv_, GL_RGBA, 0, 0, mWidth, mHeight, border_);
 	glReadBuffer(buffer);
 }
+
+void Texture::save(const std::string& BMP_Name){
+	PixMap32RGBA map_;
+
+	GLuint lv_ = 0;
+	map_.reserve(mWidth, mHeight);
+	glBindTexture(GL_TEXTURE_2D, mId);
+	glGetTexImage(GL_TEXTURE_2D, lv_, GL_RGBA, GL_UNSIGNED_BYTE, map_.data());
+	map_.save_bmp24BGR(BMP_Name);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+
+}

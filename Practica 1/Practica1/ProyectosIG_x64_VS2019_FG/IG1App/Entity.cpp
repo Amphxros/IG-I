@@ -176,9 +176,7 @@ void Estrella::update() /// TODO: PREGUTAR A LA PROFE
 	angleY += 0.1;
 
 	setModelMat(glm::rotate(mModelMat, angleZ, dvec3(0.0, 0.0, 1.0)));
-	angleZ += 0.1;			 
-	
-
+	angleZ += 0.1;
 }	
 
 Caja::Caja(GLdouble ld){
@@ -226,6 +224,83 @@ void Caja::render(glm::dmat4 const& modelViewMat) const
 	}
 }
 
+CajaFondo::CajaFondo(GLdouble ld): mModelMatFondo(1.0) {
+	mMesh = Mesh::generaContCubo(ld);
+	meshFondo = Mesh::generaFondoCubo(ld);
+	
+	mModelMatFondo = rotate(glm::dmat4(1.0), glm::radians(90.0), glm::dvec3(1.0, 0.0, 0.0));
+	mModelMatFondo = translate(mModelMatFondo, dvec3(0,0,-ld/2));
+}
+
+void CajaFondo::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		glEnable(GL_CULL_FACE);
+
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT, GL_LINES);
+		glColor3d(mColor.r, mColor.g, mColor.b);
+		glLineWidth(2);
+		if (mTexture != nullptr) {
+			mTexture->bind(GL_REPLACE);
+		}
+		mMesh->render();
+
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_BACK, GL_LINES);
+		glColor3d(mColor.r, mColor.g, mColor.b);
+		glLineWidth(2);
+		if (mTextureAlt != nullptr) {
+			mTextureAlt->bind(GL_REPLACE);
+		}
+		mMesh->render();
+		
+		dmat4 aMatFondo = modelViewMat * mModelMatFondo;  // glm matrix multiplication
+		upload(aMatFondo);
+
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT, GL_LINES);
+		glColor3d(mColor.r, mColor.g, mColor.b);
+		glLineWidth(2);
+		if (mTexture != nullptr) {
+			mTexture->bind(GL_REPLACE);
+		}
+		meshFondo->render();
+
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_BACK, GL_LINES);
+		glColor3d(mColor.r, mColor.g, mColor.b);
+		glLineWidth(2);
+		if (mTextureAlt != nullptr) {
+			mTextureAlt->bind(GL_REPLACE);
+		}
+		meshFondo->render();
+
+		//default
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4d(1.0, 1.0, 1.0, 1.0);
+		glLineWidth(1);
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+		if (mTextureAlt != nullptr) {
+			mTextureAlt->unbind();
+		}
+		glDisable(GL_CULL_FACE);
+	}
+}
+
+void CajaFondo::update()
+{
+	setModelMat(glm::rotate(modelMat(), radians(1.0), dvec3(0.0, 0.0, 1.0)));
+
+	mModelMatFondo = rotate(mModelMatFondo, glm::radians(1.0), glm::dvec3(0.0, 1.0, 0.0));
+}
+
 Suelo::Suelo(GLdouble w, GLdouble h, GLuint rw, GLuint rh) {
 	mMesh = Mesh::generaRectanguloConTextura(w, h, rw, rh);
 	mModelMat = rotate(glm::dmat4(1), glm::radians(90.0), glm::dvec3(1.0, 0.0, 0.0));
@@ -264,7 +339,7 @@ void Suelo::render(glm::dmat4 const& modelViewMat) const {
 Foto::Foto(GLdouble w, GLdouble h) {
 	mMesh = Mesh::generaRectanguloConTextura(w, h, 1,1);
 	
-	mModelMat=glm::translate(glm::dmat4(1),dvec3(40, 1, 40));
+	mModelMat=glm::translate(glm::dmat4(1),dvec3(w/2, 1, h/2));
 	mModelMat = rotate(modelMat(), glm::radians(90.0), glm::dvec3(1.0, 0.0, 0.0));
 }
 
@@ -296,6 +371,5 @@ void Foto::render(glm::dmat4 const& modelViewMat) const {
 
 void Foto::update()
 {
-
 	mTexture->loadColorBuffer(IG1App::s_ig1app.getWidth(), IG1App::s_ig1app.getHeight(), GL_FRONT);
 }

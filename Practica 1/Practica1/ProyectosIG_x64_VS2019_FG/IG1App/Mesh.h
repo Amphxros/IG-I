@@ -23,12 +23,13 @@ public:
 	static Mesh* generaEstrella3D(GLdouble re, GLuint np, GLdouble h);
 	static Mesh* generaEstrella3DconTextura(GLdouble re, GLuint np, GLdouble h);
 	static Mesh* generaContCubo(GLdouble ld);
+	static Mesh* generaFondoCubo(GLdouble ld);
 	static Mesh* generaRectanguloConTextura(GLdouble w, GLdouble h,GLuint rw,GLuint rh );
 
 	Mesh() {};
 	virtual ~Mesh() {};
 
-	Mesh(const Mesh & m) = delete;  // no copy constructor
+	Mesh(const Mesh & m) = delete; // no copy constructor
 	Mesh & operator=(const Mesh & m) = delete;  // no copy assignment
 			
 	virtual void render() const;

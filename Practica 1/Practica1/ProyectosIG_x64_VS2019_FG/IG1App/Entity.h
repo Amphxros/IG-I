@@ -108,6 +108,18 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
+class CajaFondo : public Abs_Entity
+{
+public:
+	explicit CajaFondo(GLdouble ld);
+	~CajaFondo() { delete mMesh; delete meshFondo; };
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+	virtual void update();
+private:
+	Mesh* meshFondo = nullptr;
+	glm::dmat4 mModelMatFondo = glm::dmat4(1.0);
+};
+
 class Suelo : public Abs_Entity
 {
 public:

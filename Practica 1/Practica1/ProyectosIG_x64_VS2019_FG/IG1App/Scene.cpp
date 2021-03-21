@@ -2,7 +2,7 @@
 #include "CheckML.h"
 #include <gtc/matrix_transform.hpp>  
 #include <gtc/type_ptr.hpp>
-
+#include<iostream>
 using namespace glm;
 //-------------------------------------------------------------------------
 
@@ -86,13 +86,19 @@ void Scene::escena3D() {
 	st->setTexture(gTextures[2]);
 	gObjects.push_back(st);
 	
-
-
+	/*
 	Caja* caj = new Caja(50);
 	caj->setModelMat(glm::translate(caj->modelMat(),dvec3(0, 25, 0)));
 	caj->setTexture(gTextures[3]);
 	caj->setTextureAlt(gTextures[7]);
 	gObjects.push_back(caj);
+	*/
+
+	CajaFondo* cajFondo = new CajaFondo(50);
+	cajFondo->setModelMat(glm::translate(cajFondo->modelMat(), dvec3(0, 25, 0)));
+	cajFondo->setTexture(gTextures[3]);
+	cajFondo->setTextureAlt(gTextures[6]);
+	gObjects.push_back(cajFondo);
 
 	Suelo* suelo = new Suelo(600, 600, 7, 7);
 	//Suelo* suelo = new Suelo(70, 70);
@@ -100,7 +106,7 @@ void Scene::escena3D() {
 	suelo->setTexture(gTextures[0]);
 	gObjects.push_back(suelo);
 
-	Foto* foto = new Foto(60, 60);
+	Foto* foto = new Foto(128, 70);
 	foto->setTexture(gTextures[4]);
 	gObjects.push_back(foto);
 }
@@ -195,4 +201,13 @@ void Scene::changeScene(int id)
 	mId = id;
 	init();
 }
+
+void Scene::savePhoto(){
+	if(mId==1){
+		gObjects.back()->update(); //para sobreescribir la textura de la foto
+		gTextures[4]->save("../BmpsP1/Photo.bmp"); //y guardar la foto
+		std::cout << "guardado";
+	}
+}
+
 //-------------------------------------------------------------------------

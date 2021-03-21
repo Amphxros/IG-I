@@ -144,6 +144,10 @@ void IG1App::key(unsigned char key, int x, int y)
 		mCamera->set3D();
 		mScene->changeScene(1);
 		break;
+	case'f':
+	case 'F':
+		mScene->savePhoto();
+		break;
 	default:
 		need_redisplay = false;
 		break;

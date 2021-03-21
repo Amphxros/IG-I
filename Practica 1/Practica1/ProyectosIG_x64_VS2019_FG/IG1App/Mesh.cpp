@@ -192,6 +192,7 @@ Mesh* Mesh::generaRectanguloConTextura(GLdouble w,GLdouble h,GLuint rw,GLuint rh
 
 	return mesh;
 }
+
 Mesh* Mesh::generaContCubo(GLdouble ld)
 {
 	Mesh* mesh= new Mesh();
@@ -234,6 +235,31 @@ Mesh* Mesh::generaContCubo(GLdouble ld)
 	return mesh;
 }
 
+Mesh* Mesh::generaFondoCubo(GLdouble ld)
+{
+	Mesh* mesh = new Mesh;
+
+	mesh->mPrimitive = GL_TRIANGLE_STRIP;
+	mesh->mNumVertices = 4;
+
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	//mesh->vColors.reserve(mesh->mNumVertices);
+	mesh->vTextures.reserve(mesh->mNumVertices);
+
+	GLdouble l = ld / 2;
+
+	mesh->vVertices.push_back(dvec3(-l, l, l)); //V0
+	mesh->vTextures.push_back(dvec2(0.0, 1.0));
+	mesh->vVertices.push_back(dvec3(-l, -l, l)); //V1
+	mesh->vTextures.push_back(dvec2(0.0, 0.0));
+	mesh->vVertices.push_back(dvec3(l, l, l)); //V2
+	mesh->vTextures.push_back(dvec2(1.0, 1.0));
+	mesh->vVertices.push_back(dvec3(l, -l, l)); //V3
+	mesh->vTextures.push_back(dvec2(1.0, 0.0));
+
+	return mesh;
+}
+
 Mesh* Mesh::generaEstrella3D(GLdouble re, GLuint np, GLdouble h)
 {
 	Mesh* mesh = new Mesh();
@@ -269,6 +295,7 @@ Mesh* Mesh::generaEstrella3D(GLdouble re, GLuint np, GLdouble h)
 	
 	return mesh;
 }
+
 Mesh* Mesh::generaEstrella3DconTextura(GLdouble re, GLuint np, GLdouble h)
 {
 	Mesh* mesh = new Mesh();
