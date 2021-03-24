@@ -26,7 +26,7 @@ Scene::Scene(){
 	gTextures.push_back(tex4);
 
 	Texture* tex5 = new Texture();
-	tex5->load("../BmpsP1/grass.bmp", glm::u8vec3(1.0, 1.0, 1.0) , 255);
+	tex5->load("../BmpsP1/grass.bmp", glm::u8vec3(0, 0, 0) , 0);
 	gTextures.push_back(tex5);
 
 	Texture* tex6 = new Texture();
@@ -101,15 +101,15 @@ void Scene::escena3D() {
 
 	Planta* p = new Planta(200, 200);
 	p->setTexture(gTextures[4]);
-	gObjectsTranslucidos.push_back(p);
-
-	Foto* foto = new Foto(128, 70);
-	foto->setTexture(gTextures[5]);
-	gObjects.push_back(foto);
+	gObjects.push_back(p);
 
 	Cristalera* c = new Cristalera(600);
 	c->setTexture(gTextures.back());
 	gObjectsTranslucidos.push_back(c);
+
+	Foto* foto = new Foto(128, 70);
+	foto->setTexture(gTextures[5]);
+	gObjects.push_back(foto);
 
 
 }

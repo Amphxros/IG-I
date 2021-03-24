@@ -343,7 +343,7 @@ Foto::Foto(GLdouble w, GLdouble h) {
 	
 	mModelMat = glm::translate(glm::dmat4(1),dvec3(0, 1, 0));
 	mModelMat = rotate(modelMat(), glm::radians(90.0), glm::dvec3(1.0, 0.0, 0.0));
-	mModelMat = rotate(modelMat(), glm::radians(90.0), glm::dvec3(1.0, 0.0, 0.0));
+	mModelMat = rotate(modelMat(), glm::radians(180.0), glm::dvec3(0.0, 0.0, 1.0));
 }
 
 void Foto::render(glm::dmat4 const& modelViewMat) const {
@@ -419,16 +419,23 @@ void Cristalera::render(glm::dmat4 const& modelViewMat) const
 Planta::Planta(GLdouble w, GLdouble h)
 {
 	mMesh = Mesh::generaRectanguloConTextura(w, h, 1, 1);
-	setModelMat(glm::translate(dmat4(1.0), dvec3(w, h / 2, w)));
+	setModelMat(glm::translate(dmat4(1.0), dvec3(w, h/4, w)));
+
+	setModelMat(glm::scale(modelMat(), dvec3(0.5, 0.5, 0.5)));
+
 }
 
 void Planta::render(glm::dmat4 const& modelViewMat) const
 {
 	if (mMesh != nullptr)
 	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.0);
+
+
 		glColor3d(mColor.r, mColor.g, mColor.b);
-		glLineWidth(2);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		
 		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
 		upload(aMat);
 
@@ -456,5 +463,6 @@ void Planta::render(glm::dmat4 const& modelViewMat) const
 		if (mTexture != nullptr) {
 			mTexture->unbind();
 		}
+		glDisable(GL_ALPHA_TEST);
 	}
 }
