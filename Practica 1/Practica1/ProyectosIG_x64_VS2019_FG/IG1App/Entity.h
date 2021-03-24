@@ -138,4 +138,12 @@ public:
 	virtual void update();
 };
 
+
+class Cristalera :public Abs_Entity {
+public:
+	explicit Cristalera(GLdouble ld);
+	~Cristalera() { delete mMesh; };
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
 #endif //_H_Entities_H_

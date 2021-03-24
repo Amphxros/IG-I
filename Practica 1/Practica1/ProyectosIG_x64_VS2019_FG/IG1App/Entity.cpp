@@ -373,3 +373,42 @@ void Foto::update()
 {
 	mTexture->loadColorBuffer(IG1App::s_ig1app.getWidth(), IG1App::s_ig1app.getHeight(), GL_FRONT);
 }
+
+Cristalera::Cristalera(GLdouble ld)
+{
+	mMesh = Mesh::generaContCubo(ld);
+
+	setModelMat(glm::translate(dmat4(1.0),dvec3(0.0,ld/4,0.0)));
+	setModelMat(glm::scale(modelMat(), dvec3(1.0, 0.5, 1.0)));
+}
+
+void Cristalera::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDepthMask(GL_FALSE);
+		glEnable(GL_BLEND);
+
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+		glPolygonMode(GL_FRONT, GL_LINES);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glLineWidth(2);
+		if (mTexture != nullptr) {
+			mTexture->bind(GL_REPLACE);
+		}
+		mMesh->render();
+
+		//default
+		glDepthMask(GL_TRUE);
+		glDisable(GL_BLEND);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4d(1.0, 1.0, 1.0, 1.0);
+		glLineWidth(1);
+		if(mTexture!=nullptr){
+		mTexture->unbind();
+		}
+	}
+}

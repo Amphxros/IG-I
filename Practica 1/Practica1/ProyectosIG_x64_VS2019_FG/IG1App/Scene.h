@@ -46,6 +46,7 @@ protected:
 
 	std::vector<Texture*> gTextures;	//vector de texturas
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
+	std::vector<Abs_Entity*> gObjectsTranslucidos;  // Entities (graphic objects) of the scene
 	bool can_update=true;
 
 	int mId = 0; //identificador de escena

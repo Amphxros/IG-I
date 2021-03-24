@@ -22,7 +22,7 @@ Scene::Scene(){
 	gTextures.push_back(tex3);
 
 	Texture* tex4 = new Texture();
-	tex4->load("../BmpsP1/container.bmp");
+	tex4->load("../BmpsP1/container.bmp", 255 * 0.5);
 	gTextures.push_back(tex4);
 
 	Texture* tex5 = new Texture();
@@ -46,7 +46,7 @@ Scene::Scene(){
 	gTextures.push_back(tex9);
 
 	Texture* tex10 = new Texture();
-	tex10->load("../BmpsP1/windowV.bmp");
+	tex10->load("../BmpsP1/windowV.bmp", 255 * 0.5);
 	gTextures.push_back(tex10);
 }
 
@@ -60,6 +60,7 @@ void Scene::init()
 	
 	// Graphics objects (entities) of the scene
 	gObjects.clear();
+	gObjectsTranslucidos.clear();
 	switch(mId)
 	{
 	case 0:
@@ -109,6 +110,11 @@ void Scene::escena3D() {
 	Foto* foto = new Foto(128, 70);
 	foto->setTexture(gTextures[4]);
 	gObjects.push_back(foto);
+
+	Cristalera* c = new Cristalera(600);
+	c->setTexture(gTextures.back());
+	gObjectsTranslucidos.push_back(c);
+
 }
 
 void Scene::escena2D() {
@@ -148,7 +154,13 @@ void Scene::free()
 	{
 		delete el;  el = nullptr;
 	}
+
+	for (Abs_Entity* el : gObjectsTranslucidos)
+	{
+		delete el;  el = nullptr;
+	}
 	gObjects.clear();
+	gObjectsTranslucidos.clear();
 }
 //-------------------------------------------------------------------------
 void Scene::setGL() 
@@ -176,12 +188,22 @@ void Scene::render(Camera const& cam) const
 	{
 	  el->render(cam.viewMat());
 	}
+	for (Abs_Entity* el : gObjectsTranslucidos)
+	{
+	  el->render(cam.viewMat());
+	}
+
+
 }
 
 void Scene::update()
 {
 	if (can_update) {
 		for (Abs_Entity* el : gObjects)
+		{
+			el->update();
+		}
+		for (Abs_Entity* el : gObjectsTranslucidos)
 		{
 			el->update();
 		}
