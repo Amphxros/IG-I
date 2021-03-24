@@ -169,9 +169,9 @@ void Estrella::render(glm::dmat4 const& modelViewMat) const
 	}
 }
 
-void Estrella::update() /// TODO: PREGUTAR A LA PROFE
+void Estrella::update()
 {
-	setModelMat(glm::translate(dmat4(1.0), dvec3(150, 300, 150)));
+	setModelMat(glm::translate(dmat4(1.0), dvec3(-150, 200, -150)));
 	setModelMat(glm::rotate(mModelMat, angleY, dvec3(0.0, 1.0, 0.0)));
 	angleY += 0.1;
 
@@ -227,9 +227,11 @@ void Caja::render(glm::dmat4 const& modelViewMat) const
 CajaFondo::CajaFondo(GLdouble ld): mModelMatFondo(1.0) {
 	mMesh = Mesh::generaContCubo(ld);
 	meshFondo = Mesh::generaFondoCubo(ld);
+
+	mModelMat = translate(dmat4(1.0), dvec3(-150, 0, -150));
 	
 	mModelMatFondo = rotate(glm::dmat4(1.0), glm::radians(90.0), glm::dvec3(1.0, 0.0, 0.0));
-	mModelMatFondo = translate(mModelMatFondo, dvec3(0,0,-ld/2));
+	mModelMatFondo = translate(mModelMatFondo, dvec3(-150,-150,-ld/2));
 }
 
 void CajaFondo::render(glm::dmat4 const& modelViewMat) const
@@ -339,7 +341,8 @@ void Suelo::render(glm::dmat4 const& modelViewMat) const {
 Foto::Foto(GLdouble w, GLdouble h) {
 	mMesh = Mesh::generaRectanguloConTextura(w, h, 1,1);
 	
-	mModelMat=glm::translate(glm::dmat4(1),dvec3(w/2, 1, h/2));
+	mModelMat = glm::translate(glm::dmat4(1),dvec3(0, 1, 0));
+	mModelMat = rotate(modelMat(), glm::radians(90.0), glm::dvec3(1.0, 0.0, 0.0));
 	mModelMat = rotate(modelMat(), glm::radians(90.0), glm::dvec3(1.0, 0.0, 0.0));
 }
 
@@ -409,6 +412,49 @@ void Cristalera::render(glm::dmat4 const& modelViewMat) const
 		glLineWidth(1);
 		if(mTexture!=nullptr){
 		mTexture->unbind();
+		}
+	}
+}
+
+Planta::Planta(GLdouble w, GLdouble h)
+{
+	mMesh = Mesh::generaRectanguloConTextura(w, h, 1, 1);
+	setModelMat(glm::translate(dmat4(1.0), dvec3(w, h / 2, w)));
+}
+
+void Planta::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor3d(mColor.r, mColor.g, mColor.b);
+		glLineWidth(2);
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		if (mTexture != nullptr) {
+			mTexture->bind(GL_REPLACE);
+		}
+
+		mMesh->render();
+
+		glm::dmat4 bMat = glm::rotate(mModelMat, glm::radians(60.0), glm::dvec3(0.0, 1.0, 0.0));
+		bMat = modelViewMat * bMat;
+		upload(bMat);
+		mMesh->render();
+		
+		glm::dmat4 cMat = glm::rotate(mModelMat, glm::radians(120.0), glm::dvec3(0.0, 1.0, 0.0));
+		cMat = modelViewMat * cMat;
+		upload(cMat);
+		mMesh->render();
+
+
+		//default
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4d(1.0, 1.0, 1.0, 1.0);
+		glLineWidth(1);
+		if (mTexture != nullptr) {
+			mTexture->unbind();
 		}
 	}
 }

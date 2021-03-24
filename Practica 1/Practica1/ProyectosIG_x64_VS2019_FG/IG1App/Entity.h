@@ -146,4 +146,11 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
+class Planta:public Abs_Entity {
+public:
+	explicit Planta(GLdouble w, GLdouble h);
+	~Planta() { delete mMesh; };
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
 #endif //_H_Entities_H_

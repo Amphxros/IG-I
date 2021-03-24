@@ -185,10 +185,10 @@ Mesh* Mesh::generaRectanguloConTextura(GLdouble w,GLdouble h,GLuint rw,GLuint rh
 	Mesh* mesh = generaRectangulo(w,h);
 	mesh->vTextures.reserve(mesh->mNumVertices);
 
-	mesh->vTextures.push_back(dvec2(0,0));
 	mesh->vTextures.push_back(dvec2(0,rh));
-	mesh->vTextures.push_back(dvec2(rw,0));
+	mesh->vTextures.push_back(dvec2(0,0));
 	mesh->vTextures.push_back(dvec2(rw,rh));
+	mesh->vTextures.push_back(dvec2(rw,0));
 
 	return mesh;
 }

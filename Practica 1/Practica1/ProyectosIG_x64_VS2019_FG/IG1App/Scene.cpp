@@ -22,11 +22,11 @@ Scene::Scene(){
 	gTextures.push_back(tex3);
 
 	Texture* tex4 = new Texture();
-	tex4->load("../BmpsP1/container.bmp", 255 * 0.5);
+	tex4->load("../BmpsP1/container.bmp");
 	gTextures.push_back(tex4);
 
 	Texture* tex5 = new Texture();
-	tex5->load("../BmpsP1/grass.bmp");
+	tex5->load("../BmpsP1/grass.bmp", glm::u8vec3(1.0, 1.0, 1.0) , 255);
 	gTextures.push_back(tex5);
 
 	Texture* tex6 = new Texture();
@@ -83,18 +83,10 @@ void Scene::escena3D() {
 
 	Estrella* st = new Estrella(80, 8, 80,0,0);
 	
-	st->setModelMat(glm::translate(st->modelMat(), dvec3(150, 300, 150)));
+	st->setModelMat(glm::translate(st->modelMat(), dvec3(-150, 200, -150)));
 	st->setTexture(gTextures[2]);
 	gObjects.push_back(st);
 	
-	/*
-	Caja* caj = new Caja(50);
-	caj->setModelMat(glm::translate(caj->modelMat(),dvec3(0, 25, 0)));
-	caj->setTexture(gTextures[3]);
-	caj->setTextureAlt(gTextures[7]);
-	gObjects.push_back(caj);
-	*/
-
 	CajaFondo* cajFondo = new CajaFondo(50);
 	cajFondo->setModelMat(glm::translate(cajFondo->modelMat(), dvec3(0, 25, 0)));
 	cajFondo->setTexture(gTextures[3]);
@@ -107,13 +99,18 @@ void Scene::escena3D() {
 	suelo->setTexture(gTextures[0]);
 	gObjects.push_back(suelo);
 
+	Planta* p = new Planta(200, 200);
+	p->setTexture(gTextures[4]);
+	gObjectsTranslucidos.push_back(p);
+
 	Foto* foto = new Foto(128, 70);
-	foto->setTexture(gTextures[4]);
+	foto->setTexture(gTextures[5]);
 	gObjects.push_back(foto);
 
 	Cristalera* c = new Cristalera(600);
 	c->setTexture(gTextures.back());
 	gObjectsTranslucidos.push_back(c);
+
 
 }
 
