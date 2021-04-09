@@ -75,6 +75,8 @@ void IG1App::iniWinOpenGL()
 	glutSpecialFunc(s_specialKey);
 	glutDisplayFunc(s_display);
 	glutIdleFunc(s_update);
+	glutMouseFunc(s_mouse);
+	glutMotionFunc(s_motion);
 	
 	cout << glGetString(GL_VERSION) << '\n';
 	cout << glGetString(GL_VENDOR) << '\n';
@@ -208,4 +210,50 @@ void IG1App::update()
 		glutPostRedisplay();
 		mLastUpdateTime = 0;
 	}
+}
+
+void IG1App::mouse(int button, int state, int x, int y)
+{
+	mBot = button;
+	mCoord.x = x;
+	mCoord.y = (mWinH - y);
+
+}
+
+void IG1App::motion(int x, int y)
+{
+	glm::dvec2 aux = mCoord;
+	mCoord.x = x;
+	mCoord.y = (mWinH - y);
+
+	aux -= mCoord;
+
+	if (mBot == GLUT_LEFT_BUTTON) {
+		mCamera->orbit(aux.x*0.08, aux.y);
+	}
+	else if (mBot == GLUT_RIGHT_BUTTON) {
+		mCamera->moveLR(aux.x);
+		mCamera->moveUD(aux.y);
+
+	}
+}
+
+void IG1App::mouseWheel(int n, int d, int x, int y)
+{
+}
+
+void IG1App::s_mouse(int button, int state, int x, int y)
+{
+	s_ig1app.mouse(button, state, x, y);
+}
+
+void IG1App::s_motion(int x, int y)
+{
+
+	s_ig1app.motion(x, y);
+}
+
+void IG1App::s_mouseWheel(int n, int d, int x, int y)
+{
+
 }
