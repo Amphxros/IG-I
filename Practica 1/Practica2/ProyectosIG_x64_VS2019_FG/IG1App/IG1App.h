@@ -35,6 +35,7 @@ public:
 	void run();    // the main event processing loop
 	void close();  // the application
 	
+	void display2Vistas() const;
 	inline int getWidth() { return mWinW; };
 	inline int getHeight() { return mWinH; };
 
@@ -56,6 +57,7 @@ protected:
 	void mouse(int button, int state, int x, int y);
 	void motion(int x, int y);
 	void mouseWheel(int n, int d, int x, int y);
+
 
 	// static callbacks 
 	static void s_display() { s_ig1app.display(); };
@@ -82,6 +84,7 @@ protected:
 	GLuint mLastUpdateTime=0;
 	glm::dvec2 mCoord; //mis coordenadas del raton
 	int mBot = 0;
+	bool m2Vistas;
 };
 //-------------------------------------------------------------------------
 

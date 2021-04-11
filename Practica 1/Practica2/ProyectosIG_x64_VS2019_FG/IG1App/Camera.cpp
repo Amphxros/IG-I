@@ -94,6 +94,7 @@ void Camera::orbit(GLdouble incAng, GLdouble incY)
 	mEye.x = mLook.x + cos(radians(mAng)) * mRadio;
 	mEye.z = mLook.z - sin(radians(mAng)) * mRadio;
 	mEye.y += incY;
+
 	setVM();
 }
 void Camera::changePrj()
@@ -101,6 +102,16 @@ void Camera::changePrj()
 	bOrto = !bOrto;
 	setPM();
 }
+
+void Camera::setCenital(){
+	mEye = dvec3(0,mRadio,0);
+	mLook = dvec3(0,0,0);
+	mUp = dvec3(0, 0, -1);
+
+	setVM();
+	
+}
+
 //-------------------------------------------------------------------------
 
 void Camera::setSize(GLdouble xw, GLdouble yh) 

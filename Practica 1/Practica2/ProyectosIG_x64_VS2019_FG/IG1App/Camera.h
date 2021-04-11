@@ -33,6 +33,7 @@ public:
 
 	void orbit(GLdouble incAng, GLdouble incY);
 	void changePrj();
+	void setCenital();
 	// projection matrix
 	glm::dmat4 const& projMat() const { return mProjMat; };
 	
@@ -47,7 +48,7 @@ public:
 protected:
 	
 	glm::dvec3 mEye = { 0.0, 0.0, 500.0 };  // camera's position
-	glm::dvec3 mLook = { 0.0, 0.0, 0.0 };   // target's position
+	glm::dvec3 mLook = { 1.0, 1.0, 1.0 };   // target's position
 	glm::dvec3 mUp = { 0.0, 1.0, 0.0 };     // the up vector 
 
 	glm::dvec3 mRight = { 0.0, 0.0, 0.0 };  // camera's position

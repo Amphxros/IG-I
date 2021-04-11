@@ -77,6 +77,7 @@ void IG1App::iniWinOpenGL()
 	glutIdleFunc(s_update);
 	glutMouseFunc(s_mouse);
 	glutMotionFunc(s_motion);
+	glutMouseWheelFunc(s_mouseWheel);
 	
 	cout << glGetString(GL_VERSION) << '\n';
 	cout << glGetString(GL_VENDOR) << '\n';
@@ -95,8 +96,14 @@ void IG1App::display() const
 {  // double buffering
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clears the back buffer
+	
+	if (!m2Vistas) {
+		mScene->render(*mCamera);  // uploads the viewport and camera to the GPU
+	}
+	else{
+		display2Vistas();
+	}
 
-	mScene->render(*mCamera);  // uploads the viewport and camera to the GPU
 	glutSwapBuffers();	// swaps the front and back buffer
 }
 //-------------------------------------------------------------------------
@@ -153,6 +160,10 @@ void IG1App::key(unsigned char key, int x, int y)
 	case 'F':
 		mScene->savePhoto();
 		break;
+	case 'k':
+		m2Vistas = !m2Vistas;
+
+		break;
 	default:
 		need_redisplay = false;
 		break;
@@ -172,9 +183,9 @@ void IG1App::specialKey(int key, int x, int y)
 	switch (key) {
 	case GLUT_KEY_RIGHT:
 		if (mdf == GLUT_ACTIVE_CTRL)
-			mCamera->moveLR(5);   // rotates -1 on the X axis
-		else
 			mCamera->moveLR(-5); 
+		else
+			mCamera->orbit(5,0);   // rotates -1 on the X axis
 		break;
 	case GLUT_KEY_LEFT:
 		if (mdf == GLUT_ACTIVE_CTRL)
@@ -217,29 +228,43 @@ void IG1App::mouse(int button, int state, int x, int y)
 	mBot = button;
 	mCoord.x = x;
 	mCoord.y = (mWinH - y);
-
 }
 
-void IG1App::motion(int x, int y)
+void IG1App::motion(int x, int y) ///VA MAL
 {
 	glm::dvec2 aux = mCoord;
 	mCoord.x = x;
 	mCoord.y = (mWinH - y);
-
-	aux -= mCoord;
+	glm::dvec2 c;
+	c = aux - mCoord;
 
 	if (mBot == GLUT_LEFT_BUTTON) {
-		mCamera->orbit(aux.x*0.08, aux.y);
+		mCamera->orbit(c.x*0.08, c.y);
 	}
 	else if (mBot == GLUT_RIGHT_BUTTON) {
-		mCamera->moveLR(aux.x);
-		mCamera->moveUD(aux.y);
-
+		mCamera->moveLR(c.x);
+		mCamera->moveUD(c.y);
 	}
+	glutPostRedisplay();
 }
 
 void IG1App::mouseWheel(int n, int d, int x, int y)
 {
+	int m = glutGetModifiers();
+	if(m==GLUT_ACTIVE_CTRL){
+		if(d==1){
+		mCamera->moveFB(5); //EL MOVE NO VA
+		}
+		else{
+		mCamera->moveFB(-5);
+		}
+	}
+	else
+	{
+		mCamera->setScale(0.5 * d);
+	}
+	
+	glutPostRedisplay();
 }
 
 void IG1App::s_mouse(int button, int state, int x, int y)
@@ -249,11 +274,33 @@ void IG1App::s_mouse(int button, int state, int x, int y)
 
 void IG1App::s_motion(int x, int y)
 {
-
 	s_ig1app.motion(x, y);
 }
 
 void IG1App::s_mouseWheel(int n, int d, int x, int y)
 {
+	s_ig1app.mouseWheel(n, d, x, y);
+}
 
+
+void IG1App::display2Vistas() const{
+	Camera aux = *mCamera;
+	Viewport auxVP = *mViewPort;
+	//Scene* auxScene = mScene;
+	
+	//"partimos" el puerto
+	mViewPort->setSize(mWinW / 2, mWinH);
+	//"partimos" la camara	
+	aux.setSize(mViewPort->width(), mViewPort->height());
+
+	//cambiamos la posicion para que quepan ambos
+	mViewPort->setPos(0, 0);
+	//renderizamos 
+	mScene->render(aux);  // uploads the viewport and camera to the GPU
+	
+	mViewPort->setPos(mWinW/2, 0);
+	aux.setCenital();
+	mScene->render(aux);  // uploads the viewport and camera to the GPU
+
+	*mViewPort = auxVP;
 }
