@@ -230,7 +230,7 @@ void IG1App::mouse(int button, int state, int x, int y)
 	mCoord.y = (mWinH - y);
 }
 
-void IG1App::motion(int x, int y) ///VA MAL
+void IG1App::motion(int x, int y)
 {
 	glm::dvec2 aux = mCoord;
 	mCoord.x = x;

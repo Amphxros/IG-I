@@ -61,7 +61,7 @@ protected:
 	glm::dmat4 mProjMat;     // projection matrix
 	void uploadPM() const;   // transfers projMat to the GPU
 
-	GLdouble xRight, xLeft, yTop, yBot, mAng,mRadio;      // size of scene visible area
+	GLdouble xRight, xLeft, yTop, yBot, mAng, mRadio;      // size of scene visible area
 	GLdouble mNearVal = 1, mFarVal = 10000;  // view volume
 	GLdouble mScaleFact = 1;   // scale factor
 	bool bOrto = true;   // orthogonal or perspective projection

@@ -11,7 +11,7 @@ using namespace glm;
 
 Camera::Camera(Viewport* vp): mViewPort(vp), mViewMat(1.0), mProjMat(1.0),  
 							  xRight(vp->width() / 2.0), xLeft(-xRight),
-							  yTop(vp->height() / 2.0), yBot(-yTop), mRadio(1000)
+							  yTop(vp->height() / 2.0), yBot(-yTop), mRadio(1000), mAng(0)
 {
     setPM();
 }
@@ -44,7 +44,7 @@ void Camera::set2D()
 void Camera::set3D() 
 {
 	mEye = dvec3(600, 600, 600);
-	mLook = dvec3(0, 10, 0);   
+	mLook = dvec3(0, 1, 0);   
 	mUp = dvec3(0, 1, 0);
 	setVM();
 	mRadio = 1000;
@@ -94,7 +94,6 @@ void Camera::orbit(GLdouble incAng, GLdouble incY)
 	mEye.x = mLook.x + cos(radians(mAng)) * mRadio;
 	mEye.z = mLook.z - sin(radians(mAng)) * mRadio;
 	mEye.y += incY;
-
 	setVM();
 }
 void Camera::changePrj()
@@ -111,7 +110,6 @@ void Camera::setCenital(){
 	setVM();
 	
 }
-
 //-------------------------------------------------------------------------
 
 void Camera::setSize(GLdouble xw, GLdouble yh) 
