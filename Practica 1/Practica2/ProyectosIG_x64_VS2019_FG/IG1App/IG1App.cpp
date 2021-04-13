@@ -253,10 +253,10 @@ void IG1App::mouseWheel(int n, int d, int x, int y)
 	int m = glutGetModifiers();
 	if(m==GLUT_ACTIVE_CTRL){
 		if(d==1){
-		mCamera->moveFB(5); //EL MOVE NO VA
+		mCamera->moveFB(10);
 		}
 		else{
-		mCamera->moveFB(-5);
+		mCamera->moveFB(-10);
 		}
 	}
 	else

@@ -163,5 +163,3 @@ void Camera::uploadPM() const
 	glMatrixMode(GL_MODELVIEW);
 }
 //-------------------------------------------------------------------------
-
-
