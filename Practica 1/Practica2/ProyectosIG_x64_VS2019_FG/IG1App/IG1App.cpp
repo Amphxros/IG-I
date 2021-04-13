@@ -283,11 +283,14 @@ void IG1App::s_mouseWheel(int n, int d, int x, int y)
 }
 
 
-void IG1App::display2Vistas() const{
+void IG1App::display2Vistas() const{ ///TODO->Gestión independiente de eventos
 	Camera aux = *mCamera;
 	Viewport auxVP = *mViewPort;
-	//Scene* auxScene = mScene;
+	Scene* auxScene = new Scene();
 	
+	auxScene->changeScene(0); //dcha.
+	mScene->changeScene(1); //izda.
+
 	//"partimos" el puerto
 	mViewPort->setSize(mWinW / 2, mWinH);
 	//"partimos" la camara	
@@ -300,7 +303,8 @@ void IG1App::display2Vistas() const{
 	
 	mViewPort->setPos(mWinW/2, 0);
 	aux.setCenital();
-	mScene->render(aux);  // uploads the viewport and camera to the GPU
+	auxScene->render(aux);  // uploads the viewport and camera to the GPU
 
 	*mViewPort = auxVP;
+	delete auxScene;
 }
