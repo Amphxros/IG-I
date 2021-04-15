@@ -44,7 +44,11 @@ void IG1App::init()
 	mViewPort = new Viewport(mWinW, mWinH); //glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT)
 	mCamera = new Camera(mViewPort);
 	mScene = new Scene;
-	
+
+	mViewPortB = new Viewport(0, 0);
+	mCameraB = new Camera(mViewPortB);
+	mSceneB = new Scene();
+
 	mCamera->set2D();
 	mScene->init();
 }
@@ -89,6 +93,10 @@ void IG1App::free()
 	delete mScene; mScene = nullptr;
 	delete mCamera; mCamera = nullptr;
 	delete mViewPort; mViewPort = nullptr;
+
+	delete mSceneB; mSceneB = nullptr;
+	delete mCameraB; mCameraB = nullptr;
+	delete mViewPortB; mViewPortB = nullptr;
 }
 //-------------------------------------------------------------------------
 
@@ -128,41 +136,77 @@ void IG1App::key(unsigned char key, int x, int y)
 	case 27:  // Escape key 
 		glutLeaveMainLoop();  // stops main loop and destroy the OpenGL context
 	case '+':
-		mCamera->setScale(+0.05);  // zoom in  (increases the scale)
+		if (m2Vistas && mCoord.x > mWinW / 2) {
+			mCameraB->setScale(0.05);
+		}
+		else mCamera->setScale(+0.05);  // zoom in  (increases the scale)
 		break;
 	case '-':
-		mCamera->setScale(-0.05);  // zoom out (decreases the scale)
+		if (m2Vistas && mCoord.x > mWinW / 2) {
+		mCameraB->setScale(-0.05);
+		}
+		else mCamera->setScale(-0.05);  // zoom out (decreases the scale)
 		break;
 	case 'l':
-		mCamera->set3D();
+		if (m2Vistas && mCoord.x > mWinW / 2) {
+		mCameraB->set3D();
+		}
+		else mCamera->set3D();
 		break;
 	case 'o':
-		mCamera->set2D();
+		if (m2Vistas && mCoord.x > mWinW / 2) {
+		mCameraB->set3D();
+		}
+		else mCamera->set2D();	
 		break;
 	case 'U':
-		mScene->setUpdate();
+		if (m2Vistas && mCoord.x > mWinW / 2) {
+			mSceneB->setUpdate();
+		}
+		else 
+			mScene->setUpdate();
 		break;
 	case 'u':
-		mScene->updateTriangle();
+		if (m2Vistas && mCoord.x > mWinW / 2) {
+			mSceneB->updateTriangle();
+		}
+		else mScene->updateTriangle();
 		break;
 	case 'p':
-		mCamera->changePrj();
+		if (m2Vistas && mCoord.x > mWinW / 2) {
+			mCameraB->changePrj();
+		}
+		else mCamera->changePrj();
 		break;
 	case '0':
+		if (m2Vistas && mCoord.x > mWinW / 2) {
+			mCameraB->set2D();
+			mSceneB->changeScene(0);
+		}
+		else{
 		mCamera->set2D();
 		mScene->changeScene(0);
+		}
 		break;
 	case '1':
+		if (m2Vistas && mCoord.x > mWinW / 2) {
+			mCameraB->set3D();
+			mSceneB->changeScene(1);
+		}
+		else{
 		mCamera->set3D();
 		mScene->changeScene(1);
+		}
 		break;
 	case'f':
 	case 'F':
-		mScene->savePhoto();
+		if (m2Vistas && mCoord.x > mWinW / 2) {
+			mSceneB->savePhoto();
+		}
+		else mScene->savePhoto();
 		break;
 	case 'k':
 		m2Vistas = !m2Vistas;
-
 		break;
 	default:
 		need_redisplay = false;
@@ -216,8 +260,13 @@ void IG1App::update()
 
 	if (mLastUpdateTime % 30000 == 0 && mScene->getmID()==0)
 	{
+		if (m2Vistas && mCoord.x >= mWinW/2) {
+			mSceneB->update();
+		}
+		else {
+			mScene->update();
+		}
 
-		mScene->update();
 		glutPostRedisplay();
 		mLastUpdateTime = 0;
 	}
@@ -283,28 +332,31 @@ void IG1App::s_mouseWheel(int n, int d, int x, int y)
 }
 
 
-void IG1App::display2Vistas() const{ ///TODO->Gestión independiente de eventos
-	Camera aux = *mCamera;
-	Viewport auxVP = *mViewPort;
-	Scene* auxScene = new Scene();
+void IG1App::display2Vistas() const{
 	
-	auxScene->changeScene(0); //dcha.
-	mScene->changeScene(1); //izda.
-
 	//"partimos" el puerto
 	mViewPort->setSize(mWinW / 2, mWinH);
-	//"partimos" la camara	
-	aux.setSize(mViewPort->width(), mViewPort->height());
+	mViewPortB->setSize(mWinW / 2, mWinH);
 
+	//"partimos" la camara	
+	mCamera->setSize(mViewPort->width(), mViewPort->height());
+	mCameraB->setSize(mViewPortB->width(), mViewPortB->height());
+	
 	//cambiamos la posicion para que quepan ambos
 	mViewPort->setPos(0, 0);
-	//renderizamos 
-	mScene->render(aux);  // uploads the viewport and camera to the GPU
+	mViewPortB->setPos(mWinW/2, 0);
 	
-	mViewPort->setPos(mWinW/2, 0);
-	aux.setCenital();
-	auxScene->render(aux);  // uploads the viewport and camera to the GPU
+	//renderizamos 
+	mScene->render(*mCamera); // uploads the viewport and camera to the GPU
+	mSceneB->render(*mCameraB);
 
-	*mViewPort = auxVP;
-	delete auxScene;
+	//restauramos las cosas por defecto
+	mViewPort->setSize(mWinW, mWinH);
+	mViewPortB->setSize(0, 0);
+	mCamera->setSize(mViewPort->width(), mViewPort->height());
+	mCameraB->setSize(mViewPortB->width(), mViewPortB->height());
+	mViewPort->setPos(0, 0);
+	mViewPortB->setPos(0, 0);
+
+			
 }
