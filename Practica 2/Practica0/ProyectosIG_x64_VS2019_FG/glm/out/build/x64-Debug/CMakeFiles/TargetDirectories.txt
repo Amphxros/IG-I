@@ -1,0 +1,4 @@
+C:/Users/ampac/Documents/git_Repositorios/UCM_Repos/IG-I/Practica 1/Practica2/ProyectosIG_x64_VS2019_FG/glm/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/ampac/Documents/git_Repositorios/UCM_Repos/IG-I/Practica 1/Practica2/ProyectosIG_x64_VS2019_FG/glm/out/build/x64-Debug/CMakeFiles/glm_static.dir
+C:/Users/ampac/Documents/git_Repositorios/UCM_Repos/IG-I/Practica 1/Practica2/ProyectosIG_x64_VS2019_FG/glm/out/build/x64-Debug/CMakeFiles/glm_shared.dir
+C:/Users/ampac/Documents/git_Repositorios/UCM_Repos/IG-I/Practica 1/Practica2/ProyectosIG_x64_VS2019_FG/glm/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
