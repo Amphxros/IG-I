@@ -224,7 +224,7 @@ void Scene::changeScene(int id)
 void Scene::savePhoto(){
 	if(mId==1){
 		gObjects.back()->update(); //para sobreescribir la textura de la foto
-		gTextures[4]->save("../BmpsP1/Photo.bmp"); //y guardar la foto
+		gTextures[5]->save("../BmpsP1/Photo.bmp"); //y guardar la foto
 		std::cout << "guardado";
 	}
 }
