@@ -153,4 +153,48 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
+//ENTIDADES CUÁDRICAS
+class QuadricEntity : public Abs_Entity {
+public:
+	QuadricEntity();
+	~QuadricEntity() { gluDeleteQuadric(q); };
+protected:
+	GLUquadricObj* q;
+};
+
+class Sphere : public QuadricEntity {
+public:
+	Sphere(GLdouble r); // r es el radio de la esfera 
+	void render(glm::dmat4 const& modelViewMat) const;
+protected:
+	GLdouble r_;
+};
+class Cylinder : public QuadricEntity {
+public:
+	Cylinder(GLdouble baseR, GLdouble topR, GLdouble height);
+	void render(glm::dmat4 const& modelViewMat) const;
+protected:
+	GLdouble baseR_;
+	GLdouble topR_;
+	GLdouble height_;
+};
+class Disk : public QuadricEntity {
+public:
+	Disk(GLdouble innerR, GLdouble outerR);
+	void render(glm::dmat4 const& modelViewMat) const;
+protected:
+	GLdouble innerR_;
+	GLdouble outerR_;
+};
+class PartialDisk : public QuadricEntity {
+public:
+	PartialDisk(GLdouble innerR, GLdouble outerR, GLdouble startA, GLdouble sweepA);
+	void render(glm::dmat4 const& modelViewMat) const;
+protected:
+	GLdouble innerR_;
+	GLdouble outerR_;
+	GLdouble startA_;
+	GLdouble sweepA_;
+};
+
 #endif //_H_Entities_H_

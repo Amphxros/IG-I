@@ -197,6 +197,16 @@ void IG1App::key(unsigned char key, int x, int y)
 		mScene->changeScene(1);
 		}
 		break;
+	case '2':
+		if (m2Vistas && mCoord.x > mWinW / 2) {
+			mCameraB->set3D();
+			mSceneB->changeScene(2);
+		}
+		else{
+		mCamera->set3D();
+		mScene->changeScene(2);
+		}
+		break;
 	case'f':
 	case 'F':
 		if (m2Vistas && mCoord.x > mWinW / 2) {

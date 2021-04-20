@@ -69,13 +69,30 @@ void Scene::init()
 	case 1:
 		escena3D();
 		break;
+	case 2:
+		escenaCaza();
+		break;
 	default:
 		escena2D();
 		break;
 	}
 
-
 	//gObjects.push_back(new Rectangulo(100, 100));
+}
+
+void Scene::sceneDirLight(Camera const& cam) const {
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glm::fvec4 posDir = { 1, 1, 1, 0 };
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixd(value_ptr(cam.viewMat()));
+	glLightfv(GL_LIGHT0, GL_POSITION, value_ptr(posDir));
+	glm::fvec4 ambient = { 0, 0, 0, 1 };
+	glm::fvec4 diffuse = { 1, 1, 1, 1 };
+	glm::fvec4 specular = { 0.5, 0.5, 0.5, 1 };
+	glLightfv(GL_LIGHT0, GL_AMBIENT, value_ptr(ambient));
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, value_ptr(diffuse));
+	glLightfv(GL_LIGHT0, GL_SPECULAR, value_ptr(specular));
 }
 
 void Scene::escena3D() {
@@ -138,6 +155,26 @@ void Scene::escena2D() {
 	r->setModelMat(glm::translate(r->modelMat(), dvec3(150, 0, 0)));
 	gObjects.push_back(r);
 }
+
+void Scene::escenaCaza() {
+	gObjects.push_back(new EjesRGB(400.0));
+
+	Sphere* esfera = new Sphere(100.0);
+	gObjects.push_back(esfera);
+
+	/*
+	Cylinder* cilindro = new Cylinder(100.0, 50.0, 80.5);
+	gObjects.push_back(cilindro);
+
+	Disk* disco = new Disk(30.0, 90.0);
+	gObjects.push_back(disco);
+
+	PartialDisk* discoParcial = new PartialDisk(30.0, 80.0, 90.0, 45.0);
+	gObjects.push_back(discoParcial);
+	*/
+	
+}
+
 //-------------------------------------------------------------------------
 void Scene::free() 
 { // release memory and resources   
@@ -160,13 +197,26 @@ void Scene::free()
 	gObjectsTranslucidos.clear();
 }
 //-------------------------------------------------------------------------
-void Scene::setGL() 
+void Scene::setGL()
 {
 	// OpenGL basic setting
-	glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)
+	switch (mId)
+	{
+	case 0:
+		glClearColor(1.0, 1.0, 1.0, 1.0);  // background color (alpha=1 -> opaque)
+		break;
+	case 1:
+		glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)
+		break;
+	case 2:
+		glClearColor(0.7, 0.8, 0.9, 1.0);  // background color (alpha=1 -> opaque)
+		break;
+	default:
+		glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)
+		break;
+	}
 	glEnable(GL_DEPTH_TEST);  // enable Depth test
 	glEnable(GL_TEXTURE_2D); // activar el uso de texturas
-
 }
 //-------------------------------------------------------------------------
 void Scene::resetGL() 
@@ -181,6 +231,13 @@ void Scene::render(Camera const& cam) const
 {
 	cam.upload();
 
+	//Luz rara solo para el Caza TIE
+	if (mId == 2) sceneDirLight(cam);
+	else {
+		glDisable(GL_LIGHT0);
+		glDisable(GL_LIGHTING);
+	}
+
 	for (Abs_Entity* el : gObjects)
 	{
 	  el->render(cam.viewMat());
@@ -189,8 +246,6 @@ void Scene::render(Camera const& cam) const
 	{
 	  el->render(cam.viewMat());
 	}
-
-
 }
 
 void Scene::update()

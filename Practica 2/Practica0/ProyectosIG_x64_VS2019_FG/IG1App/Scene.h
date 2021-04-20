@@ -35,6 +35,7 @@ public:
 
 	void savePhoto();
 
+	void sceneDirLight(Camera const& cam) const;
 	
 protected:
 	void free();
@@ -43,6 +44,7 @@ protected:
 
 	void escena2D();
 	void escena3D();
+	void escenaCaza();
 
 	std::vector<Texture*> gTextures;	//vector de texturas
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
