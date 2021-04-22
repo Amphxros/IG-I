@@ -162,16 +162,15 @@ void Scene::escenaCaza() {
 	Sphere* esfera = new Sphere(100.0);
 	gObjects.push_back(esfera);
 
-	/*
+
 	Cylinder* cilindro = new Cylinder(100.0, 50.0, 80.5);
 	gObjects.push_back(cilindro);
-
+	
 	Disk* disco = new Disk(30.0, 90.0);
 	gObjects.push_back(disco);
-
+	
 	PartialDisk* discoParcial = new PartialDisk(30.0, 80.0, 90.0, 45.0);
 	gObjects.push_back(discoParcial);
-	*/
 	
 }
 

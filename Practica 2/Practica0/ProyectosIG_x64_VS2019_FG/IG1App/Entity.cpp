@@ -467,11 +467,11 @@ void Planta::render(glm::dmat4 const& modelViewMat) const
 	}
 }
 
-QuadricEntity::QuadricEntity() {
+QuadricEntity::QuadricEntity():Abs_Entity() {
 	q = gluNewQuadric();
 }
 
-Sphere::Sphere(GLdouble r) {
+Sphere::Sphere(GLdouble r): QuadricEntity() {
 	r_ = r;
 }
 void Sphere::render(glm::dmat4 const& modelViewMat) const {
@@ -487,27 +487,21 @@ void Sphere::render(glm::dmat4 const& modelViewMat) const {
 	glColor3f(1.0, 1.0, 1.0);
 }
 
-Cylinder::Cylinder(GLdouble baseR, GLdouble topR, GLdouble height) {
-	baseR = baseR_;
-	topR = topR_;
-	height = height_;
+Cylinder::Cylinder(GLdouble baseR, GLdouble topR, GLdouble height): QuadricEntity(),baseR_(baseR), topR_(topR), height_(height) {
 }
 void Cylinder::render(glm::dmat4 const& modelViewMat) const {
-	dmat4 aMat = modelViewMat * mModelMat;
+	glm::dmat4 aMat = modelViewMat * mModelMat;
 	upload(aMat);
-	// color:
 	glEnable(GL_COLOR_MATERIAL);
-	glColor3f(1.0, 1.0, 0.0);
-	// modo:
-	gluQuadricDrawStyle(q, GLU_FILL); // GLU_POINT / GLU_LINE / GLU_FILL
+	glColor3f(mColor.r, mColor.g, mColor.b);
+	gluQuadricDrawStyle(q, GLU_FILL);
 	gluCylinder(q, baseR_, topR_, height_, 50, 50);
-	// se debe recuperar el color:
 	glColor3f(1.0, 1.0, 1.0);
+	glDisable(GL_COLOR_MATERIAL);
 }
 
-Disk::Disk(GLdouble innerR, GLdouble outerR) {
-	innerR = innerR_;
-	outerR = outerR_;
+Disk::Disk(GLdouble innerR, GLdouble outerR):QuadricEntity(),innerR_(innerR), outerR_(outerR) {
+	
 }
 void Disk::render(glm::dmat4 const& modelViewMat) const {
 	dmat4 aMat = modelViewMat * mModelMat;
@@ -522,11 +516,8 @@ void Disk::render(glm::dmat4 const& modelViewMat) const {
 	glColor3f(1.0, 1.0, 1.0);
 }
 
-PartialDisk::PartialDisk(GLdouble innerR, GLdouble outerR, GLdouble startA, GLdouble sweepA) {
-	innerR = innerR_;
-	outerR = outerR_;
-	startA = startA_;
-	sweepA = sweepA_;
+PartialDisk::PartialDisk(GLdouble innerR, GLdouble outerR, GLdouble startA, GLdouble sweepA): 
+	QuadricEntity(), innerR_(innerR), outerR_(outerR), startA_(startA), sweepA_(sweepA) {
 }
 void PartialDisk::render(glm::dmat4 const& modelViewMat) const {
 	dmat4 aMat = modelViewMat * mModelMat;
