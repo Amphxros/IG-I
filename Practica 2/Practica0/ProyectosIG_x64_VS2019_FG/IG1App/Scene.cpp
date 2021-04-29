@@ -160,18 +160,20 @@ void Scene::escenaCaza() {
 	gObjects.push_back(new EjesRGB(400.0));
 
 	Sphere* esfera = new Sphere(100.0);
+	esfera->setColor(dvec3(0.0, 0.25, 0.42));
 	gObjects.push_back(esfera);
-
-
+	
 	Cylinder* cilindro = new Cylinder(100.0, 50.0, 80.5);
+	cilindro->setColor(dvec3(0.0, 0.25, 0.42));
 	gObjects.push_back(cilindro);
 	
 	Disk* disco = new Disk(30.0, 90.0);
+	disco->setColor(dvec3(0.0, 0.25, 0.42));
 	gObjects.push_back(disco);
 	
 	PartialDisk* discoParcial = new PartialDisk(30.0, 80.0, 90.0, 45.0);
+	discoParcial->setColor(dvec3(0.0, 0.25, 0.42));
 	gObjects.push_back(discoParcial);
-	
 }
 
 //-------------------------------------------------------------------------
