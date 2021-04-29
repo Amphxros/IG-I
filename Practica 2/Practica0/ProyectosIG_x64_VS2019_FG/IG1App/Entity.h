@@ -186,11 +186,14 @@ protected:
 class Disk : public QuadricEntity {
 public:
 	Disk(GLdouble innerR, GLdouble outerR);
+	Disk(GLdouble innerR, GLdouble outerR, GLint slices, GLint loops); // personalizado
 	virtual ~Disk() {}
 	void render(glm::dmat4 const& modelViewMat) const;
 protected:
 	GLdouble innerR_;
 	GLdouble outerR_;
+	GLint slices_; // personalizado
+	GLint loops_; // personalizado
 };
 class PartialDisk : public QuadricEntity {
 public:
