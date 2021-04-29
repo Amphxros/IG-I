@@ -482,9 +482,20 @@ void Sphere::render(glm::dmat4 const& modelViewMat) const {
 	glColor3f(mColor.r, mColor.g, mColor.b);
 	// modo:
 	gluQuadricDrawStyle(q, GLU_FILL); // GLU_POINT / GLU_LINE / GLU_FILL
+	if (mTexture != nullptr) {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		gluQuadricTexture(q, GL_TRUE);
+		mTexture->bind(GL_REPLACE);
+	}
 	gluSphere(q, r_, 50, 50);
 	// se debe recuperar el color:
 	glColor3f(1.0, 1.0, 1.0);
+	if(mTexture!=nullptr){
+		glDisable(GL_BLEND);
+		gluQuadricTexture(q, GL_FALSE);
+		mTexture->unbind();
+	}
 	glDisable(GL_COLOR_MATERIAL);
 }
 
@@ -499,9 +510,20 @@ void Cylinder::render(glm::dmat4 const& modelViewMat) const {
 	glColor3f(mColor.r, mColor.g, mColor.b);
 	// modo:
 	gluQuadricDrawStyle(q, GLU_FILL); // GLU_POINT / GLU_LINE / GLU_FILL
+	if (mTexture != nullptr) {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		gluQuadricTexture(q, GL_TRUE);
+		mTexture->bind(GL_REPLACE);
+	}
 	gluCylinder(q, baseR_, topR_, height_, 50, 50);
 	// se debe recuperar el color:
 	glColor3f(1.0, 1.0, 1.0);
+	if(mTexture!=nullptr){
+		glDisable(GL_BLEND);
+		gluQuadricTexture(q, GL_FALSE);
+		mTexture->unbind();
+	}
 	glDisable(GL_COLOR_MATERIAL);
 }
 
@@ -512,6 +534,8 @@ Disk::Disk(GLdouble innerR, GLdouble outerR) :
 	QuadricEntity(), innerR_(innerR), outerR_(outerR), slices_(50), loops_(50) {
 }
 void Disk::render(glm::dmat4 const& modelViewMat) const {
+	glDepthMask(GL_FALSE);
+
 	dmat4 aMat = modelViewMat * mModelMat;
 	upload(aMat);
 	// color:
@@ -519,10 +543,22 @@ void Disk::render(glm::dmat4 const& modelViewMat) const {
 	glColor3f(mColor.r, mColor.g, mColor.b);
 	// modo:
 	gluQuadricDrawStyle(q, GLU_FILL); // GLU_POINT / GLU_LINE / GLU_FILL
+	if (mTexture != nullptr) {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		gluQuadricTexture(q, GL_TRUE);
+		mTexture->bind(GL_REPLACE);
+	}
 	gluDisk(q, innerR_, outerR_, slices_, loops_);
 	// se debe recuperar el color:
 	glColor3f(1.0, 1.0, 1.0);
-	glDisable(GL_COLOR_MATERIAL);
+	if(mTexture!=nullptr){
+		glDisable(GL_BLEND);
+		gluQuadricTexture(q, GL_FALSE);
+		mTexture->unbind();
+	}
+glDepthMask(GL_TRUE);	
+glDisable(GL_COLOR_MATERIAL);
 }
 
 PartialDisk::PartialDisk(GLdouble innerR, GLdouble outerR, GLdouble startA, GLdouble sweepA) :
@@ -534,11 +570,22 @@ void PartialDisk::render(glm::dmat4 const& modelViewMat) const {
 	// color:
 	glEnable(GL_COLOR_MATERIAL);
 	glColor3f(mColor.r, mColor.g, mColor.b);
+	if (mTexture!=nullptr){
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		gluQuadricTexture(q, GL_TRUE);
+		mTexture->bind(GL_REPLACE);
+	}
 	// modo:
 	gluQuadricDrawStyle(q, GLU_FILL); // GLU_POINT / GLU_LINE / GLU_FILL
 	gluPartialDisk(q, innerR_, outerR_, 50, 50, startA_, sweepA_);
 	// se debe recuperar el color:
 	glColor3f(1.0, 1.0, 1.0);
+	if(mTexture!=nullptr){
+		glDisable(GL_BLEND);
+		gluQuadricTexture(q, GL_FALSE);
+		mTexture->unbind();
+	}
 	glDisable(GL_COLOR_MATERIAL);
 }
 

@@ -30,7 +30,7 @@ Scene::Scene(){
 	gTextures.push_back(tex5);
 
 	Texture* tex6 = new Texture();
-	tex6->load("../BmpsP1/noche.bmp");
+	tex6->load("../BmpsP1/noche.bmp", 255 * 0.75);
 	gTextures.push_back(tex6);
 
 	Texture* tex7 = new Texture();
@@ -125,7 +125,7 @@ void Scene::escena3D() {
 	gObjectsTranslucidos.push_back(c);
 
 	Foto* foto = new Foto(128, 70);
-	foto->setTexture(gTextures[5]);
+	foto->setTexture(gTextures[6]);
 	gObjects.push_back(foto);
 
 
@@ -181,20 +181,22 @@ void Scene::escenaCaza() {
 	gObjects.push_back(disco1);
 
 	Disk* disco2 = new Disk(0.0, 150.0, 6, 50);
+	disco2->setTexture(gTextures[5]);
 	disco2->setColor(dvec3(0.0, 0.25, 0.42));
 	disco2->setModelMat(glm::translate(disco2->modelMat(), dvec3(0, 300, 200)));
 	disco2->setModelMat(glm::rotate(disco2->modelMat(), radians(90.0), dvec3(0, 1, 0)));
 	disco2->setModelMat(glm::rotate(disco2->modelMat(), radians(90.0), dvec3(0, 0, 1)));
 	disco2->setModelMat(glm::scale(disco2->modelMat(), dvec3(1.75, 1.75, 1.0)));
-	gObjects.push_back(disco2);
+	gObjectsTranslucidos.push_back(disco2);
 
 	Disk* disco3 = new Disk(0.0, 150.0, 6, 50);
+	disco3->setTexture(gTextures[5]);
 	disco3->setColor(dvec3(0.0, 0.25, 0.42));
 	disco3->setModelMat(glm::translate(disco3->modelMat(), dvec3(400, 300, 200)));
 	disco3->setModelMat(glm::rotate(disco3->modelMat(), radians(90.0), dvec3(0, 1, 0)));
 	disco3->setModelMat(glm::rotate(disco3->modelMat(), radians(90.0), dvec3(0, 0, 1)));
 	disco3->setModelMat(glm::scale(disco3->modelMat(), dvec3(1.75, 1.75, 1.0)));
-	gObjects.push_back(disco3);
+	gObjectsTranslucidos.push_back(disco3);
 
 	//TESTS//
 	/*
@@ -250,7 +252,8 @@ void Scene::setGL()
 		glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)
 		break;
 	case 2:
-		glClearColor(0.7, 0.8, 0.9, 1.0);  // background color (alpha=1 -> opaque)
+		glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)
+		//glClearColor(0.7, 0.8, 0.9, 1.0);  // background color (alpha=1 -> opaque)
 		break;
 	default:
 		glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)
@@ -273,7 +276,8 @@ void Scene::render(Camera const& cam) const
 	cam.upload();
 
 	//Luz rara solo para el Caza TIE
-	if (mId == 2) sceneDirLight(cam);
+	if (mId>= 2) 
+		sceneDirLight(cam);
 	else {
 		glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHTING);
@@ -320,7 +324,7 @@ void Scene::changeScene(int id)
 void Scene::savePhoto(){
 	if(mId==1){
 		gObjects.back()->update(); //para sobreescribir la textura de la foto
-		gTextures[5]->save("../BmpsP1/Photo.bmp"); //y guardar la foto
+		gTextures[6]->save("../BmpsP1/Photo.bmp"); //y guardar la foto
 		std::cout << "guardado";
 	}
 }
