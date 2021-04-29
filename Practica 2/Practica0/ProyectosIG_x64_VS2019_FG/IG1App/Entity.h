@@ -176,7 +176,7 @@ protected:
 class Cylinder : public QuadricEntity {
 public:
 	Cylinder(GLdouble baseR, GLdouble topR, GLdouble height);
-	virtual ~Cylinder(){}
+	virtual ~Cylinder() {}
 	void render(glm::dmat4 const& modelViewMat) const;
 protected:
 	GLdouble baseR_=0;
@@ -202,6 +202,33 @@ protected:
 	GLdouble outerR_;
 	GLdouble startA_;
 	GLdouble sweepA_;
+};
+
+//ENTIDADES COMPUESTAS
+class CompoundEntity : public Abs_Entity {
+public:
+	CompoundEntity() {} ;
+	~CompoundEntity() { freeCEntity(); };
+
+	void addEntity(Abs_Entity* ae) { gObjectsCEntity.push_back(ae); };
+protected:
+	std::vector<Abs_Entity*> gObjectsCEntity;
+
+	void freeCEntity() {
+		for (Abs_Entity* ent : gObjectsCEntity) {
+			delete ent;
+			ent = nullptr;
+		}
+		gObjectsCEntity.clear();
+	};
+};
+
+class TIE : public CompoundEntity {
+public:
+	TIE() {};
+	virtual ~TIE() {};
+	void render(glm::dmat4 const& modelViewMat) const;
+protected:
 };
 
 #endif //_H_Entities_H_
