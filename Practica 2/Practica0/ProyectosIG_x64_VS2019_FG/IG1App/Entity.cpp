@@ -354,8 +354,7 @@ void Foto::render(glm::dmat4 const& modelViewMat) const {
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glColor3d(mColor.r, mColor.g, mColor.b);
-		glLineWidth(2);
-
+	
 		if (mTexture != nullptr) {
 			mTexture->bind(GL_REPLACE);
 		}
@@ -592,5 +591,27 @@ void PartialDisk::render(glm::dmat4 const& modelViewMat) const {
 void TIE::render(glm::dmat4 const& modelViewMat) const {
 	for (Abs_Entity* ent : gObjectsCEntity) {
 		ent->render(modelViewMat);
+	}
+}
+
+AnilloCuadrado::AnilloCuadrado(): Abs_Entity()
+{
+	mMesh = IndexMesh::generaAnilloCuadradoIndexado();
+}
+
+void AnilloCuadrado::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;
+		upload(aMat);
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor3d(mColor.r, mColor.g, mColor.b);
+
+		mMesh->render();
+
+		//default
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4d(1.0, 1.0, 1.0, 1.0);
 	}
 }

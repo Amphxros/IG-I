@@ -156,6 +156,9 @@ public:
 
 
 
+
+/////////////////////////////////////////////////////////////////////////////////
+
 //ENTIDADES CUÁDRICAS
 class QuadricEntity : public Abs_Entity {
 public:
@@ -206,7 +209,15 @@ protected:
 	GLdouble startA_;
 	GLdouble sweepA_;
 };
+///////////////////////////////////////////////////////////////////////////
+class AnilloCuadrado : public Abs_Entity {
+public:
+	AnilloCuadrado();
+	virtual ~AnilloCuadrado() {}
+	void render(glm::dmat4 const& modelViewMat) const;
+};
 
+///////////////////////////////////////////////////////////////////////////
 //ENTIDADES COMPUESTAS
 class CompoundEntity : public Abs_Entity {
 public:

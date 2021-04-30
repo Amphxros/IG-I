@@ -20,7 +20,7 @@ void Mesh::render() const
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_DOUBLE, 0, vVertices.data());  // number of coordinates per vertex, type of each coordinate, stride, pointer 
     
-if (vColors.size() > 0) { // transfer colors
+	if (vColors.size() > 0) { // transfer colors
       glEnableClientState(GL_COLOR_ARRAY);
       glColorPointer(4, GL_DOUBLE, 0, vColors.data());  // components number (rgba=4), type of each component, stride, pointer  
     }
@@ -29,6 +29,11 @@ if (vColors.size() > 0) { // transfer colors
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glTexCoordPointer(2, GL_DOUBLE, 0, vTextures.data());
 	}
+	if (vNormals.size() > 0) {
+		// se añaden comandos para la tabla de normales:
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glNormalPointer(GL_DOUBLE, 0, vNormals.data());
+	}
 
 	draw();
 
@@ -36,7 +41,7 @@ if (vColors.size() > 0) { // transfer colors
     glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
+	glDisableClientState(GL_NORMAL_ARRAY);
   }
 }
 //-------------------------------------------------------------------------
@@ -343,3 +348,81 @@ Mesh* Mesh::generaEstrella3DconTextura(GLdouble re, GLuint np, GLdouble h)
 	return mesh;
 }
 
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+IndexMesh* IndexMesh::generaAnilloCuadradoIndexado()
+{
+	IndexMesh* mesh = new IndexMesh();
+	mesh->mPrimitive = GL_TRIANGLE_STRIP;
+	mesh->mNumVertices = 8;
+	mesh->mNumIndex = 10;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	mesh->vColors.reserve(mesh->mNumVertices);
+	
+	mesh->vVertices = {
+		{30.0, 30.0, 0.0}, {10.0, 10.0, 0.0}, {70.0, 30.0, 0.0}, {90.0, 10.0, 0.0},
+		{70.0, 70.0, 0.0}, {90.0, 90.0, 0.0}, {30.0, 70.0, 0.0}, {10.0, 90.0, 0.0}
+	};
+
+	mesh->vColors = {
+		{0.0, 0.0, 0.0, 1.0}, {1.0, 0.0, 0.0, 1.0}, {0.0, 1.0, 0.0, 1.0}, {0.0, 0.0, 1.0, 1.0},
+		{1.0, 1.0, 0.0, 1.0}, {1.0, 0.0, 1.0, 1.0}, {0.0, 1.0, 1.0, 1.0}, {1.0, 0.0, 0.0, 1.0}
+	};
+
+	mesh->vIndices = new GLuint[mesh->mNumIndex]{0, 1, 2, 3, 4, 5, 6, 7, 0, 1};
+	
+	return mesh;
+}
+
+IndexMesh* IndexMesh::generaCuboConTapasIndexado(GLdouble l)
+{
+	IndexMesh* mesh = new IndexMesh();
+
+
+
+
+
+	return mesh;
+}
+
+void IndexMesh::render() const
+{
+	if (vVertices.size() > 0) {  // transfer data
+	  // transfer the coordinates of the vertices
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_DOUBLE, 0, vVertices.data());  // number of coordinates per vertex, type of each coordinate, stride, pointer 
+
+		if (vColors.size() > 0) { // transfer colors
+			glEnableClientState(GL_COLOR_ARRAY);
+			glColorPointer(4, GL_DOUBLE, 0, vColors.data());  // components number (rgba=4), type of each component, stride, pointer  
+		}
+		if (vTextures.size() > 0) {
+			// activar array de coordenadas de textura
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glTexCoordPointer(2, GL_DOUBLE, 0, vTextures.data());
+		}
+		if (vIndices!=nullptr) {
+			glEnableClientState(GL_INDEX_ARRAY);
+			glIndexPointer(GL_UNSIGNED_INT, 0, vIndices);
+		}
+		if (vNormals.size() > 0) {
+		// se añaden comandos para la tabla de normales:
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glNormalPointer(GL_DOUBLE, 0, vNormals.data());
+		}
+
+		draw();
+
+		//Desactivamos TODO
+		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_INDEX_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
+	}
+}
+
+void IndexMesh::draw() const
+{
+	glDrawElements(mPrimitive, mNumIndex, GL_UNSIGNED_INT,vIndices);
+}

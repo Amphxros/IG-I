@@ -45,8 +45,30 @@ protected:
 	std::vector<glm::dvec3> vVertices;  // vertex array
 	std::vector<glm::dvec4> vColors;    // color array
 	std::vector<glm::dvec2> vTextures;  // texture array
+	std::vector<glm::dvec3> vNormals;	// tabla de normales
 	virtual void draw() const;
 };
 //-------------------------------------------------------------------------
+
+class IndexMesh : public Mesh {
+public:
+
+	static IndexMesh* generaAnilloCuadradoIndexado();
+	static IndexMesh* generaCuboConTapasIndexado(GLdouble l);
+
+	IndexMesh() : Mesh() {};
+	virtual ~IndexMesh() {  delete[] vIndices;  vIndices = nullptr; };
+
+	virtual void render() const;
+
+	GLuint* const& indices() const { return vIndices; };
+protected:
+	GLuint* vIndices;  // index array
+	virtual void draw() const;
+	GLuint mNumIndex = 0;  // number of element
+
+};
+
+
 
 #endif //_H_Scene_H_

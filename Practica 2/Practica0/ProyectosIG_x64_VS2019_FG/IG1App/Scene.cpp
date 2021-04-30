@@ -72,6 +72,9 @@ void Scene::init()
 	case 2:
 		escenaCaza();
 		break;
+	case 3:
+		escenaIndices();
+		break;
 	default:
 		escena2D();
 		break;
@@ -127,8 +130,6 @@ void Scene::escena3D() {
 	Foto* foto = new Foto(128, 70);
 	foto->setTexture(gTextures[6]);
 	gObjects.push_back(foto);
-
-
 }
 
 void Scene::escena2D() {
@@ -218,6 +219,11 @@ void Scene::escenaCaza() {
 	*/
 }
 
+void Scene::escenaIndices() {
+	gObjects.push_back(new EjesRGB(400.0));
+	gObjects.push_back(new AnilloCuadrado());
+}
+
 //-------------------------------------------------------------------------
 void Scene::free() 
 { // release memory and resources
@@ -253,7 +259,9 @@ void Scene::setGL()
 		break;
 	case 2:
 		glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)
-		//glClearColor(0.7, 0.8, 0.9, 1.0);  // background color (alpha=1 -> opaque)
+		break;
+	case 3:
+		glClearColor(0.7, 0.8, 0.9, 1.0);  // background color (alpha=1 -> opaque)
 		break;
 	default:
 		glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)
@@ -276,7 +284,7 @@ void Scene::render(Camera const& cam) const
 	cam.upload();
 
 	//Luz rara solo para el Caza TIE
-	if (mId>= 2) 
+	if (mId == 2) 
 		sceneDirLight(cam);
 	else {
 		glDisable(GL_LIGHT0);
@@ -322,7 +330,7 @@ void Scene::changeScene(int id)
 }
 
 void Scene::savePhoto(){
-	if(mId==1){
+	if(mId == 1){
 		gObjects.back()->update(); //para sobreescribir la textura de la foto
 		gTextures[6]->save("../BmpsP1/Photo.bmp"); //y guardar la foto
 		std::cout << "guardado";
