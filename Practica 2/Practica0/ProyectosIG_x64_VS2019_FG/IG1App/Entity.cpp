@@ -605,13 +605,41 @@ void AnilloCuadrado::render(glm::dmat4 const& modelViewMat) const
 		dmat4 aMat = modelViewMat * mModelMat;
 		upload(aMat);
 
+		glEnable(GL_COLOR_MATERIAL);
+		glColor3f(mColor.r, mColor.g, mColor.b);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glColor3d(mColor.r, mColor.g, mColor.b);
 
 		mMesh->render();
 
 		//default
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glColor4d(1.0, 1.0, 1.0, 1.0);
+
+		glDisable(GL_COLOR_MATERIAL);
+		glColor3f(0,0,0);
+	}
+}
+
+Cubo::Cubo(): Abs_Entity()
+{
+	mMesh = IndexMesh::generaCuboConTapasIndexado(100);
+}
+
+void Cubo::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;
+		upload(aMat);
+
+		glEnable(GL_COLOR_MATERIAL);
+		glColor3f(mColor.r, mColor.g, mColor.b);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		mMesh->render();
+
+		//default
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		glDisable(GL_COLOR_MATERIAL);
+		glColor3f(0, 0, 0);
 	}
 }

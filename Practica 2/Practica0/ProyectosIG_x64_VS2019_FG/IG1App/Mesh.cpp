@@ -358,7 +358,7 @@ IndexMesh* IndexMesh::generaAnilloCuadradoIndexado()
 	mesh->mNumIndex = 10;
 	mesh->vVertices.reserve(mesh->mNumVertices);
 	mesh->vColors.reserve(mesh->mNumVertices);
-	
+	mesh->vNormals.reserve(mesh->mNumVertices);
 	mesh->vVertices = {
 		{30.0, 30.0, 0.0}, {10.0, 10.0, 0.0}, {70.0, 30.0, 0.0}, {90.0, 10.0, 0.0},
 		{70.0, 70.0, 0.0}, {90.0, 90.0, 0.0}, {30.0, 70.0, 0.0}, {10.0, 90.0, 0.0}
@@ -371,6 +371,11 @@ IndexMesh* IndexMesh::generaAnilloCuadradoIndexado()
 
 	mesh->vIndices = new GLuint[mesh->mNumIndex]{0, 1, 2, 3, 4, 5, 6, 7, 0, 1};
 	
+
+	for (int i = 0; i < mesh->mNumVertices; i++) {
+		mesh->vNormals.push_back(dvec3(0.0, 0.0, 1.0));
+	}
+
 	return mesh;
 }
 
@@ -378,10 +383,44 @@ IndexMesh* IndexMesh::generaCuboConTapasIndexado(GLdouble l)
 {
 	IndexMesh* mesh = new IndexMesh();
 
+	mesh->mPrimitive = GL_TRIANGLES;
+	mesh->mNumVertices = 8;
+	mesh->mNumIndex = 36;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	mesh->vColors.reserve(mesh->mNumVertices);
 
+	GLdouble ld = l / 2;
+	mesh->vNormals.reserve(mesh->mNumVertices);
+	mesh->vVertices = {
+		{ld, ld, -ld}, {ld, -ld, -ld}, {ld, ld, ld}, {ld, -ld, ld},
+		{-ld, ld, ld}, {-ld, -ld, ld}, {-ld, ld, -ld}, {-ld, -ld, -ld}
+	};
 
+	for (int i = 0; i < mesh->mNumVertices; i++) {
+		mesh->vColors.push_back(dvec4(0.0, 1.0, 0.0, 1.0));
+	}
 
+	mesh->vIndices = new GLuint[mesh->mNumIndex]
+	{
+	0,1,2, 2,1,3,													
+	2,3,4, 4,3,5,												
+	4,5,6, 6,5,7, 												
+	6,7,0, 0,7,1, 												
+	4,6,2, 2,6,0, 												
+	1,7,3, 3,7,5
+	};
 
+	mesh->vNormals = {
+		glm::normalize(dvec3(1, 1, -1)),
+		glm::normalize(dvec3(1, -1, -1)),
+		glm::normalize(dvec3(1, 1, 1)),
+		glm::normalize(dvec3(1, -1, 1)),
+		glm::normalize(dvec3(-1, 1, 1)),
+		glm::normalize(dvec3(-1, -1, 1)),
+		glm::normalize(dvec3(-1, 1, -1)),
+		glm::normalize(dvec3(-1, -1, -1))
+	};
+	
 	return mesh;
 }
 

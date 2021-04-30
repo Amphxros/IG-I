@@ -222,6 +222,8 @@ void Scene::escenaCaza() {
 void Scene::escenaIndices() {
 	gObjects.push_back(new EjesRGB(400.0));
 	gObjects.push_back(new AnilloCuadrado());
+
+	gObjects.push_back(new Cubo());
 }
 
 //-------------------------------------------------------------------------
@@ -283,8 +285,8 @@ void Scene::render(Camera const& cam) const
 {
 	cam.upload();
 
-	//Luz rara solo para el Caza TIE
-	if (mId == 2) 
+	//Luz rara
+	if (mId == 2 || mId == 3)
 		sceneDirLight(cam);
 	else {
 		glDisable(GL_LIGHT0);

@@ -213,7 +213,14 @@ protected:
 class AnilloCuadrado : public Abs_Entity {
 public:
 	AnilloCuadrado();
-	virtual ~AnilloCuadrado() {}
+	virtual ~AnilloCuadrado() {};
+	void render(glm::dmat4 const& modelViewMat) const;
+};
+
+class Cubo : public Abs_Entity {
+public:
+	Cubo();
+	virtual ~Cubo() {};
 	void render(glm::dmat4 const& modelViewMat) const;
 };
 
