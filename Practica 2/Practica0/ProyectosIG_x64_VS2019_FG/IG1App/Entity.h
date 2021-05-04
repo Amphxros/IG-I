@@ -209,7 +209,37 @@ protected:
 	GLdouble startA_;
 	GLdouble sweepA_;
 };
+
 ///////////////////////////////////////////////////////////////////////////
+class EntityWithIndexMesh: public Abs_Entity {
+public:
+	EntityWithIndexMesh() : mModelMat(1.0) {};  // 4x4 identity matrix
+	virtual ~EntityWithIndexMesh() {};
+
+	EntityWithIndexMesh(const EntityWithIndexMesh& e) = delete;  // no copy constructor
+	EntityWithIndexMesh& operator=(const EntityWithIndexMesh& e) = delete;  // no copy assignment
+
+	virtual void render(glm::dmat4 const& modelViewMat) const = 0;  // abstract method
+	virtual void update() {};
+	// modeling matrix
+	glm::dmat4 const& modelMat() const { return mModelMat; };
+
+	void setModelMat(glm::dmat4 const& aMat) { mModelMat = aMat; };
+	void setColor(glm::dvec3 color) { mColor = glm::dvec4(color.r, color.g, color.b, 1); }
+	void setTexture(Texture* tex) { mTexture = tex; }; // establecer textura
+	void setTextureAlt(Texture* tex) { mTextureAlt = tex; }; // establecer textura
+
+protected:
+	IndexMesh* mIndexMesh = nullptr;   // the mesh
+	Texture* mTexture = nullptr; // atributo para la textura principal
+	Texture* mTextureAlt = nullptr; // atributo para la textura alternativa
+	glm::dmat4 mModelMat;    // modeling matrix
+
+	glm::dvec4 mColor;    // modeling matrix
+	// transfers modelViewMat to the GPU
+	virtual void upload(glm::dmat4 const& mModelViewMat) const;
+};
+
 class AnilloCuadrado : public Abs_Entity {
 public:
 	AnilloCuadrado();
@@ -217,7 +247,7 @@ public:
 	void render(glm::dmat4 const& modelViewMat) const;
 };
 
-class Cubo : public Abs_Entity {
+class Cubo : public EntityWithIndexMesh {
 public:
 	Cubo();
 	virtual ~Cubo() {};

@@ -61,6 +61,7 @@ public:
 
 	virtual void render() const;
 
+	void buildNormalVectors();
 	GLuint* const& indices() const { return vIndices; };
 protected:
 	GLuint* vIndices;  // index array

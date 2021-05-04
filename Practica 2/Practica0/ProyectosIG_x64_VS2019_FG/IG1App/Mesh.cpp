@@ -461,6 +461,26 @@ void IndexMesh::render() const
 	}
 }
 
+void IndexMesh::buildNormalVectors()
+{
+	for (int i = 0; i < mNumVertices; i++) {
+		vNormals.emplace_back(glm::dvec3(0, 0, 0));
+	}
+
+	for (int i = 0; i < mNumIndex; i+=3) {
+		glm::dvec3 n = glm::cross(vVertices[vIndices[(i + 2)]] - vVertices[vIndices[(i + 1)]], vVertices[vIndices[i]] - vVertices[(i + 1)]);
+		
+		for (int j = i; j < i + 3; j++) {
+			vNormals[vIndices[j % mNumIndex]] += n;
+		}
+	}
+
+	for (int i = 0; i < mNumVertices; i++) {
+		vNormals[i] = glm::normalize(vNormals[i]);
+	}
+
+}
+
 void IndexMesh::draw() const
 {
 	glDrawElements(mPrimitive, mNumIndex, GL_UNSIGNED_INT,vIndices);

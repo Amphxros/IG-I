@@ -12,7 +12,7 @@ void Abs_Entity::upload(dmat4 const& modelViewMat) const
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixd(value_ptr(modelViewMat));  // transfers modelView matrix to the GPU
 }
-//-------------------------------------------------------------------------
+
 //-------------------------------------------------------------------------
 
 EjesRGB::EjesRGB(GLdouble l): Abs_Entity()
@@ -619,14 +619,15 @@ void AnilloCuadrado::render(glm::dmat4 const& modelViewMat) const
 	}
 }
 
-Cubo::Cubo(): Abs_Entity()
+Cubo::Cubo(): EntityWithIndexMesh()
 {
-	mMesh = IndexMesh::generaCuboConTapasIndexado(100);
+	mIndexMesh = IndexMesh::generaCuboConTapasIndexado(100);
+	static_cast<IndexMesh*>(mIndexMesh)->buildNormalVectors();
 }
 
 void Cubo::render(glm::dmat4 const& modelViewMat) const
 {
-	if (mMesh != nullptr) {
+	if (mIndexMesh != nullptr) {
 		dmat4 aMat = modelViewMat * mModelMat;
 		upload(aMat);
 
@@ -634,7 +635,7 @@ void Cubo::render(glm::dmat4 const& modelViewMat) const
 		glColor3f(mColor.r, mColor.g, mColor.b);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-		mMesh->render();
+		mIndexMesh->render();
 
 		//default
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -642,4 +643,12 @@ void Cubo::render(glm::dmat4 const& modelViewMat) const
 		glDisable(GL_COLOR_MATERIAL);
 		glColor3f(0, 0, 0);
 	}
+}
+
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+void EntityWithIndexMesh::upload(glm::dmat4 const& mModelViewMat) const
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixd(value_ptr(mModelViewMat));  // transfers modelView matrix to the GPU
 }
