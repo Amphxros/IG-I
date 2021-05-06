@@ -468,15 +468,20 @@ void IndexMesh::buildNormalVectors()
 	}
 
 	for (int i = 0; i < mNumIndex; i+=3) {
-		glm::dvec3 n = glm::cross(vVertices[vIndices[(i + 2)]] - vVertices[vIndices[(i + 1)]], vVertices[vIndices[i]] - vVertices[(i + 1)]);
 		
-		for (int j = i; j < i + 3; j++) {
-			vNormals[vIndices[j % mNumIndex]] += n;
-		}
-	}
+		GLuint auxA, auxB, auxC; //puntos a, b y c que forman 1 cara
 
-	for (int i = 0; i < mNumVertices; i++) {
-		vNormals[i] = glm::normalize(vNormals[i]);
+		auxA = vIndices[i];
+		auxB = vIndices[i + 1];
+		auxC = vIndices[i + 2];
+
+		//calculamos la normal cruzando los vertices de dichos puntos
+		dvec3 n = normalize(cross((vVertices[auxC] - vVertices[auxB]), (vVertices[auxA] - vVertices[auxB])));
+
+		//le sumamos a cada uno su normal 
+		vNormals[auxA] += n; 
+		vNormals[auxB] += n;
+		vNormals[auxC] += n;
 	}
 
 }
