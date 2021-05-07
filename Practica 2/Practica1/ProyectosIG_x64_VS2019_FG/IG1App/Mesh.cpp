@@ -499,6 +499,7 @@ void IndexMesh::draw() const
 MbR::MbR(int muestras, int puntos, dvec3* perfilPtos) : 
 	IndexMesh(), n(muestras), m(puntos), perfil(perfilPtos)
 {
+	// Definir el número de vértices como nn*mm
 	mNumVertices = n * m;
 }
 
@@ -506,7 +507,6 @@ MbR* MbR::generaIndexMeshByRevolution(int mm, int nn, glm::dvec3* perfil)
 {
 	MbR* mesh = new MbR(mm, nn, perfil);
 	// Definir la primitiva como GL_TRIANGLES
-	// Definir el número de vértices como nn*mm
 	// Usar un vector auxiliar de vértices
 	dvec3* vertices = new dvec3[mesh->mNumVertices];
 	for (int i = 0; i < nn; i++) {
@@ -526,23 +526,35 @@ MbR* MbR::generaIndexMeshByRevolution(int mm, int nn, glm::dvec3* perfil)
 	mesh->vVertices.reserve(mesh->mNumVertices);
 
 	for (int i = 0; i < mesh->mNumVertices; i++){
-		vVertices.emplace_back(vertices[i]);
+		mesh->vVertices.emplace_back(vertices[i]);
 	}
-	//// DETERMINAR los índices de las caras cuadrangulares... PAG_7
-	// El contador i recorre las muestras alrededor del eje Y
-	for (int i=0; i<nn; i++)
-	// El contador j recorre los vértices del perfil, 
-	// de abajo arriba. Las caras cuadrangulares resultan
-	// al unir la muestra i-ésima con la (i+1)%nn-ésima
-	for (int j=0; j<mm-1; j++) 
-	// El contador indice sirve para llevar cuenta 
-	// de los índices generados hasta ahora. Se recorre
-	// la cara desde la esquina inferior izquierda 
-	int indice = i*mm+j;
-	// Los cuatro índices son entonces:
-indice, (indice+mm)%(nn*mm), (indice+mm+1)%(nn*mm), indice+1
 
-	// Construir los índices de las caras triangulares a partir de las cuadrangulares... PAG_6
+	// Índices caras cuadrangulares:
+	// Se recorre las muestras alrededor del eje Y
+	for (int i = 0; i < nn; i++) {
+		// El contador j recorre los vértices del perfil, de abajo arriba.
+		//Las caras cuadrangulares resultan al unir la muestra i-ésima con la (i+1)%nn-ésima
+		for (int j = 0; j < mm - 1; j++) {
+			// El contador indice sirve para llevar cuenta de los índices generados hasta ahora.
+			// Se recorre la cara desde la esquina inferior izquierda 
+			int indice = i * mm + j;
+		}
+		//// Los cuatro índices son entonces:
+		//// indice, (indice + mm) % (nn * mm), (indice + mm + 1) % (nn * mm), indice + 1
+	}
+	// Índices de las caras triangulares:
+
+		// abajo: indice, (indice + mm) % (nn * mm), (indice + mm + 1) % (nn * mm);
+		// arriba: (indice + mm + 1) % (nn * mm), indice + 1, indice
+		// |- - / |
+		// |- / - |
+		// |/ - - |
+		//Añadir seis índices al array mesh->vIndices usando un contador
+		//indiceMayor para ir rellenando este array
+	
 	//...
+		
+	
+	mesh->buildNormalVectors();
 	return mesh;
 }
