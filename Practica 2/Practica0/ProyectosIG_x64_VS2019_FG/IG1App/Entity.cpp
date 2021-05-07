@@ -26,9 +26,11 @@ void EjesRGB::render(dmat4 const& modelViewMat) const
 	if (mMesh != nullptr) {
 		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
 		upload(aMat);
+		glEnable(GL_COLOR_MATERIAL);
 		glLineWidth(2);
 		mMesh->render();
 		glLineWidth(1);
+		glDisable(GL_COLOR_MATERIAL);
 	}
 }
 //---------------------------------------------------------------------
@@ -627,16 +629,16 @@ void Cubo::render(glm::dmat4 const& modelViewMat) const
 		upload(aMat);
 
 		glEnable(GL_COLOR_MATERIAL);
-		glColor3f(mColor.r, mColor.g, mColor.b);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor3f(0, 1, 0);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		mIndexMesh->render();
 
 		//default
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		glDisable(GL_COLOR_MATERIAL);
-		glColor3f(0, 0, 0);
+		glColor3f(1, 1, 1);
 	}
 }
 
@@ -694,7 +696,6 @@ TIE::TIE():
 	Texture* noche = new Texture();
 	noche-> load("../BmpsP1/noche.bmp", 255 * 0.75);
 	gTextureCEntity.push_back(noche);
-	
 	
 	// Ala izda.
 	Disk* wingL = new Disk(0.0, 150.0, 6, 50);

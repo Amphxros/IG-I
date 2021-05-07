@@ -410,16 +410,16 @@ IndexMesh* IndexMesh::generaCuboConTapasIndexado(GLdouble l)
 	1,7,3, 3,7,5
 	};
 
-	mesh->vNormals = {
-		glm::normalize(dvec3(1, 1, -1)),
-		glm::normalize(dvec3(1, -1, -1)),
-		glm::normalize(dvec3(1, 1, 1)),
-		glm::normalize(dvec3(1, -1, 1)),
-		glm::normalize(dvec3(-1, 1, 1)),
-		glm::normalize(dvec3(-1, -1, 1)),
-		glm::normalize(dvec3(-1, 1, -1)),
-		glm::normalize(dvec3(-1, -1, -1))
-	};
+	//mesh->vNormals = {
+	//	glm::normalize(dvec3(1, 1, -1)),
+	//	glm::normalize(dvec3(1, -1, -1)),
+	//	glm::normalize(dvec3(1, 1, 1)),
+	//	glm::normalize(dvec3(1, -1, 1)),
+	//	glm::normalize(dvec3(-1, 1, 1)),
+	//	glm::normalize(dvec3(-1, -1, 1)),
+	//	glm::normalize(dvec3(-1, 1, -1)),
+	//	glm::normalize(dvec3(-1, -1, -1))
+	//};
 	
 	return mesh;
 }
@@ -476,14 +476,16 @@ void IndexMesh::buildNormalVectors()
 		auxC = vIndices[i + 2];
 
 		//calculamos la normal cruzando los vertices de dichos puntos
-		dvec3 n = normalize(cross((vVertices[auxC] - vVertices[auxB]), (vVertices[auxA] - vVertices[auxB])));
+		dvec3 n =cross((vVertices[auxB] - vVertices[auxA]), (vVertices[auxC] - vVertices[auxA]));
 
 		//le sumamos a cada uno su normal 
 		vNormals[auxA] += n; 
 		vNormals[auxB] += n;
 		vNormals[auxC] += n;
 	}
-
+	for (int i = 0; i < mNumVertices; i++) {
+		vNormals[i] = -normalize(vNormals[i]);
+	}
 }
 
 void IndexMesh::draw() const
