@@ -264,23 +264,12 @@ public:
 protected:
 	std::vector<Abs_Entity*> gObjectsCEntity;
 	std::vector<Abs_Entity*> gObjectsTranslucidosCEntity;
-
-	void freeCEntity() {
-		for (Abs_Entity* ent : gObjectsCEntity) {
-			delete ent;
-			ent = nullptr;
-		}
-		gObjectsCEntity.clear();
-
-		for (Abs_Entity* entTrans : gObjectsTranslucidosCEntity) {
-			delete entTrans;
-			entTrans = nullptr;
-		}
-		gObjectsTranslucidosCEntity.clear();
-	};
+	std::vector<Texture*> gTextureCEntity;
+	void freeCEntity();
 };
 
-class TIE : public CompoundEntity {
+class TIE:
+	public CompoundEntity {
 public:
 	TIE();
 	virtual ~TIE() {};

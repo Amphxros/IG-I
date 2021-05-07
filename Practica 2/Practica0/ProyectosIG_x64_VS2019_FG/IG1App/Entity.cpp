@@ -656,35 +656,65 @@ void CompoundEntity::render(glm::dmat4 const& modelViewMat) const
 
 	upload(aMat);
 
+	//objetos no translucidos
 	for (Abs_Entity* ent : gObjectsCEntity) {
 		ent->render(aMat);
 	}
-
+	//renderizado objetos translucidos
 	for (Abs_Entity* entTrans : gObjectsTranslucidosCEntity) {
 		entTrans->render(aMat);
 	}
 }
 
-TIE::TIE() : CompoundEntity()
+void CompoundEntity::freeCEntity()
 {
+	for (Abs_Entity* ent : gObjectsCEntity) {
+		delete ent;
+		ent = nullptr;
+	}
+	gObjectsCEntity.clear();
+
+	for (Abs_Entity* entTrans : gObjectsTranslucidosCEntity) {
+		delete entTrans;
+		entTrans = nullptr;
+	}
+	gObjectsTranslucidosCEntity.clear();
+
+	for (auto t : gTextureCEntity) {
+		delete t;
+		t = nullptr;
+	}
+}
+
+
+TIE::TIE():
+	CompoundEntity()
+{
+	//textura que usamos
+	Texture* noche = new Texture();
+	noche-> load("../BmpsP1/noche.bmp", 255 * 0.75);
+	gTextureCEntity.push_back(noche);
+	
+	
 	// Ala izda.
 	Disk* wingL = new Disk(0.0, 150.0, 6, 50);
-	//disco3->setTexture(Scene.gTextures[5]);
 	wingL->setColor(dvec3(0.0, 0.25, 0.42));
 	wingL->setModelMat(glm::translate(wingL->modelMat(), dvec3(400, 300, 200)));
 	wingL->setModelMat(glm::rotate(wingL->modelMat(), radians(90.0), dvec3(0, 1, 0)));
 	wingL->setModelMat(glm::rotate(wingL->modelMat(), radians(90.0), dvec3(0, 0, 1)));
 	wingL->setModelMat(glm::scale(wingL->modelMat(), dvec3(1.75, 1.75, 1.0)));
-	addEntityTranslucida(wingL); ///TODO/////////////////////////////////////////////////////
+	wingL->setTexture(noche);
+	addEntityTranslucida(wingL);
 
 	// Ala dcha.
 	Disk* wingR = new Disk(0.0, 150.0, 6, 50);
-	//disco2->setTexture(Scene.gTextures[5]);
 	wingR->setColor(dvec3(0.0, 0.25, 0.42));
 	wingR->setModelMat(glm::translate(wingR->modelMat(), dvec3(0, 300, 200)));
 	wingR->setModelMat(glm::rotate(wingR->modelMat(), radians(90.0), dvec3(0, 1, 0)));
 	wingR->setModelMat(glm::rotate(wingR->modelMat(), radians(90.0), dvec3(0, 0, 1)));
 	wingR->setModelMat(glm::scale(wingR->modelMat(), dvec3(1.75, 1.75, 1.0)));
+	
+	wingR->setTexture(noche);
 	addEntityTranslucida(wingR);
 
 	// Núcleo

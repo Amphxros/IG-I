@@ -37,6 +37,7 @@ public:
 	GLuint size() const { return mNumVertices; };   // number of elements
 	std::vector<glm::dvec3> const& vertices() const { return vVertices; };
 	std::vector<glm::dvec4> const& colors() const { return vColors; };
+	std::vector<glm::dvec3> const& normals() const { return vNormals; };
 		
 protected:
 	
@@ -48,9 +49,11 @@ protected:
 	std::vector<glm::dvec3> vNormals;	// tabla de normales
 	virtual void draw() const;
 };
+
 //-------------------------------------------------------------------------
 
-class IndexMesh : public Mesh {
+class IndexMesh:
+	public Mesh {
 public:
 
 	static IndexMesh* generaAnilloCuadradoIndexado();
@@ -61,7 +64,7 @@ public:
 
 	virtual void render() const;
 
-	void buildNormalVectors();
+	void buildNormalVectors(); //construye las normales
 	GLuint* const& indices() const { return vIndices; };
 protected:
 	GLuint* vIndices;  // index array

@@ -161,6 +161,8 @@ void Scene::escenaCaza() {
 	gObjects.push_back(new EjesRGB(400.0));
 
 	TIE* caza = new TIE();
+	
+
 	gObjects.push_back(caza);
 	
 	//ANTIGUO CAZA//
