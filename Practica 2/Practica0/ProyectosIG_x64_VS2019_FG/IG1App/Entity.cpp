@@ -588,11 +588,6 @@ void PartialDisk::render(glm::dmat4 const& modelViewMat) const {
 	glDisable(GL_COLOR_MATERIAL);
 }
 
-void TIE::render(glm::dmat4 const& modelViewMat) const {
-	for (Abs_Entity* ent : gObjectsCEntity) {
-		ent->render(modelViewMat);
-	}
-}
 
 AnilloCuadrado::AnilloCuadrado(): Abs_Entity()
 {
@@ -645,10 +640,78 @@ void Cubo::render(glm::dmat4 const& modelViewMat) const
 	}
 }
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+//-----
+
 void EntityWithIndexMesh::upload(glm::dmat4 const& mModelViewMat) const
 {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixd(value_ptr(mModelViewMat));  // transfers modelView matrix to the GPU
+}
+
+//------------------------------------------------------------------------
+
+void CompoundEntity::render(glm::dmat4 const& modelViewMat) const
+{
+	dmat4 aMat = modelViewMat * mModelMat;
+
+	upload(aMat);
+
+	for (Abs_Entity* ent : gObjectsCEntity) {
+		ent->render(aMat);
+	}
+
+	for (Abs_Entity* entTrans : gObjectsTranslucidosCEntity) {
+		entTrans->render(aMat);
+	}
+}
+
+TIE::TIE() : CompoundEntity()
+{
+	// Ala izda.
+	Disk* wingL = new Disk(0.0, 150.0, 6, 50);
+	//disco3->setTexture(Scene.gTextures[5]);
+	wingL->setColor(dvec3(0.0, 0.25, 0.42));
+	wingL->setModelMat(glm::translate(wingL->modelMat(), dvec3(400, 300, 200)));
+	wingL->setModelMat(glm::rotate(wingL->modelMat(), radians(90.0), dvec3(0, 1, 0)));
+	wingL->setModelMat(glm::rotate(wingL->modelMat(), radians(90.0), dvec3(0, 0, 1)));
+	wingL->setModelMat(glm::scale(wingL->modelMat(), dvec3(1.75, 1.75, 1.0)));
+	addEntityTranslucida(wingL); ///TODO/////////////////////////////////////////////////////
+
+	// Ala dcha.
+	Disk* wingR = new Disk(0.0, 150.0, 6, 50);
+	//disco2->setTexture(Scene.gTextures[5]);
+	wingR->setColor(dvec3(0.0, 0.25, 0.42));
+	wingR->setModelMat(glm::translate(wingR->modelMat(), dvec3(0, 300, 200)));
+	wingR->setModelMat(glm::rotate(wingR->modelMat(), radians(90.0), dvec3(0, 1, 0)));
+	wingR->setModelMat(glm::rotate(wingR->modelMat(), radians(90.0), dvec3(0, 0, 1)));
+	wingR->setModelMat(glm::scale(wingR->modelMat(), dvec3(1.75, 1.75, 1.0)));
+	addEntityTranslucida(wingR);
+
+	// Núcleo
+	Sphere* core = new Sphere(100.0);
+	core->setColor(dvec3(0.0, 0.25, 0.42));
+	core->setModelMat(glm::translate(core->modelMat(), dvec3(200, 300, 200)));
+	addEntity(core);
+
+	// Eje
+	Cylinder* shaft = new Cylinder(25.0, 25.0, 400.0);
+	shaft->setColor(dvec3(0.0, 0.25, 0.42));
+	shaft->setModelMat(glm::translate(shaft->modelMat(), dvec3(0, 300, 200)));
+	shaft->setModelMat(glm::rotate(shaft->modelMat(), radians(90.0), dvec3(0, 1, 0)));
+	addEntity(shaft);
+
+	// Morro
+	CompoundEntity* front = new CompoundEntity();
+
+	Cylinder* frontCylinder = new Cylinder(60.0, 60.0, 20.0);
+	frontCylinder->setColor(dvec3(0.0, 0.25, 0.42));
+	frontCylinder->setModelMat(glm::translate(frontCylinder->modelMat(), dvec3(200, 300, 280)));
+	front->addEntity(frontCylinder);
+
+	Disk* frontRing = new Disk(0.0, 60.0);
+	frontRing->setColor(dvec3(0.0, 0.25, 0.42));
+	frontRing->setModelMat(glm::translate(frontRing->modelMat(), dvec3(200, 300, 300)));
+	front->addEntity(frontRing);
+
+	addEntity(front);
 }

@@ -159,7 +159,12 @@ void Scene::escena2D() {
 
 void Scene::escenaCaza() {
 	gObjects.push_back(new EjesRGB(400.0));
+
+	TIE* caza = new TIE();
+	gObjects.push_back(caza);
 	
+	//ANTIGUO CAZA//
+	/*
 	Sphere* esfera1 = new Sphere(100.0);
 	esfera1->setColor(dvec3(0.0, 0.25, 0.42));
 	esfera1->setModelMat(glm::translate(esfera1->modelMat(), dvec3(200, 300, 200)));
@@ -198,8 +203,9 @@ void Scene::escenaCaza() {
 	disco3->setModelMat(glm::rotate(disco3->modelMat(), radians(90.0), dvec3(0, 0, 1)));
 	disco3->setModelMat(glm::scale(disco3->modelMat(), dvec3(1.75, 1.75, 1.0)));
 	gObjectsTranslucidos.push_back(disco3);
+	*/
 
-	//TESTS//
+	//TESTS CUÁDRICOS//
 	/*
 	Sphere* esfera = new Sphere(100.0);
 	esfera->setColor(dvec3(0.0, 0.25, 0.42));
@@ -286,8 +292,7 @@ void Scene::render(Camera const& cam) const
 	cam.upload();
 
 	//Luz rara
-	if (mId == 2 || mId == 3)
-		sceneDirLight(cam);
+	if (mId == 2 || mId == 3) sceneDirLight(cam);
 	else {
 		glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHTING);

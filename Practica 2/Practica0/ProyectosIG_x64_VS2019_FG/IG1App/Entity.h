@@ -153,10 +153,6 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////////
 
 //ENTIDADES CUÁDRICAS
@@ -254,16 +250,20 @@ public:
 	void render(glm::dmat4 const& modelViewMat) const;
 };
 
-///////////////////////////////////////////////////////////////////////////
-//ENTIDADES COMPUESTAS
+////////////////////////ENTIDADES COMPUESTAS///////////////////////////////////
+
 class CompoundEntity : public Abs_Entity {
 public:
 	CompoundEntity() {} ;
 	~CompoundEntity() { freeCEntity(); };
 
 	void addEntity(Abs_Entity* ae) { gObjectsCEntity.push_back(ae); };
+	void addEntityTranslucida(Abs_Entity* ae) { gObjectsTranslucidosCEntity.push_back(ae); };
+
+	void render(glm::dmat4 const& modelViewMat) const override;
 protected:
 	std::vector<Abs_Entity*> gObjectsCEntity;
+	std::vector<Abs_Entity*> gObjectsTranslucidosCEntity;
 
 	void freeCEntity() {
 		for (Abs_Entity* ent : gObjectsCEntity) {
@@ -271,15 +271,19 @@ protected:
 			ent = nullptr;
 		}
 		gObjectsCEntity.clear();
+
+		for (Abs_Entity* entTrans : gObjectsTranslucidosCEntity) {
+			delete entTrans;
+			entTrans = nullptr;
+		}
+		gObjectsTranslucidosCEntity.clear();
 	};
 };
 
 class TIE : public CompoundEntity {
 public:
-	TIE() {};
+	TIE();
 	virtual ~TIE() {};
-	void render(glm::dmat4 const& modelViewMat) const;
-protected:
 };
 
 #endif //_H_Entities_H_
