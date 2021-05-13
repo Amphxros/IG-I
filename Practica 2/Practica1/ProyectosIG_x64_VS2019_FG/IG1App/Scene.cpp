@@ -78,6 +78,12 @@ void Scene::init()
 	case 4:
 		escenaAnillo();
 		break;
+	case 5:
+		escenaCono();
+		break;
+	case 6:
+		escenaEsferas();
+		break;
 	default:
 		escena2D();
 		break;
@@ -241,6 +247,26 @@ void Scene::escenaIndices() {
 	gObjects.push_back(new Cubo());
 }
 
+void Scene::escenaCono()
+{
+	Cono* c = new Cono(100, 50, 50);
+	c->setColor(dvec3(0.5, 0.0, 1.0));
+	gObjects.push_back(c);
+
+}
+
+void Scene::escenaEsferas()
+{
+	Sphere* sphere = new Sphere(100);
+	sphere->setColor(dvec3(0.0, 0.0, 1.0));
+	gObjects.push_back(sphere);
+
+	Esfera* e = new Esfera(100, 30, 30);
+	e->setModelMat(glm::translate(e->modelMat(), dvec3(250, 0, 0)));
+	e->setColor(dvec3(0.0, 0.0, 1.0));
+	gObjects.push_back(e);
+}
+
 //-------------------------------------------------------------------------
 void Scene::free() 
 { // release memory and resources
@@ -278,6 +304,9 @@ void Scene::setGL()
 		glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)
 		break;
 	case 3:
+	case 4:
+	case 5:
+	case 6:
 		glClearColor(0.7, 0.8, 0.9, 1.0);  // background color (alpha=1 -> opaque)
 		break;
 	default:
@@ -301,7 +330,7 @@ void Scene::render(Camera const& cam) const
 	cam.upload();
 
 	//Luz rara
-	if (mId == 2 || mId == 3) sceneDirLight(cam);
+	if (mId >= 2) sceneDirLight(cam);
 	else {
 		glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHTING);

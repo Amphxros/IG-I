@@ -529,31 +529,45 @@ MbR* MbR::generaIndexMeshByRevolution(int mm, int nn, glm::dvec3* perfil)
 		mesh->vVertices.emplace_back(vertices[i]);
 	}
 
+	mesh->mNumIndex = (mm - 1) * nn * 6;
 	// Índices caras cuadrangulares:
-	// Se recorre las muestras alrededor del eje Y
+	mesh->vIndices = new GLuint[mesh->mNumIndex];
+	// El contador indice sirve para llevar cuenta de los índices generados hasta ahora.
+	int indMayor = 0;
 	for (int i = 0; i < nn; i++) {
-		// El contador j recorre los vértices del perfil, de abajo arriba.
+	// Se recorre las muestras alrededor del eje Y
 		//Las caras cuadrangulares resultan al unir la muestra i-ésima con la (i+1)%nn-ésima
+		// El contador j recorre los vértices del perfil, de abajo arriba.
 		for (int j = 0; j < mm - 1; j++) {
-			// El contador indice sirve para llevar cuenta de los índices generados hasta ahora.
 			// Se recorre la cara desde la esquina inferior izquierda 
 			int indice = i * mm + j;
+			//triangulo1
+			mesh->vIndices[indMayor] = indice;
+			indMayor++;
+			mesh->vIndices[indMayor] = (indice + mm) % (nn * mm);
+			indMayor++;
+			mesh->vIndices[indMayor] = (indice + mm + 1) % (nn * mm);
+			indMayor++;
+			//triangulo2
+			mesh->vIndices[indMayor] = (indice + mm + 1) % (nn * mm);
+			indMayor++;
+			mesh->vIndices[indMayor] = (indice +1);
+			indMayor++;
+			mesh->vIndices[indMayor] = indice;
+			indMayor++;
 		}
 		//// Los cuatro índices son entonces:
-		//// indice, (indice + mm) % (nn * mm), (indice + mm + 1) % (nn * mm), indice + 1
-	}
-	// Índices de las caras triangulares:
-
-		// abajo: indice, (indice + mm) % (nn * mm), (indice + mm + 1) % (nn * mm);
+		//// * indice
+		//// * (indice + mm) % (nn * mm)
+		//// * (indice + mm + 1) % (nn * mm)
+		//// * indice + 1
+		//------------------------------------------
+		// abajo: indice, (indice + mm) % (nn * mm), (indice + mm + 1) % (nn * mm)
 		// arriba: (indice + mm + 1) % (nn * mm), indice + 1, indice
-		// |- - / |
-		// |- / - |
-		// |/ - - |
-		//Añadir seis índices al array mesh->vIndices usando un contador
-		//indiceMayor para ir rellenando este array
-	
-	//...
-		
+		// | - - / |
+		// | - / - |
+		// | / - - |
+	}
 	
 	mesh->buildNormalVectors();
 	return mesh;

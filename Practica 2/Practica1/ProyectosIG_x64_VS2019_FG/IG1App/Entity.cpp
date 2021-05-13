@@ -744,3 +744,54 @@ TIE::TIE():
 
 	addEntity(front);
 }
+
+Cono::Cono(GLdouble h, GLdouble r, GLuint n)
+{
+	int m = 3;
+	dvec3* perfil = new dvec3[m];
+	perfil[0] = dvec3(0, 0, 0);
+	perfil[1] = dvec3(r, 0, 0);
+	perfil[2] = dvec3(0, h, 0);
+	 
+	mMesh = MbR::generaIndexMeshByRevolution(m, n, perfil);
+
+}
+
+void Cono::render(glm::dmat4 const& modelViewMat) const
+{
+	dmat4 aMat = modelViewMat * mModelMat;
+	upload(aMat);
+	// color:
+	glEnable(GL_COLOR_MATERIAL);
+	glColor3f(mColor.r, mColor.g, mColor.b);
+	mMesh->render();
+
+	glColor3f(1, 1, 1);
+	glDisable(GL_COLOR_MATERIAL);
+}
+
+
+Esfera::Esfera(GLdouble r, GLint p, GLint m)
+{
+	dvec3* perfil = new dvec3[p];
+	double angle = -90.0;
+	for (int i = 0; i < p; i++)
+	{
+		perfil[i] = glm::dvec3(r * cos(radians(angle)), r * sin(radians(angle)), 0.0);
+		angle += 180.0 / (p - 1.0);
+	}
+		mMesh = MbR::generaIndexMeshByRevolution(m, p, perfil);
+}
+
+void Esfera::render(glm::dmat4 const& modelViewMat) const
+{
+	dmat4 aMat = modelViewMat * mModelMat;
+	upload(aMat);
+	// color:
+	glEnable(GL_COLOR_MATERIAL);
+	glColor3f(mColor.r, mColor.g, mColor.b);
+	mMesh->render();
+	
+	glColor3f(1, 1, 1);
+	glDisable(GL_COLOR_MATERIAL);
+}

@@ -275,4 +275,24 @@ public:
 	virtual ~TIE() {};
 };
 
+
+
+/////////////////////////////////////////////////////////////////7
+
+class Cono: public EntityWithIndexMesh
+{
+public:
+	Cono(GLdouble h, GLdouble r, GLuint n);
+	virtual ~Cono() {};
+	void render(glm::dmat4 const& modelViewMat) const;
+};
+
+class Esfera: public EntityWithIndexMesh
+{
+public:
+	Esfera(GLdouble r, GLint p, GLint m);
+	virtual ~Esfera() {};
+	void render(glm::dmat4 const& modelViewMat) const;
+};
+
 #endif //_H_Entities_H_
