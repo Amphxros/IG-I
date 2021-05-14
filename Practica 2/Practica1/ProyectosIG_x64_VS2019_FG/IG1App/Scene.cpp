@@ -7,7 +7,7 @@ using namespace glm;
 //-------------------------------------------------------------------------
 
 Scene::Scene(){
-	gTextures.reserve(10);
+	gTextures.reserve(15);
 	
 	Texture* tex1 = new Texture();
 	tex1->load("../BmpsP1/baldosaC.bmp");
@@ -48,6 +48,14 @@ Scene::Scene(){
 	Texture* tex10 = new Texture();
 	tex10->load("../BmpsP1/windowV.bmp", 255 * 0.5);
 	gTextures.push_back(tex10);
+
+	Texture* tex11 = new Texture();
+	tex11->load("../BmpsP1/checker.bmp");
+	gTextures.push_back(tex11);
+	
+	Texture* tex12 = new Texture();
+	tex12->load("../BmpsP1/stones.bmp");
+	gTextures.push_back(tex12);
 }
 
 void Scene::init()
@@ -83,6 +91,9 @@ void Scene::init()
 		break;
 	case 6:
 		escenaEsferas();
+		break;
+	case 7:
+		escenaGrids();
 		break;
 	default:
 		escena2D();
@@ -133,7 +144,7 @@ void Scene::escena3D() {
 	gObjects.push_back(p);
 
 	Cristalera* c = new Cristalera(600);
-	c->setTexture(gTextures.back());
+	c->setTexture(gTextures[9]);
 	gObjectsTranslucidos.push_back(c);
 
 	Foto* foto = new Foto(128, 70);
@@ -170,8 +181,6 @@ void Scene::escenaCaza() {
 	gObjects.push_back(new EjesRGB(400.0));
 
 	TIE* caza = new TIE();
-	
-
 	gObjects.push_back(caza);
 	
 	//ANTIGUO CAZA//
@@ -252,11 +261,12 @@ void Scene::escenaCono()
 	Cono* c = new Cono(100, 50, 50);
 	c->setColor(dvec3(0.5, 0.0, 1.0));
 	gObjects.push_back(c);
-
 }
 
 void Scene::escenaEsferas()
 {
+
+	gObjects.push_back(new EjesRGB(400.0));
 	Sphere* sphere = new Sphere(100);
 	sphere->setColor(dvec3(0.0, 0.0, 1.0));
 	gObjects.push_back(sphere);
@@ -265,6 +275,14 @@ void Scene::escenaEsferas()
 	e->setModelMat(glm::translate(e->modelMat(), dvec3(250, 0, 0)));
 	e->setColor(dvec3(0.0, 0.0, 1.0));
 	gObjects.push_back(e);
+}
+
+void Scene::escenaGrids()
+{
+
+	gObjects.push_back(new EjesRGB(400.0));
+	GridCube* c = new GridCube(200, 10);
+	gObjects.push_back(c);
 }
 
 //-------------------------------------------------------------------------
@@ -307,6 +325,7 @@ void Scene::setGL()
 	case 4:
 	case 5:
 	case 6:
+	case 7:
 		glClearColor(0.7, 0.8, 0.9, 1.0);  // background color (alpha=1 -> opaque)
 		break;
 	default:
@@ -330,7 +349,7 @@ void Scene::render(Camera const& cam) const
 	cam.upload();
 
 	//Luz rara
-	if (mId >= 2) sceneDirLight(cam);
+	if (mId >= 2 && mId<=6) sceneDirLight(cam);
 	else {
 		glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHTING);

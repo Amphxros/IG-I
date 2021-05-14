@@ -248,6 +248,17 @@ void IG1App::key(unsigned char key, int x, int y)
 		mScene->changeScene(6);
 		}
 		break;
+
+	case '7':
+		if (m2Vistas && mCoord.x > mWinW / 2) {
+			mCameraB->set2D();
+			mSceneB->changeScene(7);
+		}
+		else{
+		mCamera->set2D();
+		mScene->changeScene(7);
+		}
+		break;
 	case'f':
 	case 'F':
 		if (m2Vistas && mCoord.x > mWinW / 2) {

@@ -58,6 +58,8 @@ public:
 
 	static IndexMesh* generaAnilloCuadradoIndexado();
 	static IndexMesh* generaCuboConTapasIndexado(GLdouble l);
+	static IndexMesh* generateGrid(GLdouble lado, GLuint nDiv);
+	static IndexMesh* generateGridTex(GLdouble lado, GLuint nDiv);
 
 	IndexMesh() : Mesh() {};
 	virtual ~IndexMesh() {  delete[] vIndices;  vIndices = nullptr; };

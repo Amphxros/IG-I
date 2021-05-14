@@ -795,3 +795,61 @@ void Esfera::render(glm::dmat4 const& modelViewMat) const
 	glColor3f(1, 1, 1);
 	glDisable(GL_COLOR_MATERIAL);
 }
+
+Grid::Grid(GLdouble l, GLint nDiv)
+{
+	mMesh = IndexMesh::generateGrid(l, nDiv);
+	static_cast<IndexMesh*>(mIndexMesh)->buildNormalVectors();
+}
+
+void Grid::render(glm::dmat4 const& modelViewMat) const
+{
+	dmat4 aMat = modelViewMat * mModelMat;
+	upload(aMat);
+	// color:
+	glEnable(GL_COLOR_MATERIAL);
+	glColor3f(mColor.r, mColor.g, mColor.b);
+	if (mTexture != nullptr)
+		mTexture->bind(GL_REPLACE);
+	
+	mMesh->render();
+
+	glColor3f(1, 1, 1);
+	if (mTexture != nullptr)
+		mTexture->unbind();
+	glDisable(GL_COLOR_MATERIAL);
+}
+
+GridCube::GridCube(GLdouble l, GLuint nDiv): CompoundEntity()
+{
+	Grid* gAbajo = new Grid(l, nDiv);
+	gAbajo->setModelMat(rotate(dmat4(1.0), glm::radians(180.0), dvec3(0, 0, 1)));
+	gAbajo->setColor(dvec3(0, 0.5, 1));
+	addEntity(gAbajo);
+
+	Grid* gArriba = new Grid(l, nDiv);
+	gArriba->setModelMat(translate(dmat4(1.0), dvec3(0, l, 0)));
+	addEntity(gArriba);
+	
+	Grid* gZneg = new Grid(l, nDiv);
+	gZneg->setModelMat(translate(dmat4(1.0), dvec3(0, 0, -l/2)));
+	gZneg->setModelMat(rotate(gZneg->modelMat(), glm::radians(-90.0), dvec3(0, 0, 1)));
+	addEntity(gZneg);
+	
+	Grid* gZpos = new Grid(l, nDiv);
+	gZpos->setModelMat(translate(dmat4(1.0), dvec3(0, 0, l / 2)));
+	gZpos->setModelMat(rotate(gZpos->modelMat(), glm::radians(90.0), dvec3(0, 0, 1)));
+	addEntity(gZpos);
+
+	
+	Grid* gXneg = new Grid(l, nDiv);
+	gXneg->setModelMat(translate(dmat4(1.0), dvec3(0, 0, -l / 2)));
+	gXneg->setModelMat(rotate(gXneg->modelMat(), glm::radians(-90.0), dvec3(1, 0, 0)));
+	addEntity(gXneg);
+
+	Grid* gXpos = new Grid(l, nDiv);
+	gXpos->setModelMat(translate(dmat4(1.0), dvec3(l / 2, 0, 0)));
+	gXpos->setModelMat(rotate(gXpos->modelMat(), glm::radians(90.0), dvec3(1, 0, 0)));
+	addEntity(gXpos);
+}
+

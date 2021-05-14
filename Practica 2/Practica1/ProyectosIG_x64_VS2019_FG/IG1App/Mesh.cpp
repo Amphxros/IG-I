@@ -424,6 +424,81 @@ IndexMesh* IndexMesh::generaCuboConTapasIndexado(GLdouble l)
 	return mesh;
 }
 
+IndexMesh* IndexMesh::generateGrid(GLdouble lado, GLuint nDiv)
+{
+	// Grid cuadrado de lado*lado, centrado en el plano Y=0, dividido en nDiv*nDiv celdas (cada celda son 2 triángulos)
+	IndexMesh* mesh = new IndexMesh();
+	GLdouble x = -lado / 2;
+	GLdouble z = -lado / 2;
+	GLdouble incr = lado/ nDiv; // incremento para la coordenada x, y la c. z
+	GLuint numFC = nDiv + 1; // número de vértices por filas y columnas
+	// Generación de vértices
+	mesh->mNumVertices = numFC * numFC; 
+	mesh->vVertices.reserve(mesh->mNumVertices);
+
+	for (int i = 0; i < nDiv; i++) {
+		for (int j = 0; j < nDiv; j++) {
+			mesh->vVertices[i*numFC + j]= dvec3(x + i * incr, 0, z + j * incr);
+		}
+	}
+
+	// Generación de índices
+	mesh->mNumIndex = nDiv * nDiv * 6; 
+	mesh->vIndices = new GLuint[mesh->mNumIndex];
+	int cont = 0;
+	
+	for (int i = 0; i < nDiv; i++) {
+		for (int j = 0; j < nDiv; j++) {
+			int iv = i* numFC + j;
+			
+			/*
+			iv, iv+nFC, iv+1;
+			iv+1, iv+nFC, iv+nFC+1;			
+			*/
+
+			//triangulo1
+			mesh->vIndices[cont] = iv;
+			cont++;
+			mesh->vIndices[cont] = iv + numFC;
+			cont++;
+			mesh->vIndices[cont] = iv + 1;
+			cont++;
+
+			//triangulo2
+			mesh->vIndices[cont] = iv + 1;
+			cont++;
+			mesh->vIndices[cont] = iv + numFC;
+			cont++;
+			mesh->vIndices[cont] = iv + 1+ numFC;
+			cont++;
+
+		}
+	}
+
+	return mesh;
+
+}
+IndexMesh* IndexMesh::generateGridTex(GLdouble lado, GLuint nDiv) 
+{
+	// Grid cuadrado de lado*lado, centrado en el plano Y=0, dividido en nDiv*nDiv celdas
+	IndexMesh* mesh = generateGrid(lado, nDiv); 
+	// número de vértices por filas y columnas
+	GLuint numFC = nDiv + 1;
+	// Generación de las coordenadas de textura
+	mesh->vTextures.reserve(mesh->mNumVertices);
+	int s = 0;
+	int t = 1;
+	for (int i = 0; i < nDiv; i++) {
+		GLdouble indX = i /nDiv;
+		for (int j = 0; j < nDiv; j++) {
+			GLdouble indY = j / nDiv;
+			mesh->vTextures[i * numFC + j] = dvec2(s+indX,t-indY);
+		}
+	}
+
+	return mesh; 
+}
+
 void IndexMesh::render() const
 {
 	if (vVertices.size() > 0) {  // transfer data

@@ -295,4 +295,19 @@ public:
 	void render(glm::dmat4 const& modelViewMat) const;
 };
 
+
+class Grid : public EntityWithIndexMesh {
+public :
+	Grid(GLdouble l, GLint nDiv);
+	virtual ~Grid(){}
+	void render(glm::dmat4 const& modelViewMat) const;
+
+};
+
+class GridCube : public CompoundEntity {
+public:
+	GridCube(GLdouble l, GLuint nDiv);
+	virtual ~GridCube() {}
+};
+
 #endif //_H_Entities_H_

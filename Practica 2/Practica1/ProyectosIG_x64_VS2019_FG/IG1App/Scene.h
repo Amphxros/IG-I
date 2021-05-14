@@ -50,6 +50,7 @@ protected:
 
 	void escenaCono();
 	void escenaEsferas();
+	void escenaGrids();
 
 	std::vector<Texture*> gTextures;	//vector de texturas
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
