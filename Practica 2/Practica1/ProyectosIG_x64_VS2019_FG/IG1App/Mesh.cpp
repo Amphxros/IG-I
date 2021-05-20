@@ -436,9 +436,9 @@ IndexMesh* IndexMesh::generateGrid(GLdouble lado, GLuint nDiv)
 	mesh->mNumVertices = numFC * numFC; 
 	mesh->vVertices.reserve(mesh->mNumVertices);
 
-	for (int i = 0; i < nDiv; i++) {
-		for (int j = 0; j < nDiv; j++) {
-			mesh->vVertices[i*numFC + j]= dvec3(x + i * incr, 0, z + j * incr);
+	for (int i = 0; i < numFC; i++) {
+		for (int j = 0; j < numFC; j++) {
+			mesh->vVertices.push_back(dvec3(x + i * incr, 0, z + j * incr));
 		}
 	}
 
@@ -488,11 +488,11 @@ IndexMesh* IndexMesh::generateGridTex(GLdouble lado, GLuint nDiv)
 	mesh->vTextures.reserve(mesh->mNumVertices);
 	int s = 0;
 	int t = 1;
-	for (int i = 0; i < nDiv; i++) {
-		GLdouble indX = i /nDiv;
-		for (int j = 0; j < nDiv; j++) {
-			GLdouble indY = j / nDiv;
-			mesh->vTextures[i * numFC + j] = dvec2(s+indX,t-indY);
+	for (int i = 0; i < numFC; i++) {
+		GLdouble indX = i /numFC;
+		for (int j = 0; j < numFC; j++) {
+			GLdouble indY = j / numFC;
+			mesh->vTextures.push_back( dvec2(s+indX,t-indY));
 		}
 	}
 

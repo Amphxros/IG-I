@@ -798,8 +798,7 @@ void Esfera::render(glm::dmat4 const& modelViewMat) const
 
 Grid::Grid(GLdouble l, GLint nDiv)
 {
-	mMesh = IndexMesh::generateGrid(l, nDiv);
-	static_cast<IndexMesh*>(mIndexMesh)->buildNormalVectors();
+	mMesh = IndexMesh::generateGridTex(l, nDiv);
 }
 
 void Grid::render(glm::dmat4 const& modelViewMat) const
@@ -809,47 +808,66 @@ void Grid::render(glm::dmat4 const& modelViewMat) const
 	// color:
 	glEnable(GL_COLOR_MATERIAL);
 	glColor3f(mColor.r, mColor.g, mColor.b);
-	if (mTexture != nullptr)
+	glPolygonMode(GL_FRONT, GL_FILL);
+	glColor3f(mColor.r, mColor.g, mColor.b);
+	if (mTexture != nullptr) {
 		mTexture->bind(GL_REPLACE);
-	
+	}
 	mMesh->render();
 
 	glColor3f(1, 1, 1);
 	if (mTexture != nullptr)
 		mTexture->unbind();
 	glDisable(GL_COLOR_MATERIAL);
+	
+	glColor3f(1,1, 1);
 }
 
 GridCube::GridCube(GLdouble l, GLuint nDiv): CompoundEntity()
 {
+
+	Texture* texA = new Texture();
+	texA->load("../BmpsP1/checker.bmp");
+	gTextureCEntity.push_back(texA);
+
+	Texture* texB = new Texture();
+	texB->load("../BmpsP1/stones.bmp");
+	gTextureCEntity.push_back(texB);
+
+
 	Grid* gAbajo = new Grid(l, nDiv);
+	gAbajo->setTexture(texB);
 	gAbajo->setModelMat(rotate(dmat4(1.0), glm::radians(180.0), dvec3(0, 0, 1)));
-	gAbajo->setColor(dvec3(0, 0.5, 1));
 	addEntity(gAbajo);
 
 	Grid* gArriba = new Grid(l, nDiv);
 	gArriba->setModelMat(translate(dmat4(1.0), dvec3(0, l, 0)));
+	gArriba->setTexture(texB);
 	addEntity(gArriba);
 	
 	Grid* gZneg = new Grid(l, nDiv);
-	gZneg->setModelMat(translate(dmat4(1.0), dvec3(0, 0, -l/2)));
-	gZneg->setModelMat(rotate(gZneg->modelMat(), glm::radians(-90.0), dvec3(0, 0, 1)));
+	gZneg->setModelMat(translate(dmat4(1.0), dvec3(0, l/2,-l/2)));
+	gZneg->setModelMat(rotate(gZneg->modelMat(), glm::radians(90.0), dvec3(1, 0, 0)));
+	gZneg->setTexture(texA);
 	addEntity(gZneg);
 	
 	Grid* gZpos = new Grid(l, nDiv);
-	gZpos->setModelMat(translate(dmat4(1.0), dvec3(0, 0, l / 2)));
-	gZpos->setModelMat(rotate(gZpos->modelMat(), glm::radians(90.0), dvec3(0, 0, 1)));
+	gZpos->setModelMat(translate(dmat4(1.0), dvec3(0, l/2, l/2 )));
+	gZpos->setTexture(texA);
+	gZpos->setModelMat(rotate(gZpos->modelMat(), glm::radians(90.0), dvec3(1, 0, 0)));
 	addEntity(gZpos);
-
+	
 	
 	Grid* gXneg = new Grid(l, nDiv);
-	gXneg->setModelMat(translate(dmat4(1.0), dvec3(0, 0, -l / 2)));
-	gXneg->setModelMat(rotate(gXneg->modelMat(), glm::radians(-90.0), dvec3(1, 0, 0)));
+	gXneg->setModelMat(translate(dmat4(1.0), dvec3(-l / 2, l/2, 0)));
+	gXneg->setTexture(texA);
+	gXneg->setModelMat(rotate(gXneg->modelMat(), glm::radians(-90.0), dvec3(0, 0, 1)));
 	addEntity(gXneg);
-
+	
 	Grid* gXpos = new Grid(l, nDiv);
-	gXpos->setModelMat(translate(dmat4(1.0), dvec3(l / 2, 0, 0)));
-	gXpos->setModelMat(rotate(gXpos->modelMat(), glm::radians(90.0), dvec3(1, 0, 0)));
+	gXpos->setTexture(texA);
+	gXpos->setModelMat(translate(dmat4(1.0), dvec3(l / 2, l/2, 0)));
+	gXpos->setModelMat(rotate(gXpos->modelMat(), glm::radians(90.0), dvec3(0, 0, 1)));
 	addEntity(gXpos);
 }
 

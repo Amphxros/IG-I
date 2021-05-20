@@ -349,7 +349,8 @@ void Scene::render(Camera const& cam) const
 	cam.upload();
 
 	//Luz rara
-	if (mId >= 2 && mId<=6) sceneDirLight(cam);
+	if (mId >= 2 && mId<=6) 
+		sceneDirLight(cam);
 	else {
 		glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHTING);
