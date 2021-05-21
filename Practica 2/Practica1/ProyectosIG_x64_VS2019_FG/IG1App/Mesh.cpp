@@ -486,12 +486,12 @@ IndexMesh* IndexMesh::generateGridTex(GLdouble lado, GLuint nDiv)
 	GLuint numFC = nDiv + 1;
 	// Generación de las coordenadas de textura
 	mesh->vTextures.reserve(mesh->mNumVertices);
-	int s = 0;
-	int t = 1;
+	double s = 0;
+	double t = 1;
 	for (int i = 0; i < numFC; i++) {
-		GLdouble indX = i /numFC;
+		GLdouble indX = (double)i /numFC;
 		for (int j = 0; j < numFC; j++) {
-			GLdouble indY = j / numFC;
+			GLdouble indY = (double)j / numFC;
 			mesh->vTextures.push_back( dvec2(s+indX,t-indY));
 		}
 	}
