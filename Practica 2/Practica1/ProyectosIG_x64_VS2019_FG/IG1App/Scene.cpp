@@ -258,6 +258,7 @@ void Scene::escenaIndices() {
 
 void Scene::escenaCono()
 {
+	gObjects.push_back(new EjesRGB(400.0));
 	Cono* c = new Cono(100, 50, 50);
 	c->setColor(dvec3(0.5, 0.0, 1.0));
 	gObjects.push_back(c);
@@ -281,7 +282,7 @@ void Scene::escenaGrids()
 {
 
 	gObjects.push_back(new EjesRGB(400.0));
-	GridCube* c = new GridCube(200, 10);
+	GridCube* c = new GridCube(200, 5);
 	gObjects.push_back(c);
 }
 

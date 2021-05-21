@@ -777,12 +777,15 @@ Esfera::Esfera(GLdouble r, GLint p, GLint m)
 {
 	dvec3* perfil = new dvec3[p];
 	double angle = -90.0;
-	for (int i = 0; i < p; i++)
+	for (int i = 0; i < p ; i++)
 	{
 		perfil[i] = glm::dvec3(r * cos(radians(angle)), r * sin(radians(angle)), 0.0);
-		angle += 180.0 / (p - 1.0);
+		angle += 180.0 / (p - 1);
 	}
-		mMesh = MbR::generaIndexMeshByRevolution(m, p, perfil);
+
+
+
+	mMesh = MbR::generaIndexMeshByRevolution(m, p, perfil);
 }
 
 void Esfera::render(glm::dmat4 const& modelViewMat) const
@@ -791,11 +794,13 @@ void Esfera::render(glm::dmat4 const& modelViewMat) const
 	upload(aMat);
 	// color:
 	glEnable(GL_COLOR_MATERIAL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glColor3f(mColor.r, mColor.g, mColor.b);
 	mMesh->render();
 	
 	glColor3f(1, 1, 1);
 	glDisable(GL_COLOR_MATERIAL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 Grid::Grid(GLdouble l, GLint nDiv)
@@ -873,4 +878,3 @@ GridCube::GridCube(GLdouble l, GLuint nDiv): CompoundEntity()
 	gXpos->setModelMat(rotate(gXpos->modelMat(), glm::radians(90.0), dvec3(0, 0, 1)));
 	addEntity(gXpos);
 }
-

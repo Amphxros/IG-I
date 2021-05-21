@@ -489,9 +489,9 @@ IndexMesh* IndexMesh::generateGridTex(GLdouble lado, GLuint nDiv)
 	double s = 0;
 	double t = 1;
 	for (int i = 0; i < numFC; i++) {
-		GLdouble indX = (double)i /numFC;
+		GLdouble indX = (double)i /(numFC-1);
 		for (int j = 0; j < numFC; j++) {
-			GLdouble indY = (double)j / numFC;
+			GLdouble indY = (double)j / (numFC-1);
 			mesh->vTextures.push_back( dvec2(s+indX,t-indY));
 		}
 	}
@@ -559,7 +559,7 @@ void IndexMesh::buildNormalVectors()
 		vNormals[auxC] += n;
 	}
 	for (int i = 0; i < mNumVertices; i++) {
-		vNormals[i] = -normalize(vNormals[i]);
+		vNormals[i] = normalize(vNormals[i]);
 	}
 
 }
