@@ -8,6 +8,7 @@
 #include "Mesh.h"
 
 #include "Texture.h"
+#include "Material.h"
 
 //-------------------------------------------------------------------------
 
@@ -279,6 +280,15 @@ public:
 
 /////////////////////////////////////////////////////////////////7
 
+class EntityWithMaterial : public Abs_Entity {
+public:
+	EntityWithMaterial() : Abs_Entity() { };
+	virtual ~EntityWithMaterial() { };
+	void setMaterial(Material* mat) { mat_ = mat; };
+protected:
+	Material* mat_ = nullptr;
+};
+
 class Cono: public EntityWithIndexMesh
 {
 public:
@@ -287,14 +297,13 @@ public:
 	void render(glm::dmat4 const& modelViewMat) const;
 };
 
-class Esfera: public EntityWithIndexMesh
+class Esfera: public EntityWithMaterial
 {
 public:
 	Esfera(GLdouble r, GLint p, GLint m);
 	virtual ~Esfera() {};
 	void render(glm::dmat4 const& modelViewMat) const;
 };
-
 
 class Grid : public EntityWithIndexMesh {
 public :
@@ -309,5 +318,8 @@ public:
 	GridCube(GLdouble l, GLuint nDiv);
 	virtual ~GridCube() {}
 };
+
+
+////////////////////////////////////////////////////////////////////////
 
 #endif //_H_Entities_H_

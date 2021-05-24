@@ -95,6 +95,9 @@ void Scene::init()
 	case 7:
 		escenaGrids();
 		break;
+	case 8:
+		escenaLuces();
+		break;
 	default:
 		escena2D();
 		break;
@@ -286,6 +289,29 @@ void Scene::escenaGrids()
 	gObjects.push_back(c);
 }
 
+void Scene::escenaLuces() {
+
+	Esfera* e = new Esfera(1000, 100, 100);
+	e->setColor(dvec3(0, 1, 1));
+	e->setModelMat(glm::translate(e->modelMat(), dvec3(0, -1200, -300)));
+	gObjects.push_back(e);
+	
+	TIE* cazaA = new TIE();
+	cazaA->setModelMat(glm::scale(cazaA->modelMat(), dvec3(0.3, 0.3, 0.3)));
+	gObjects.push_back(cazaA);
+	
+	TIE* cazaB = new TIE();
+	cazaB->setModelMat(glm::translate(cazaB->modelMat(), dvec3(100, -50, 50)));
+	cazaB->setModelMat(glm::scale(cazaB->modelMat(), dvec3(0.3, 0.3, 0.3)));
+	gObjects.push_back(cazaB);
+	
+	TIE* cazaC = new TIE();
+	cazaC->setModelMat(glm::translate(cazaC->modelMat(),dvec3(300, 50, -150)));
+	cazaC->setModelMat(glm::scale(cazaC->modelMat(), dvec3(0.3, 0.3, 0.3)));
+	gObjects.push_back(cazaC);
+}
+
+
 //-------------------------------------------------------------------------
 void Scene::free() 
 { // release memory and resources
@@ -328,6 +354,9 @@ void Scene::setGL()
 	case 6:
 	case 7:
 		glClearColor(0.7, 0.8, 0.9, 1.0);  // background color (alpha=1 -> opaque)
+		break;
+	case 8:
+		glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)
 		break;
 	default:
 		glClearColor(0.0, 0.0, 0.0, 1.0);  // background color (alpha=1 -> opaque)

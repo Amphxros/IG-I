@@ -47,6 +47,7 @@ protected:
 	void escenaCaza();
 	void escenaAnillo();
 	void escenaIndices();
+	void escenaLuces();
 
 	void escenaCono();
 	void escenaEsferas();

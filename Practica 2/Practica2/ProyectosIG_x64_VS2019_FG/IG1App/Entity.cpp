@@ -773,7 +773,7 @@ void Cono::render(glm::dmat4 const& modelViewMat) const
 }
 
 
-Esfera::Esfera(GLdouble r, GLint p, GLint m)
+Esfera::Esfera(GLdouble r, GLint p, GLint m): EntityWithMaterial()
 {
 	dvec3* perfil = new dvec3[p];
 	double angle = -90.0;
@@ -794,7 +794,7 @@ void Esfera::render(glm::dmat4 const& modelViewMat) const
 	upload(aMat);
 	// color:
 	glEnable(GL_COLOR_MATERIAL);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glColor3f(mColor.r, mColor.g, mColor.b);
 	mMesh->render();
 	

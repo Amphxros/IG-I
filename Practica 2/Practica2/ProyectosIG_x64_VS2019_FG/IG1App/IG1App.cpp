@@ -259,6 +259,16 @@ void IG1App::key(unsigned char key, int x, int y)
 		mScene->changeScene(7);
 		}
 		break;
+	case '8':
+		if (m2Vistas && mCoord.x > mWinW / 2) {
+			mCameraB->set2D();
+			mSceneB->changeScene(8);
+		}
+		else{
+		mCamera->set2D();
+		mScene->changeScene(8);
+		}
+		break;
 	case'f':
 	case 'F':
 		if (m2Vistas && mCoord.x > mWinW / 2) {
@@ -473,6 +483,4 @@ void IG1App::display2Vistas() const{
 	mCameraB->setSize(mViewPortB->width(), mViewPortB->height());
 	mViewPort->setPos(0, 0);
 	mViewPortB->setPos(0, 0);
-
-			
 }
