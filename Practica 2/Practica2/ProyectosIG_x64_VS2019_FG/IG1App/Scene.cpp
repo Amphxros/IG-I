@@ -56,6 +56,20 @@ Scene::Scene(){
 	Texture* tex12 = new Texture();
 	tex12->load("../BmpsP1/stones.bmp");
 	gTextures.push_back(tex12);
+
+	//luces
+
+	dirLight = new DirLight(fvec3(1, 1, 1));
+	
+	glm::fvec4 ambient = { 0, 0, 0, 1 };
+	dirLight->setAmb(ambient);
+	
+	glm::fvec4 diffuse = { 1, 1, 1, 1 };
+	dirLight->setDiff(diffuse);
+
+	glm::fvec4 specular = { 0.5, 0.5, 0.5, 1 };
+	dirLight->setSpec(specular);
+
 }
 
 void Scene::init()
@@ -107,18 +121,8 @@ void Scene::init()
 }
 
 void Scene::sceneDirLight(Camera const& cam) const {
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glm::fvec4 posDir = { 1, 1, 1, 0 };
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixd(value_ptr(cam.viewMat()));
-	glLightfv(GL_LIGHT0, GL_POSITION, value_ptr(posDir));
-	glm::fvec4 ambient = { 0, 0, 0, 1 };
-	glm::fvec4 diffuse = { 1, 1, 1, 1 };
-	glm::fvec4 specular = { 0.5, 0.5, 0.5, 1 };
-	glLightfv(GL_LIGHT0, GL_AMBIENT, value_ptr(ambient));
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, value_ptr(diffuse));
-	glLightfv(GL_LIGHT0, GL_SPECULAR, value_ptr(specular));
+	
+	
 }
 
 void Scene::escena3D() {
@@ -291,30 +295,23 @@ void Scene::escenaGrids()
 
 void Scene::escenaLuces() {
 
+	Material* m = new Material();
+	m->setCopper();
 	Esfera* e = new Esfera(1000, 100, 100);
+	e->setMaterial(m);
 	e->setColor(dvec3(0, 1, 1));
 	e->setModelMat(glm::translate(e->modelMat(), dvec3(0, -1200, -300)));
 	gObjects.push_back(e);
-	
-	TIE* cazaA = new TIE();
-	cazaA->setModelMat(glm::scale(cazaA->modelMat(), dvec3(0.3, 0.3, 0.3)));
-	gObjects.push_back(cazaA);
-	
-	TIE* cazaB = new TIE();
-	cazaB->setModelMat(glm::translate(cazaB->modelMat(), dvec3(100, -50, 50)));
-	cazaB->setModelMat(glm::scale(cazaB->modelMat(), dvec3(0.3, 0.3, 0.3)));
-	gObjects.push_back(cazaB);
-	
-	TIE* cazaC = new TIE();
-	cazaC->setModelMat(glm::translate(cazaC->modelMat(),dvec3(300, 50, -150)));
-	cazaC->setModelMat(glm::scale(cazaC->modelMat(), dvec3(0.3, 0.3, 0.3)));
-	gObjects.push_back(cazaC);
+
+	TIEFormation* f = new TIEFormation();
+	gObjects.push_back(f);
+
 }
 
 
 //-------------------------------------------------------------------------
 void Scene::free() 
-{ // release memory and resources
+{ // release me2mory and resources
 	for (Texture* el : gTextures)
 	{
 		delete el;  el = nullptr;
@@ -379,11 +376,19 @@ void Scene::render(Camera const& cam) const
 	cam.upload();
 
 	//Luz rara
-	if (mId >= 2 && mId<=6) 
-		sceneDirLight(cam);
+	if (mId >= 2 && mId <= 6 && isLightEnabled) {
+		glEnable(GL_LIGHTING);
+		dirLight->enable();
+		dirLight->upload(cam.viewMat());
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixd(value_ptr(cam.viewMat()));
+	}
+		
 	else {
-		glDisable(GL_LIGHT0);
+		dirLight->disable();
 		glDisable(GL_LIGHTING);
+		glm::fvec4 amb = { 0.0, 0.0, 0.0, 1.0 };
+		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(amb));
 	}
 
 	for (Abs_Entity* el : gObjects)

@@ -10,15 +10,15 @@ public:
 	virtual ~Light() { disable(); };
 	void uploadL();
 	// Método abstracto
-	virtual void upload(glm::dmat4 const& modelViewMat) const = 0;
+	virtual void upload(glm::dmat4 const& modelViewMat) {};
 	// Setter’s para cambiar el valor de los atributos lumínicos
 	void setAmb(glm::fvec4 amb);
 	void setDiff(glm::fvec4 diff);
 	void setSpec(glm::fvec4 spec);
-
-protected:
 	void disable();
 	void enable();
+
+protected:
 	// Atributo para poder generar un nuevo id cada vez
 	static GLuint cont;
 
@@ -33,9 +33,9 @@ protected:
 
 class DirLight : public Light {
 public:
-	DirLight();
+	DirLight(glm::fvec3 dir);
 	virtual ~DirLight() {};
-	virtual void upload(glm::dmat4 const& modelViewMat) const;
+	void upload(glm::dmat4 const& modelViewMat);
 	void setPosDir(glm::fvec3 dir);
 };
 

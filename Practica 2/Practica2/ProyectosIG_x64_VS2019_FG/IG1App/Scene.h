@@ -9,7 +9,7 @@
 #include "Entity.h"
 
 #include <vector>
-
+#include "Light.h"
 #include "Texture.h"
 
 //-------------------------------------------------------------------------
@@ -37,6 +37,11 @@ public:
 
 	void sceneDirLight(Camera const& cam) const;
 	
+	DirLight* getDirLight() { return dirLight; }
+	void enableDirLight() { isLightEnabled = true; }
+	void disableDirLight() { isLightEnabled = false; }
+
+
 protected:
 	void free();
 	void setGL();
@@ -58,7 +63,11 @@ protected:
 	std::vector<Abs_Entity*> gObjectsTranslucidos;  // Entities (graphic objects) of the scene
 	bool can_update=true;
 
+	bool isLightEnabled = false;
+
 	int mId = 0; //identificador de escena
+
+	DirLight* dirLight;
 };
 //-------------------------------------------------------------------------
 

@@ -320,6 +320,14 @@ public:
 };
 
 
+class TIEFormation :
+	public CompoundEntity {
+public:
+	TIEFormation();
+	virtual ~TIEFormation() {};
+};
+
+
 ////////////////////////////////////////////////////////////////////////
 
 #endif //_H_Entities_H_

@@ -793,13 +793,17 @@ void Esfera::render(glm::dmat4 const& modelViewMat) const
 	dmat4 aMat = modelViewMat * mModelMat;
 	upload(aMat);
 	// color:
-	glEnable(GL_COLOR_MATERIAL);
+	if (mat_ != nullptr) mat_->upload();
+
+	else glEnable(GL_COLOR_MATERIAL);
+	
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glColor3f(mColor.r, mColor.g, mColor.b);
-	mMesh->render();
+	
+mMesh->render();
 	
 	glColor3f(1, 1, 1);
-	glDisable(GL_COLOR_MATERIAL);
+	if (mat_ == nullptr) glDisable(GL_COLOR_MATERIAL);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
@@ -877,4 +881,23 @@ GridCube::GridCube(GLdouble l, GLuint nDiv): CompoundEntity()
 	gXpos->setModelMat(translate(dmat4(1.0), dvec3(l / 2, l/2, 0)));
 	gXpos->setModelMat(rotate(gXpos->modelMat(), glm::radians(90.0), dvec3(0, 0, 1)));
 	addEntity(gXpos);
+}
+
+TIEFormation::TIEFormation()
+{
+	TIE* cazaA = new TIE();
+	cazaA->setModelMat(glm::scale(cazaA->modelMat(), dvec3(0.3, 0.3, 0.3)));
+	addEntity(cazaA);
+
+	TIE* cazaB = new TIE();
+	cazaB->setModelMat(glm::translate(cazaB->modelMat(), dvec3(100,0, 50)));
+	cazaB->setModelMat(glm::rotate(cazaB->modelMat(), radians(5.0), dvec3(0, 0, 1)));
+	cazaB->setModelMat(glm::scale(cazaB->modelMat(), dvec3(0.3, 0.3, 0.3)));
+	addEntity(cazaB);
+
+	TIE* cazaC = new TIE();
+	cazaC->setModelMat(glm::translate(cazaC->modelMat(), dvec3(300,0, -150)));
+	cazaB->setModelMat(glm::rotate(cazaB->modelMat(), radians(5.0), dvec3(0, 0, 1)));
+	cazaC->setModelMat(glm::scale(cazaC->modelMat(), dvec3(0.3, 0.3, 0.3)));
+	addEntity(cazaC);
 }

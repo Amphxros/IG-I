@@ -279,6 +279,29 @@ void IG1App::key(unsigned char key, int x, int y)
 	case 'k':
 		m2Vistas = !m2Vistas;
 		break;
+	case 'q':
+		mScene->enableDirLight();
+		break;
+	case 'w':
+		mScene->disableDirLight();
+		break;
+
+	//ESTO ES PARA POSLIGHT
+	case 'a':
+		mScene->enableDirLight(); // pos
+		break;
+	case 's':
+		mScene->disableDirLight(); // pos
+		break;
+	//ESTO ES PARA SPOTLIGHT
+	case 'z':
+		mScene->enableDirLight(); // spot
+		break;
+	case 'x':
+		mScene->disableDirLight(); // spot
+		break;
+
+
 	default:
 		need_redisplay = false;
 		break;

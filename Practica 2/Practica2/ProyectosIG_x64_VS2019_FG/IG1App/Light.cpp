@@ -51,16 +51,16 @@ void Light::setSpec(glm::fvec4 spec){
 
 ////////////////////////////////////////////////
 
-DirLight::DirLight(): Light()
+DirLight::DirLight(glm::fvec3 dir): Light()
 {
-
+	setPosDir(dir);
 }
 
-void DirLight::upload(glm::dmat4 const& modelViewMat) const {
+void DirLight::upload(glm::dmat4 const& modelViewMat){
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixd(value_ptr(modelViewMat));
 	glLightfv(id, GL_POSITION, value_ptr(posDir));
-	//uploadL();
+	uploadL();
 }
 
 // Ojo al 0.0 que determina que la luz sea remota
@@ -76,6 +76,7 @@ PosLight::PosLight(): Light()
 PosLight::~PosLight()
 {
 }
+
 
 void PosLight::upload(glm::dmat4 const& modelViewMat){
 glMatrixMode(GL_MODELVIEW);

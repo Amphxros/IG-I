@@ -746,3 +746,7 @@ TIE::TIE():
 
 	addEntity(front);
 }
+
+TIEFormation::TIEFormation()
+{
+}
