@@ -794,7 +794,6 @@ void Esfera::render(glm::dmat4 const& modelViewMat) const
 	upload(aMat);
 	// color:
 	if (mat_ != nullptr) mat_->upload();
-
 	else glEnable(GL_COLOR_MATERIAL);
 	
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -890,14 +889,32 @@ TIEFormation::TIEFormation()
 	addEntity(cazaA);
 
 	TIE* cazaB = new TIE();
-	cazaB->setModelMat(glm::translate(cazaB->modelMat(), dvec3(200, 0, 150)));
+	cazaB->setModelMat(glm::translate(cazaB->modelMat(), dvec3(0, 0, 150)));
 	cazaB->setModelMat(glm::rotate(cazaB->modelMat(), radians(-15.0), dvec3(0, 0, 1)));
 	cazaB->setModelMat(glm::scale(cazaB->modelMat(), dvec3(0.3, 0.3, 0.3)));
 	addEntity(cazaB);
-
+	
 	TIE* cazaC = new TIE();
-	cazaC->setModelMat(glm::translate(cazaC->modelMat(), dvec3(-200, 0, -150)));
+	cazaC->setModelMat(glm::translate(cazaC->modelMat(), dvec3(0, 0, -150)));
 	cazaC->setModelMat(glm::rotate(cazaC->modelMat(), radians(15.0), dvec3(0, 0, 1)));
 	cazaC->setModelMat(glm::scale(cazaC->modelMat(), dvec3(0.3, 0.3, 0.3)));
 	addEntity(cazaC);
+	angle_Orbita = 180;
+	angle_rotation = 0;
+	rd_Orbita = 100;
+}
+
+void TIEFormation::rota()
+{
+	
+}
+
+void TIEFormation::orbita()
+{
+	GLdouble x;
+	GLdouble y;
+	angle_Orbita += 5;
+	x = rd_Orbita * glm::cos(glm::radians(angle_Orbita));
+	y = rd_Orbita * glm::sin(glm::radians(angle_Orbita));
+	setModelMat(glm::translate(mModelMat, dvec3(x, y, 0)));
 }

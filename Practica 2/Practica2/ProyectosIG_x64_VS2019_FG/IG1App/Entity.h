@@ -325,6 +325,17 @@ class TIEFormation :
 public:
 	TIEFormation();
 	virtual ~TIEFormation() {};
+	void rota();
+	void orbita();
+protected:
+	GLdouble rd_Orbita;
+	GLdouble rd_rotation;
+	
+	GLdouble angle_Orbita;
+	GLdouble angle_rotation;
+
+
+
 };
 
 

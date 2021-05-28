@@ -25,24 +25,31 @@ public:
 	~Scene() { free();  resetGL(); }
 	void init();
 
+
 	void changeScene(int id); //elimina la escena actual y genera la nueva
     void render(Camera const& cam) const;
 
 	void update();
 	void updateTriangle();
 	void setUpdate() { can_update = !can_update; }
+	
+	void orbita();
+	void rota();
+	
+	
 	inline int getmID() { return mId; }
 
 	void savePhoto();
+	void disableAllLights();
 
-	void sceneDirLight(Camera const& cam) const; // Obsoleto
-	
 	DirLight* getDirLight() { return dirLight; }
 	void enableDirLight() { isDirLightEnabled = true; }
 	void disableDirLight() { isDirLightEnabled = false; }
+
 	PosLight* getPosLight() { return posLight; }
 	void enablePosLight() { isPosLightEnabled = true; }
 	void disablePosLight() { isPosLightEnabled = false; }
+
 	SpotLight* getSpotLight() { return spotLight; }
 	void enableSpotLight() { isSpotLightEnabled = true; }
 	void disableSpotLight() { isSpotLightEnabled = false; }

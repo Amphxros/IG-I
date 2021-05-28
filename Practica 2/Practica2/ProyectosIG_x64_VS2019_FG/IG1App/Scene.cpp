@@ -58,7 +58,6 @@ Scene::Scene(){
 	gTextures.push_back(tex12);
 
 	//luces
-
 	glm::fvec4 ambient, diffuse, specular;
 
 	dirLight = new DirLight(fvec3(1, 1, 1));
@@ -70,8 +69,8 @@ Scene::Scene(){
 	dirLight->setSpec(specular);
 
 	posLight = new PosLight(fvec3(50, 50, 10));
-	ambient = { 0, 0, 0, 1 };
-	diffuse = { 1, 0.85, 0, 1 };
+	ambient = { 0.0, 0.0, 0.0, 1 };
+	diffuse = { 0.2, 0.8, 0.2, 1 };
 	specular = { 0.5, 0.5, 0.5, 1 };
 	posLight->setAmb(ambient);
 	posLight->setDiff(diffuse);
@@ -79,8 +78,8 @@ Scene::Scene(){
 
 	spotLight = new SpotLight(dvec3(0.0, 0.0, 1.0), 0.5, 3.0, fvec3(10, 50, 50));
 	ambient = { 0, 0, 0, 1 };
-	diffuse = { 1, 1, 1, 1 };
-	specular = { 0.5, 0.5, 0.5, 1 };
+	diffuse = { 0.3, 0.3, 0.3, 1 };
+	specular = { 0.5, 1, 0.5, 1 };
 	spotLight->setAmb(ambient);
 	spotLight->setDiff(diffuse);
 	spotLight->setSpec(specular);
@@ -131,11 +130,6 @@ void Scene::init()
 		break;
 	}
 
-	//gObjects.push_back(new Rectangulo(100, 100));
-}
-
-void Scene::sceneDirLight(Camera const& cam) const {
-	//Obsoleto
 }
 
 void Scene::escena3D() {
@@ -202,67 +196,6 @@ void Scene::escenaCaza() {
 
 	TIE* caza = new TIE();
 	gObjects.push_back(caza);
-	
-	//ANTIGUO CAZA//
-	/*
-	Sphere* esfera1 = new Sphere(100.0);
-	esfera1->setColor(dvec3(0.0, 0.25, 0.42));
-	esfera1->setModelMat(glm::translate(esfera1->modelMat(), dvec3(200, 300, 200)));
-	gObjects.push_back(esfera1);
-
-	Cylinder* cilindro1 = new Cylinder(25.0, 25.0, 400.0);
-	cilindro1->setColor(dvec3(0.0, 0.25, 0.42));
-	cilindro1->setModelMat(glm::translate(cilindro1->modelMat(), dvec3(0, 300, 200)));
-	cilindro1->setModelMat(glm::rotate(cilindro1->modelMat(), radians(90.0), dvec3(0, 1, 0)));
-	gObjects.push_back(cilindro1);
-
-	Cylinder* cilindro2 = new Cylinder(60.0, 60.0, 20.0);
-	cilindro2->setColor(dvec3(0.0, 0.25, 0.42));
-	cilindro2->setModelMat(glm::translate(cilindro2->modelMat(), dvec3(200, 300, 280)));
-	gObjects.push_back(cilindro2);
-	
-	Disk* disco1 = new Disk(0.0, 60.0);
-	disco1->setColor(dvec3(0.0, 0.25, 0.42));
-	disco1->setModelMat(glm::translate(disco1->modelMat(), dvec3(200, 300, 300)));
-	gObjects.push_back(disco1);
-
-	Disk* disco2 = new Disk(0.0, 150.0, 6, 50);
-	disco2->setTexture(gTextures[5]);
-	disco2->setColor(dvec3(0.0, 0.25, 0.42));
-	disco2->setModelMat(glm::translate(disco2->modelMat(), dvec3(0, 300, 200)));
-	disco2->setModelMat(glm::rotate(disco2->modelMat(), radians(90.0), dvec3(0, 1, 0)));
-	disco2->setModelMat(glm::rotate(disco2->modelMat(), radians(90.0), dvec3(0, 0, 1)));
-	disco2->setModelMat(glm::scale(disco2->modelMat(), dvec3(1.75, 1.75, 1.0)));
-	gObjectsTranslucidos.push_back(disco2);
-
-	Disk* disco3 = new Disk(0.0, 150.0, 6, 50);
-	disco3->setTexture(gTextures[5]);
-	disco3->setColor(dvec3(0.0, 0.25, 0.42));
-	disco3->setModelMat(glm::translate(disco3->modelMat(), dvec3(400, 300, 200)));
-	disco3->setModelMat(glm::rotate(disco3->modelMat(), radians(90.0), dvec3(0, 1, 0)));
-	disco3->setModelMat(glm::rotate(disco3->modelMat(), radians(90.0), dvec3(0, 0, 1)));
-	disco3->setModelMat(glm::scale(disco3->modelMat(), dvec3(1.75, 1.75, 1.0)));
-	gObjectsTranslucidos.push_back(disco3);
-	*/
-
-	//TESTS CUÁDRICOS//
-	/*
-	Sphere* esfera = new Sphere(100.0);
-	esfera->setColor(dvec3(0.0, 0.25, 0.42));
-	gObjects.push_back(esfera);
-
-	Cylinder* cilindro = new Cylinder(100.0, 50.0, 80.5);
-	cilindro->setColor(dvec3(0.0, 0.25, 0.42));
-	gObjects.push_back(cilindro);
-
-	Disk* disco = new Disk(30.0, 90.0);
-	disco->setColor(dvec3(0.0, 0.25, 0.42));
-	gObjects.push_back(disco);
-
-	PartialDisk* discoParcial = new PartialDisk(30.0, 80.0, 90.0, 45.0);
-	discoParcial->setColor(dvec3(0.0, 0.25, 0.42));
-	gObjects.push_back(discoParcial);
-	*/
 }
 
 void Scene::escenaAnillo()
@@ -309,11 +242,11 @@ void Scene::escenaGrids()
 void Scene::escenaLuces() {
 
 	Material* m = new Material();
-	m->setCopper();
+	m->setBrass();
 	Esfera* e = new Esfera(1000, 100, 100);
 	e->setMaterial(m);
-	e->setColor(dvec3(0, 1, 1));
-	e->setModelMat(glm::translate(e->modelMat(), dvec3(0, -1200, -300)));
+	e->setColor(dvec3(0.5, 0.65, 0.65)); //e->setColor(dvec3(0, 1, 1));
+	e->setModelMat(glm::translate(e->modelMat(), dvec3(0, -1200, 0)));
 	gObjects.push_back(e);
 
 	TIEFormation* f = new TIEFormation();
@@ -386,7 +319,6 @@ void Scene::resetGL()
 
 void Scene::render(Camera const& cam) const 
 {
-	cam.upload();
 
 	//Luz
 	if (mId >= 2) {
@@ -419,7 +351,7 @@ void Scene::render(Camera const& cam) const
 			dirLight->disable();
 			posLight->disable();
 			spotLight->disable();
-			glDisable(GL_LIGHTING);
+			//glDisable(GL_LIGHTING);
 			glm::fvec4 amb = { 0.0, 0.0, 0.0, 1.0 };
 			glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(amb));
 		}
@@ -428,10 +360,11 @@ void Scene::render(Camera const& cam) const
 		dirLight->disable();
 		posLight->disable();
 		spotLight->disable();
-		glDisable(GL_LIGHTING);
 		glm::fvec4 amb = { 0.0, 0.0, 0.0, 1.0 };
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(amb));
+		//glDisable(GL_LIGHTING);
 	}
+	cam.upload();
 
 	for (Abs_Entity* el : gObjects)
 	{
@@ -465,6 +398,24 @@ void Scene::updateTriangle()
 	}
 }
 
+void Scene::orbita()
+{
+	if (mId == 8) {
+		if (dynamic_cast<TIEFormation*>(gObjects.back()) != nullptr) {
+			static_cast<TIEFormation*>(gObjects.back())->orbita();
+		}
+	}
+}
+
+void Scene::rota()
+{
+	if (mId == 8) {
+		if (dynamic_cast<TIEFormation*>(gObjects.back()) != nullptr) {
+			static_cast<TIEFormation*>(gObjects.back())->rota();
+		}
+	}
+}
+
 void Scene::changeScene(int id)
 {
 	mId = id;
@@ -477,6 +428,15 @@ void Scene::savePhoto(){
 		gTextures[6]->save("../BmpsP1/Photo.bmp"); //y guardar la foto
 		std::cout << "guardado";
 	}
+}
+
+void Scene::disableAllLights()
+{
+	disableDirLight();
+	disablePosLight();
+	disableSpotLight();
+	glm::fvec4 amb = { 0.0, 0.0, 0.0, 1.0 };
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(amb));
 }
 
 //-------------------------------------------------------------------------

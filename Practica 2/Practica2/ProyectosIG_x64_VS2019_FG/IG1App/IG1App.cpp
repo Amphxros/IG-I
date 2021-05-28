@@ -301,9 +301,13 @@ void IG1App::key(unsigned char key, int x, int y)
 		mScene->enableSpotLight();
 		break;
 	case 'r':
-		mScene->disableDirLight();
-		mScene->disablePosLight();
-		mScene->disableSpotLight();
+		mScene->disableAllLights();
+		break;
+	case 'y':
+		mScene->orbita();
+		break;
+	case 'b':
+		mScene->rota();
 		break;
 	default:
 		need_redisplay = false;
