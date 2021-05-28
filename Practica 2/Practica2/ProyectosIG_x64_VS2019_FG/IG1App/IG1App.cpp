@@ -217,7 +217,6 @@ void IG1App::key(unsigned char key, int x, int y)
 		mScene->changeScene(3);
 		}
 		break;
-	
 	case '4':
 		if (m2Vistas && mCoord.x > mWinW / 2) {
 			mCameraB->set2D();
@@ -248,7 +247,6 @@ void IG1App::key(unsigned char key, int x, int y)
 		mScene->changeScene(6);
 		}
 		break;
-
 	case '7':
 		if (m2Vistas && mCoord.x > mWinW / 2) {
 			mCameraB->set2D();
@@ -285,23 +283,28 @@ void IG1App::key(unsigned char key, int x, int y)
 	case 'w':
 		mScene->disableDirLight();
 		break;
-
-	//ESTO ES PARA POSLIGHT
 	case 'a':
-		mScene->enableDirLight(); // pos
+		mScene->enablePosLight();
 		break;
 	case 's':
-		mScene->disableDirLight(); // pos
+		mScene->disablePosLight();
 		break;
-	//ESTO ES PARA SPOTLIGHT
 	case 'z':
-		mScene->enableDirLight(); // spot
+		mScene->enableSpotLight();
 		break;
 	case 'x':
-		mScene->disableDirLight(); // spot
+		mScene->disableSpotLight();
 		break;
-
-
+	case 'e':
+		mScene->enableDirLight();
+		mScene->enablePosLight();
+		mScene->enableSpotLight();
+		break;
+	case 'r':
+		mScene->disableDirLight();
+		mScene->disablePosLight();
+		mScene->disableSpotLight();
+		break;
 	default:
 		need_redisplay = false;
 		break;

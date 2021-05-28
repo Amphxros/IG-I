@@ -33,7 +33,7 @@ protected:
 
 class DirLight : public Light {
 public:
-	DirLight(glm::fvec3 dir);
+	DirLight(glm::fvec3 dir = { 1, 0, 0 });
 	virtual ~DirLight() {};
 	void upload(glm::dmat4 const& modelViewMat);
 	void setPosDir(glm::fvec3 dir);
@@ -41,8 +41,8 @@ public:
 
 class PosLight : public Light {
 public:
-	PosLight();
-	virtual ~PosLight();
+	PosLight(glm::fvec3 pos = { 0, 0, 0 });
+	virtual ~PosLight() {};
 	virtual void upload(glm::dmat4 const& modelViewMat);
 	void setPosDir(glm::fvec3 dir);
 	void setAtte(GLfloat kc, GLfloat kl, GLfloat kq);
@@ -53,7 +53,7 @@ protected:
 
 class SpotLight : public PosLight {
 public: 
-	SpotLight(glm::fvec3 pos = { 0, 0, 0 }) : PosLight() {posDir = glm::fvec4(pos, 1.0);};
+	SpotLight(glm::fvec3 dir, GLfloat cut, GLfloat ex, glm::fvec3 pos = { 0, 0, 0 });
 	virtual void upload(glm::dmat4 const& modelViewMat);
 	void setSpot(glm::fvec3 dir, GLfloat cf, GLfloat e);
 protected:

@@ -35,11 +35,17 @@ public:
 
 	void savePhoto();
 
-	void sceneDirLight(Camera const& cam) const;
+	void sceneDirLight(Camera const& cam) const; // Obsoleto
 	
 	DirLight* getDirLight() { return dirLight; }
-	void enableDirLight() { isLightEnabled = true; }
-	void disableDirLight() { isLightEnabled = false; }
+	void enableDirLight() { isDirLightEnabled = true; }
+	void disableDirLight() { isDirLightEnabled = false; }
+	PosLight* getPosLight() { return posLight; }
+	void enablePosLight() { isPosLightEnabled = true; }
+	void disablePosLight() { isPosLightEnabled = false; }
+	SpotLight* getSpotLight() { return spotLight; }
+	void enableSpotLight() { isSpotLightEnabled = true; }
+	void disableSpotLight() { isSpotLightEnabled = false; }
 
 
 protected:
@@ -63,11 +69,15 @@ protected:
 	std::vector<Abs_Entity*> gObjectsTranslucidos;  // Entities (graphic objects) of the scene
 	bool can_update=true;
 
-	bool isLightEnabled = false;
+	bool isDirLightEnabled = false;
+	bool isPosLightEnabled = false;
+	bool isSpotLightEnabled = false;
 
 	int mId = 0; //identificador de escena
 
 	DirLight* dirLight;
+	PosLight* posLight;
+	SpotLight* spotLight;
 };
 //-------------------------------------------------------------------------
 

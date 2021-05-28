@@ -51,61 +51,51 @@ void Light::setSpec(glm::fvec4 spec){
 
 ////////////////////////////////////////////////
 
-DirLight::DirLight(glm::fvec3 dir): Light()
-{
+DirLight::DirLight(glm::fvec3 dir) : Light() {
 	setPosDir(dir);
 }
-
-void DirLight::upload(glm::dmat4 const& modelViewMat){
+void DirLight::upload(glm::dmat4 const& modelViewMat) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixd(value_ptr(modelViewMat));
 	glLightfv(id, GL_POSITION, value_ptr(posDir));
 	uploadL();
 }
-
 // Ojo al 0.0 que determina que la luz sea remota
 void DirLight::setPosDir(glm::fvec3 dir) {
 	posDir = glm::fvec4(dir, 0.0);
 }
 
-PosLight::PosLight(): Light()
-{
-
+PosLight::PosLight(glm::fvec3 pos) : Light() {
+	setPosDir(pos);
 }
-
-PosLight::~PosLight()
-{
+void PosLight::upload(glm::dmat4 const& modelViewMat) {
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixd(value_ptr(modelViewMat));
+	glLightfv(id, GL_POSITION, value_ptr(posDir));
+	glLightf(id, GL_CONSTANT_ATTENUATION, kc_);
+	glLightf(id, GL_LINEAR_ATTENUATION, kl_);
+	glLightf(id, GL_QUADRATIC_ATTENUATION, kq_);
+	uploadL();
 }
-
-
-void PosLight::upload(glm::dmat4 const& modelViewMat){
-glMatrixMode(GL_MODELVIEW);
-glLoadMatrixd(value_ptr(modelViewMat));
-glLightfv(id, GL_POSITION, value_ptr(posDir));
-glLightf(id, GL_CONSTANT_ATTENUATION, kc_);
-glLightf(id, GL_LINEAR_ATTENUATION, kl_);
-glLightf(id, GL_QUADRATIC_ATTENUATION, kq_);
-uploadL();
-}
-void PosLight::setAtte(GLfloat kc, GLfloat kl, GLfloat kq)
-{
+void PosLight::setAtte(GLfloat kc, GLfloat kl, GLfloat kq) {
 	kc_ = kc;
 	kl_ = kl;
 	kq_ = kq;
 }
-
 // Ojo al 1.0 que determina que la luz sea local
 void PosLight::setPosDir(glm::fvec3 dir) {
 	posDir = glm::fvec4(dir, 1.0);
 }
 
+SpotLight::SpotLight(glm::fvec3 dir, GLfloat cut, GLfloat ex, glm::fvec3 pos) : PosLight(pos) {
+	setSpot(dir, cut, ex);
+}
 void SpotLight::upload(glm::dmat4 const& modelViewMat) {
 	PosLight::upload(modelViewMat);
 	glLightfv(id, GL_SPOT_DIRECTION, value_ptr(direction));
 	glLightf(id, GL_SPOT_CUTOFF, cutoff);
 	glLightf(id, GL_SPOT_EXPONENT, exp);
 }
-
 // Ojo al 0.0: la dirección de emisión del foco es vector
 void SpotLight::setSpot(glm::fvec3 dir, GLfloat cf, GLfloat e) {
 	direction = glm::fvec4(dir, 0.0);

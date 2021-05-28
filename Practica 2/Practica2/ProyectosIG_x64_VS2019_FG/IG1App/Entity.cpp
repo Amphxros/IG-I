@@ -890,14 +890,14 @@ TIEFormation::TIEFormation()
 	addEntity(cazaA);
 
 	TIE* cazaB = new TIE();
-	cazaB->setModelMat(glm::translate(cazaB->modelMat(), dvec3(100,0, 50)));
-	cazaB->setModelMat(glm::rotate(cazaB->modelMat(), radians(5.0), dvec3(0, 0, 1)));
+	cazaB->setModelMat(glm::translate(cazaB->modelMat(), dvec3(200, 0, 150)));
+	cazaB->setModelMat(glm::rotate(cazaB->modelMat(), radians(-15.0), dvec3(0, 0, 1)));
 	cazaB->setModelMat(glm::scale(cazaB->modelMat(), dvec3(0.3, 0.3, 0.3)));
 	addEntity(cazaB);
 
 	TIE* cazaC = new TIE();
-	cazaC->setModelMat(glm::translate(cazaC->modelMat(), dvec3(300,0, -150)));
-	cazaB->setModelMat(glm::rotate(cazaB->modelMat(), radians(5.0), dvec3(0, 0, 1)));
+	cazaC->setModelMat(glm::translate(cazaC->modelMat(), dvec3(-200, 0, -150)));
+	cazaC->setModelMat(glm::rotate(cazaC->modelMat(), radians(15.0), dvec3(0, 0, 1)));
 	cazaC->setModelMat(glm::scale(cazaC->modelMat(), dvec3(0.3, 0.3, 0.3)));
 	addEntity(cazaC);
 }

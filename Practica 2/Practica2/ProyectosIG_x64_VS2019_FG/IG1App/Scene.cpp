@@ -59,17 +59,31 @@ Scene::Scene(){
 
 	//luces
 
-	dirLight = new DirLight(fvec3(1, 1, 1));
-	
-	glm::fvec4 ambient = { 0, 0, 0, 1 };
-	dirLight->setAmb(ambient);
-	
-	glm::fvec4 diffuse = { 1, 1, 1, 1 };
-	dirLight->setDiff(diffuse);
+	glm::fvec4 ambient, diffuse, specular;
 
-	glm::fvec4 specular = { 0.5, 0.5, 0.5, 1 };
+	dirLight = new DirLight(fvec3(1, 1, 1));
+	ambient = { 0, 0, 0, 1 };
+	diffuse = { 1, 1, 1, 1 };
+	specular = { 0.5, 0.5, 0.5, 1 };
+	dirLight->setAmb(ambient);
+	dirLight->setDiff(diffuse);
 	dirLight->setSpec(specular);
 
+	posLight = new PosLight(fvec3(50, 50, 10));
+	ambient = { 0, 0, 0, 1 };
+	diffuse = { 1, 0.85, 0, 1 };
+	specular = { 0.5, 0.5, 0.5, 1 };
+	posLight->setAmb(ambient);
+	posLight->setDiff(diffuse);
+	posLight->setSpec(specular);
+
+	spotLight = new SpotLight(dvec3(0.0, 0.0, 1.0), 0.5, 3.0, fvec3(10, 50, 50));
+	ambient = { 0, 0, 0, 1 };
+	diffuse = { 1, 1, 1, 1 };
+	specular = { 0.5, 0.5, 0.5, 1 };
+	spotLight->setAmb(ambient);
+	spotLight->setDiff(diffuse);
+	spotLight->setSpec(specular);
 }
 
 void Scene::init()
@@ -121,8 +135,7 @@ void Scene::init()
 }
 
 void Scene::sceneDirLight(Camera const& cam) const {
-	
-	
+	//Obsoleto
 }
 
 void Scene::escena3D() {
@@ -375,17 +388,46 @@ void Scene::render(Camera const& cam) const
 {
 	cam.upload();
 
-	//Luz rara
-	if (mId >= 2 && mId <= 6 && isLightEnabled) {
-		glEnable(GL_LIGHTING);
-		dirLight->enable();
-		dirLight->upload(cam.viewMat());
-		glMatrixMode(GL_MODELVIEW);
-		glLoadMatrixd(value_ptr(cam.viewMat()));
+	//Luz
+	if (mId >= 2) {
+		// ¿Alguna luz de escena?
+		if (isDirLightEnabled || isPosLightEnabled || isSpotLightEnabled) {
+			glEnable(GL_LIGHTING);
+
+			if (isDirLightEnabled) {		
+				dirLight->enable();
+				dirLight->upload(cam.viewMat());
+			}
+			else dirLight->disable();
+
+			if (isPosLightEnabled) {
+				posLight->enable();
+				posLight->upload(cam.viewMat());
+			}
+			else posLight->disable();
+
+			if (isSpotLightEnabled) {
+				spotLight->enable();
+				spotLight->upload(cam.viewMat());
+			}
+			else spotLight->disable();
+
+			glMatrixMode(GL_MODELVIEW);
+			glLoadMatrixd(value_ptr(cam.viewMat()));
+		}
+		else {
+			dirLight->disable();
+			posLight->disable();
+			spotLight->disable();
+			glDisable(GL_LIGHTING);
+			glm::fvec4 amb = { 0.0, 0.0, 0.0, 1.0 };
+			glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(amb));
+		}
 	}
-		
 	else {
 		dirLight->disable();
+		posLight->disable();
+		spotLight->disable();
 		glDisable(GL_LIGHTING);
 		glm::fvec4 amb = { 0.0, 0.0, 0.0, 1.0 };
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(amb));
