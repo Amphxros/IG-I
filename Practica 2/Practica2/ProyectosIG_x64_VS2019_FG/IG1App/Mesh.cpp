@@ -392,8 +392,11 @@ IndexMesh* IndexMesh::generaCuboConTapasIndexado(GLdouble l)
 	GLdouble ld = l / 2;
 	mesh->vNormals.reserve(mesh->mNumVertices);
 	mesh->vVertices = {
-		{ld, ld, -ld}, {ld, -ld, -ld}, {ld, ld, ld}, {ld, -ld, ld},
-		{-ld, ld, ld}, {-ld, -ld, ld}, {-ld, ld, -ld}, {-ld, -ld, -ld}
+		{ld, ld, ld}, {ld, -ld, ld}, {ld, ld, -ld}, {ld, -ld, -ld},
+		{-ld, ld, -ld}, {-ld, -ld, -ld}, {-ld, ld, ld}, {-ld, -ld, ld}
+
+		/*{ld, ld, -ld}, {ld, -ld, -ld}, {ld, ld, ld}, {ld, -ld, ld},
+		{-ld, ld, ld}, {-ld, -ld, ld}, {-ld, ld, -ld}, {-ld, -ld, -ld}*/
 	};
 
 	for (int i = 0; i < mesh->mNumVertices; i++) {
@@ -402,14 +405,22 @@ IndexMesh* IndexMesh::generaCuboConTapasIndexado(GLdouble l)
 
 	mesh->vIndices = new GLuint[mesh->mNumIndex]
 	{
-	0,1,2, 2,1,3,													
+	1,3,2, 2,0,1,													
+	3,5,4, 4,2,3,												
+	5,7,6, 6,4,5, 												
+	7,1,0, 0,6,7, 												
+	6,0,2, 2,4,6, 												
+	5,3,1, 1,7,5
+	
+	/*0,1,2, 2,1,3,													
 	2,3,4, 4,3,5,												
 	4,5,6, 6,5,7, 												
 	6,7,0, 0,7,1, 												
 	4,6,2, 2,6,0, 												
-	1,7,3, 3,7,5
+	1,7,3, 3,7,5*/
 	};
 
+	//		/!\ ESTÁN MAL /!\
 	//mesh->vNormals = {
 	//	glm::normalize(dvec3(1, 1, -1)),
 	//	glm::normalize(dvec3(1, -1, -1)),
