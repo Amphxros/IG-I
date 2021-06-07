@@ -251,9 +251,26 @@ void Scene::escenaLuces() {
 
 	TIEFormation* f = new TIEFormation();
 	gObjects.push_back(f);
-
 }
 
+
+void Scene::TIEsLightsOn()
+{
+	if (mId == 8)
+	{
+		//encender los focos de los tres TIE’s
+		static_cast<TIEFormation*>(gObjects.back())->turnLights(true);
+	}
+}
+
+void Scene::TIEsLightsOff()
+{
+	if (mId == 8)
+	{
+		//apagar los focos de los tres TIE’s
+		static_cast<TIEFormation*>(gObjects.back())->turnLights(false);
+	}
+}
 
 //-------------------------------------------------------------------------
 void Scene::free() 

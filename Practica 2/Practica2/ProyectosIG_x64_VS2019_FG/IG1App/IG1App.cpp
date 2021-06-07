@@ -309,6 +309,12 @@ void IG1App::key(unsigned char key, int x, int y)
 	case 'b':
 		mScene->rota();
 		break;
+	case 't':
+		mScene->TIEsLightsOn();
+		break;
+	case 'g':
+		mScene->TIEsLightsOff();
+		break;
 	default:
 		need_redisplay = false;
 		break;

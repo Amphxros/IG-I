@@ -54,6 +54,9 @@ public:
 	void enableSpotLight() { isSpotLightEnabled = true; }
 	void disableSpotLight() { isSpotLightEnabled = false; }
 
+	void TIEsLightsOn();
+	void TIEsLightsOff();
+
 
 protected:
 	void free();

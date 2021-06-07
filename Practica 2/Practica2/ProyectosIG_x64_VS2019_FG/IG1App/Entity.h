@@ -8,6 +8,7 @@
 #include "Mesh.h"
 
 #include "Texture.h"
+#include "Light.h";
 #include "Material.h"
 
 //-------------------------------------------------------------------------
@@ -52,7 +53,6 @@ public:
 
 class Poligono : public Abs_Entity
 {
-
 public:
 	explicit Poligono(GLdouble numL, GLdouble rd);
 	~Poligono(){ delete mMesh; }
@@ -255,18 +255,22 @@ public:
 
 class CompoundEntity : public Abs_Entity {
 public:
-	CompoundEntity() {} ;
+	CompoundEntity() : renderLights(true) {} ;
 	~CompoundEntity() { freeCEntity(); };
 
 	void addEntity(Abs_Entity* ae) { gObjectsCEntity.push_back(ae); };
 	void addEntityTranslucida(Abs_Entity* ae) { gObjectsTranslucidosCEntity.push_back(ae); };
-
+	void addLight(Light* l) { luces.push_back(l); }
 	void render(glm::dmat4 const& modelViewMat) const override;
+	void turnlights(bool on) { renderLights = on; };
 protected:
 	std::vector<Abs_Entity*> gObjectsCEntity;
 	std::vector<Abs_Entity*> gObjectsTranslucidosCEntity;
 	std::vector<Texture*> gTextureCEntity;
 	void freeCEntity();
+
+	std::vector<Light*> luces;
+	bool renderLights;
 };
 
 class TIE:
@@ -276,9 +280,23 @@ public:
 	virtual ~TIE() {};
 };
 
+class TIEFormation :
+	public CompoundEntity {
+public:
+	TIEFormation();
+	virtual ~TIEFormation() {};
+	void rota();
+	void orbita();
+	void turnLights(bool b);
+protected:
+	GLdouble rd_Orbita;
+	GLdouble rd_rotation;
+	
+	GLdouble angle_Orbita;
+	GLdouble angle_rotation;
+};
 
-
-/////////////////////////////////////////////////////////////////7
+/////////////////////////////////////////////////////////////////
 
 class EntityWithMaterial : public Abs_Entity {
 public:
@@ -318,26 +336,6 @@ public:
 	GridCube(GLdouble l, GLuint nDiv);
 	virtual ~GridCube() {}
 };
-
-
-class TIEFormation :
-	public CompoundEntity {
-public:
-	TIEFormation();
-	virtual ~TIEFormation() {};
-	void rota();
-	void orbita();
-protected:
-	GLdouble rd_Orbita;
-	GLdouble rd_rotation;
-	
-	GLdouble angle_Orbita;
-	GLdouble angle_rotation;
-
-
-
-};
-
 
 ////////////////////////////////////////////////////////////////////////
 

@@ -658,6 +658,12 @@ void CompoundEntity::render(glm::dmat4 const& modelViewMat) const
 
 	upload(aMat);
 
+	if(renderLights){
+		for(auto l : luces){
+			l->upload(modelViewMat);
+		}
+	}
+
 	//objetos no translucidos
 	for (Abs_Entity* ent : gObjectsCEntity) {
 		ent->render(aMat);
@@ -685,6 +691,10 @@ void CompoundEntity::freeCEntity()
 	for (auto t : gTextureCEntity) {
 		delete t;
 		t = nullptr;
+	}
+	for (auto l : luces) {
+		delete l;
+		l = nullptr;
 	}
 }
 
@@ -899,14 +909,51 @@ TIEFormation::TIEFormation()
 	cazaC->setModelMat(glm::rotate(cazaC->modelMat(), radians(15.0), dvec3(0, 0, 1)));
 	cazaC->setModelMat(glm::scale(cazaC->modelMat(), dvec3(0.3, 0.3, 0.3)));
 	addEntity(cazaC);
+
 	angle_Orbita = 180;
 	angle_rotation = 0;
-	rd_Orbita = 100;
+	rd_Orbita = 1000;
+
+	glm::fvec4 ambient, diffuse, specular;
+
+	SpotLight* a = new SpotLight(glm::fvec3(0.0f,-1.0f,0.0f),glm::radians(20.0f),20);
+	ambient = { 0, 0, 0, 1 };
+	diffuse = { 0.3, 0.3, 0.3, 1 };
+	specular = { 0.5, 1, 0.5, 1 };
+	a->setAmb(ambient);
+	a->setDiff(diffuse);
+	a->setSpec(specular);
+	cazaA->addLight(a);
+
+	SpotLight* b = new SpotLight(glm::fvec3(0.0f,-1.0f,0.0f),glm::radians(20.0f),20);
+	ambient = { 0, 0, 0, 1 };
+	diffuse = { 0.3, 0.3, 0.3, 1 };
+	specular = { 0.5, 1, 0.5, 1 };
+	b->setAmb(ambient);
+	b->setDiff(diffuse);
+	b->setSpec(specular);
+	cazaB->addLight(b);
+
+	SpotLight* c = new SpotLight(glm::fvec3(0.0f,-1.0f,0.0f),glm::radians(20.0f),20);
+	ambient = { 0, 0, 0, 1 };
+	diffuse = { 0.3, 0.3, 0.3, 1 };
+	specular = { 0.5, 1, 0.5, 1 };
+	c->setAmb(ambient);
+	c->setDiff(diffuse);
+	c->setSpec(specular);
+	
+	cazaC->addLight(c);
 }
 
 void TIEFormation::rota()
 {
-	
+	GLdouble x;
+	GLdouble y;
+	angle_rotation-=5;
+	for(auto &e:gObjectsCEntity ){
+		e->setModelMat(glm::translate(e->modelMat(), dvec3(0,0,0)));
+		e->setModelMat(glm::rotate(e->modelMat(), glm::radians(angle_rotation), dvec3(0, 1, 0)));
+	}
 }
 
 void TIEFormation::orbita()
@@ -914,7 +961,21 @@ void TIEFormation::orbita()
 	GLdouble x;
 	GLdouble y;
 	angle_Orbita += 5;
+
 	x = rd_Orbita * glm::cos(glm::radians(angle_Orbita));
 	y = rd_Orbita * glm::sin(glm::radians(angle_Orbita));
+
+	
 	setModelMat(glm::translate(mModelMat, dvec3(x, y, 0)));
+
+	for(auto &e: gObjectsCEntity){	
+			setModelMat(glm::rotate(e->modelMat(), glm::radians(angle_Orbita), dvec3(0,0,1)));
+	}
+}
+
+void TIEFormation::turnLights(bool b)
+{
+	for(auto& e: gObjectsCEntity){
+		static_cast<CompoundEntity*>(e)->turnlights(b);
+	}
 }
