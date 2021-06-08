@@ -246,10 +246,10 @@ void Scene::escenaLuces() {
 	Esfera* e = new Esfera(1000, 100, 100);
 	e->setMaterial(m);
 	e->setColor(dvec3(0.5, 0.65, 0.65)); //e->setColor(dvec3(0, 1, 1));
-	e->setModelMat(glm::translate(e->modelMat(), dvec3(0, -1200, 0)));
 	gObjects.push_back(e);
 
 	TIEFormation* f = new TIEFormation();
+	f->setModelMat(glm::translate(f->modelMat(), dvec3(0, 1300, 0)));
 	gObjects.push_back(f);
 }
 
@@ -379,6 +379,7 @@ void Scene::render(Camera const& cam) const
 		spotLight->disable();
 		glm::fvec4 amb = { 0.0, 0.0, 0.0, 1.0 };
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(amb));
+		
 		//glDisable(GL_LIGHTING);
 	}
 	cam.upload();

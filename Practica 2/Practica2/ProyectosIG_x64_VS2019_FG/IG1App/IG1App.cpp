@@ -261,6 +261,7 @@ void IG1App::key(unsigned char key, int x, int y)
 		if (m2Vistas && mCoord.x > mWinW / 2) {
 			mCameraB->set2D();
 			mSceneB->changeScene(8);
+			mCameraB->setScale(-30);
 		}
 		else{
 		mCamera->set2D();

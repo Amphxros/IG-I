@@ -263,6 +263,9 @@ public:
 	void addLight(Light* l) { luces.push_back(l); }
 	void render(glm::dmat4 const& modelViewMat) const override;
 	void turnlights(bool on) { renderLights = on; };
+	std::vector<Abs_Entity*> gEntities() { return gObjectsCEntity; }
+	std::vector<Abs_Entity*> gEntitiesT() { return gObjectsTranslucidosCEntity; }
+
 protected:
 	std::vector<Abs_Entity*> gObjectsCEntity;
 	std::vector<Abs_Entity*> gObjectsTranslucidosCEntity;
@@ -293,6 +296,7 @@ protected:
 	GLdouble rd_rotation;
 	
 	GLdouble angle_Orbita;
+	GLdouble angle_TIEs;
 	GLdouble angle_rotation;
 };
 
