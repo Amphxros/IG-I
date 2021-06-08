@@ -897,22 +897,24 @@ TIEFormation::TIEFormation()
 	CompoundEntity* cazas = new CompoundEntity();
 	addEntity(cazas);
 
+	CompoundEntity* cmp = new CompoundEntity();
+	cazas->addEntity(cmp);
 	TIE* cazaA = new TIE();
 	cazaA->setModelMat(glm::scale(cazaA->modelMat(), dvec3(0.3, 0.3, 0.3)));
 	cazaA->setModelMat(glm::translate(cazaA->modelMat(), dvec3(150, 0, 0)));
-	cazas->addEntity(cazaA);
+	cmp->addEntity(cazaA);
 
 	TIE* cazaB = new TIE();
 	cazaB->setModelMat(glm::translate(cazaB->modelMat(), dvec3(0, 0, 150)));
 	cazaB->setModelMat(glm::rotate(cazaB->modelMat(), radians(-5.0), dvec3(0, 0, 1)));
 	cazaB->setModelMat(glm::scale(cazaB->modelMat(), dvec3(0.3, 0.3, 0.3)));
-	cazas->addEntity(cazaB);
+	cmp->addEntity(cazaB);
 	
 	TIE* cazaC = new TIE();
 	cazaC->setModelMat(glm::translate(cazaC->modelMat(), dvec3(0, 0, -150)));
 	cazaC->setModelMat(glm::rotate(cazaC->modelMat(), radians(5.0), dvec3(0, 0, 1)));
 	cazaC->setModelMat(glm::scale(cazaC->modelMat(), dvec3(0.3, 0.3, 0.3)));
-	cazas->addEntity(cazaC);
+	cmp->addEntity(cazaC);
 
 	angle_Orbita = 0;
 	angle_rotation = 0;
@@ -952,8 +954,8 @@ TIEFormation::TIEFormation()
 void TIEFormation::rota()
 {
 	angle_rotation+=0.1;
-	for (auto& e : gObjectsCEntity) {
-		e->setModelMat(glm::rotate(e->modelMat(), glm::radians(angle_rotation), dvec3(1, 0, 0)));
+	for (auto& e : static_cast<CompoundEntity*>(gObjectsCEntity.back())->gEntities()) {
+		e->setModelMat(glm::rotate(e->modelMat(), glm::radians(angle_rotation), dvec3(0, 1, 0)));
 	}
 }
 
@@ -966,8 +968,10 @@ void TIEFormation::orbita()
 	x = rd_Orbita * glm::cos(glm::radians(angle_Orbita));
 	y = rd_Orbita * glm::sin(glm::radians(angle_Orbita));
 
+	for (auto& e : gObjectsCEntity) {
+		e->setModelMat(glm::rotate(dmat4(1.0), glm::radians(angle_Orbita), dvec3(0, 0, 1)));
+	}
 	setModelMat(glm::translate(mModelMat, dvec3(x, y, 0)));
-	//setModelMat(glm::rotate(dmat4(1.0), glm::radians(angle_Orbita), dvec3(0, 0, 1)));
 	
 }
 
