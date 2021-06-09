@@ -819,6 +819,7 @@ mMesh->render();
 Grid::Grid(GLdouble l, GLint nDiv)
 {
 	mMesh = IndexMesh::generateGridTex(l, nDiv);
+	static_cast<IndexMesh*>(mMesh)->buildNormalVectors();
 }
 
 void Grid::render(glm::dmat4 const& modelViewMat) const
@@ -830,14 +831,14 @@ void Grid::render(glm::dmat4 const& modelViewMat) const
 	//glColor3f(mColor.r, mColor.g, mColor.b);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	if (mTexture != nullptr) {
-		mTexture->bind(GL_REPLACE);
+		mTexture->bind(GL_MODULATE);
 	}
 	mMesh->render();
 
 	glColor3f(1, 1, 1);
 	if (mTexture != nullptr)
 		mTexture->unbind();
-	glDisable(GL_COLOR_MATERIAL);
+	//glDisable(GL_COLOR_MATERIAL);
 	
 	glColor3f(1,1, 1);
 }
@@ -855,6 +856,7 @@ GridCube::GridCube(GLdouble l, GLuint nDiv): CompoundEntity()
 
 
 	Grid* gAbajo = new Grid(l, nDiv);
+	
 	gAbajo->setTexture(texA);
 	gAbajo->setModelMat(rotate(dmat4(1.0), glm::radians(180.0), dvec3(0, 0, 1)));
 	addEntity(gAbajo);
@@ -890,6 +892,9 @@ GridCube::GridCube(GLdouble l, GLuint nDiv): CompoundEntity()
 	gXpos->setModelMat(translate(dmat4(1.0), dvec3(l / 2, l/2, 0)));
 	gXpos->setModelMat(rotate(gXpos->modelMat(), glm::radians(90.0), dvec3(0, 0, 1)));
 	addEntity(gXpos);
+
+
+
 }
 
 TIEFormation::TIEFormation()

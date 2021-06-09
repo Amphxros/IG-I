@@ -62,19 +62,20 @@ Scene::Scene(){
 
 	dirLight = new DirLight(fvec3(1, 1, 1));
 	ambient = { 0, 0, 0, 1 };
-	diffuse = { 1, 1, 1, 1 };
-	specular = { 0.5, 0.5, 0.5, 1 };
+	diffuse = { 0.5,0.5,0.5,1};
+	specular = { 0.05, 0.05, 0.05, 1 };
 	dirLight->setAmb(ambient);
 	dirLight->setDiff(diffuse);
 	dirLight->setSpec(specular);
 
-	posLight = new PosLight(fvec3(50, 50, 10));
+	posLight = new PosLight(fvec3(300, 300, 300));
 	ambient = { 0.0, 0.0, 0.0, 1 };
-	diffuse = { 0.2, 0.8, 0.2, 1 };
+	diffuse = { 0.2, 0.2, 0.2, 1 };
 	specular = { 0.5, 0.5, 0.5, 1 };
 	posLight->setAmb(ambient);
 	posLight->setDiff(diffuse);
 	posLight->setSpec(specular);
+	posLight->setAtte(0.5, 0.5, 0.5);
 
 	spotLight = new SpotLight(dvec3(0.0, 0.0, 1.0), 0.5, 3.0, fvec3(10, 50, 50));
 	ambient = { 0, 0, 0, 1 };
@@ -83,6 +84,7 @@ Scene::Scene(){
 	spotLight->setAmb(ambient);
 	spotLight->setDiff(diffuse);
 	spotLight->setSpec(specular);
+	spotLight->setAtte(0.5, 0.5, 0.5);
 }
 
 void Scene::init()
@@ -324,6 +326,7 @@ void Scene::setGL()
 	}
 	glEnable(GL_DEPTH_TEST);  // enable Depth test
 	glEnable(GL_TEXTURE_2D); // activar el uso de texturas
+	glEnable(GL_NORMALIZE); // evitar sobreexposición
 }
 //-------------------------------------------------------------------------
 void Scene::resetGL() 
@@ -331,6 +334,7 @@ void Scene::resetGL()
 	glClearColor(.0, .0, .0, .0);  // background color (alpha=1 -> opaque)
 	glDisable(GL_DEPTH_TEST);  // disable Depth test
 	glDisable(GL_TEXTURE_2D); // desactivar el uso de texturas
+	glDisable(GL_NORMALIZE); // evitar sobreexposición
 }
 //-------------------------------------------------------------------------
 
