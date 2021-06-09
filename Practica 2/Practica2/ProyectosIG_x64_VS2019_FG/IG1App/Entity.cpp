@@ -982,7 +982,10 @@ void TIEFormation::orbita()
 
 void TIEFormation::turnLights(bool b)
 {
-	for(auto& e: gObjectsCEntity){
+	auto container = static_cast<CompoundEntity*>(gObjectsCEntity.back())->gEntities();
+	auto cazas= static_cast<CompoundEntity*>(container.back())->gEntities();
+
+	for(auto& e: cazas){
 		static_cast<CompoundEntity*>(e)->turnlights(b);
 	}
 }

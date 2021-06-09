@@ -79,6 +79,7 @@ protected:
 	std::vector<Abs_Entity*> gObjectsTranslucidos;  // Entities (graphic objects) of the scene
 	bool can_update=true;
 
+	bool areTIELightsEnabled = false;
 	bool isDirLightEnabled = false;
 	bool isPosLightEnabled = false;
 	bool isSpotLightEnabled = false;

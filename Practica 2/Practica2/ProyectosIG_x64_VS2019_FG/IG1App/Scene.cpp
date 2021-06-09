@@ -60,31 +60,24 @@ Scene::Scene(){
 	//luces
 	glm::fvec4 ambient, diffuse, specular;
 
-	dirLight = new DirLight(fvec3(1, 1, 1));
-	ambient = { 0, 0, 0, 1 };
-	diffuse = { 0.5,0.5,0.5,1};
-	specular = { 0.05, 0.05, 0.05, 1 };
-	dirLight->setAmb(ambient);
-	dirLight->setDiff(diffuse);
-	dirLight->setSpec(specular);
+	dirLight = new DirLight(fvec3(1, 1, -1));
+	
+	posLight = new PosLight(fvec3(-300, 0, 300));
+	//ambient = { 0.0, 0.0, 0.0, 1 };
+	//diffuse = { 1, 2, 0, 1 };
+	//specular = { 0.5, 0.5, 1.5, 1 };
+	//posLight->setAmb(ambient);
+	//posLight->setDiff(diffuse);
+	//posLight->setSpec(specular);
 
-	posLight = new PosLight(fvec3(300, 300, 300));
-	ambient = { 0.0, 0.0, 0.0, 1 };
-	diffuse = { 0.2, 0.2, 0.2, 1 };
-	specular = { 0.5, 0.5, 0.5, 1 };
-	posLight->setAmb(ambient);
-	posLight->setDiff(diffuse);
-	posLight->setSpec(specular);
-	posLight->setAtte(0.5, 0.5, 0.5);
-
-	spotLight = new SpotLight(dvec3(0.0, 0.0, 1.0), 0.5, 3.0, fvec3(10, 50, 50));
-	ambient = { 0, 0, 0, 1 };
-	diffuse = { 0.3, 0.3, 0.3, 1 };
-	specular = { 0.5, 1, 0.5, 1 };
-	spotLight->setAmb(ambient);
-	spotLight->setDiff(diffuse);
-	spotLight->setSpec(specular);
-	spotLight->setAtte(0.5, 0.5, 0.5);
+	spotLight = new SpotLight(fvec3(-1,0,1), 2.5, 3.0, fvec3(-100, 0, 50));
+	//ambient = { 0, 0, 0, 1 };
+	//diffuse = { 0.3, 0.3, 0.3, 1 };
+	//specular = { 0.5, 1, 0.5, 0.5 };
+	//spotLight->setAmb(ambient);
+	//spotLight->setDiff(diffuse);
+	//spotLight->setSpec(specular);
+	//spotLight->setAtte(0.5, 0.5, 0.5);
 }
 
 void Scene::init()
@@ -260,6 +253,7 @@ void Scene::TIEsLightsOn()
 {
 	if (mId == 8)
 	{
+		areTIELightsEnabled = true;
 		//encender los focos de los tres TIE’s
 		static_cast<TIEFormation*>(gObjects.back())->turnLights(true);
 	}
@@ -269,6 +263,7 @@ void Scene::TIEsLightsOff()
 {
 	if (mId == 8)
 	{
+		areTIELightsEnabled = false;
 		//apagar los focos de los tres TIE’s
 		static_cast<TIEFormation*>(gObjects.back())->turnLights(false);
 	}
@@ -346,24 +341,26 @@ void Scene::render(Camera const& cam) const
 		// ¿Alguna luz de escena?
 		if (isDirLightEnabled || isPosLightEnabled || isSpotLightEnabled) {
 			glEnable(GL_LIGHTING);
-
+			
 			if (isDirLightEnabled) {		
 				dirLight->enable();
 				dirLight->upload(cam.viewMat());
 			}
 			else dirLight->disable();
+			
 
 			if (isPosLightEnabled) {
 				posLight->enable();
 				posLight->upload(cam.viewMat());
 			}
 			else posLight->disable();
-
+			
 			if (isSpotLightEnabled) {
 				spotLight->enable();
 				spotLight->upload(cam.viewMat());
 			}
 			else spotLight->disable();
+			
 
 			glMatrixMode(GL_MODELVIEW);
 			glLoadMatrixd(value_ptr(cam.viewMat()));
@@ -372,7 +369,7 @@ void Scene::render(Camera const& cam) const
 			dirLight->disable();
 			posLight->disable();
 			spotLight->disable();
-			//glDisable(GL_LIGHTING);
+			
 			glm::fvec4 amb = { 0.0, 0.0, 0.0, 1.0 };
 			glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(amb));
 		}
@@ -384,7 +381,7 @@ void Scene::render(Camera const& cam) const
 		glm::fvec4 amb = { 0.0, 0.0, 0.0, 1.0 };
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(amb));
 		
-		//glDisable(GL_LIGHTING);
+		glDisable(GL_LIGHTING);
 	}
 	cam.upload();
 
@@ -457,6 +454,7 @@ void Scene::disableAllLights()
 	disableDirLight();
 	disablePosLight();
 	disableSpotLight();
+
 	glm::fvec4 amb = { 0.0, 0.0, 0.0, 1.0 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(amb));
 }
