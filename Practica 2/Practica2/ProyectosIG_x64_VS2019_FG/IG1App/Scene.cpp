@@ -64,10 +64,10 @@ Scene::Scene(){
 	
 	posLight = new PosLight(fvec3(600, 600, 0));
 	//ambient = { 0.0, 0.0, 0.0, 1 };
-	//diffuse = { 1, 2, 0, 1 };
+	diffuse = { 1, 2, 1, 1 }; //necesarrio para el color verde
 	//specular = { 0.5, 0.5, 1.5, 1 };
 	//posLight->setAmb(ambient);
-	//posLight->setDiff(diffuse);
+	posLight->setDiff(diffuse);
 	//posLight->setSpec(specular);
 
 
@@ -158,7 +158,7 @@ void Scene::escena3D() {
 	gObjectsTranslucidos.push_back(c);
 
 	Foto* foto = new Foto(128, 70);
-	foto->setTexture(gTextures[6]);
+	foto->setTexture(gTextures[7]);
 	gObjects.push_back(foto);
 }
 
@@ -371,7 +371,7 @@ void Scene::render(Camera const& cam) const
 		glm::fvec4 amb = { 0.0, 0.0, 0.0, 1.0 };
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(amb));
 		
-		//glDisable(GL_LIGHTING);
+		glDisable(GL_LIGHTING);
 	}
 	cam.upload();
 
@@ -434,7 +434,7 @@ void Scene::changeScene(int id)
 void Scene::savePhoto(){
 	if(mId == 1){
 		gObjects.back()->update(); //para sobreescribir la textura de la foto
-		gTextures[6]->save("../BmpsP1/Photo.bmp"); //y guardar la foto
+		gTextures[7]->save("../BmpsP1/Photo.bmp"); //y guardar la foto
 		std::cout << "guardado";
 	}
 }
