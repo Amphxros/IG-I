@@ -43,16 +43,42 @@ public:
 	void disableAllLights();
 
 	DirLight* getDirLight() { return dirLight; }
-	void enableDirLight() { isDirLightEnabled = true; }
-	void disableDirLight() { isDirLightEnabled = false; }
+	void enableDirLight() {
+		isDirLightEnabled = true;
+		dirLight->enable();
+	}
+	void disableDirLight() { 
+
+		isDirLightEnabled = false;
+		dirLight->disable();
+	}
 
 	PosLight* getPosLight() { return posLight; }
-	void enablePosLight() { isPosLightEnabled = true; }
-	void disablePosLight() { isPosLightEnabled = false; }
+	void enablePosLight() {
+
+		isPosLightEnabled = true;
+		posLight->enable();
+	}
+	void disablePosLight(){ 
+
+		isPosLightEnabled = false;
+		posLight->disable();
+	}
 
 	SpotLight* getSpotLight() { return spotLight; }
-	void enableSpotLight() { isSpotLightEnabled = true; }
-	void disableSpotLight() { isSpotLightEnabled = false; }
+	void enableSpotLight()
+	{
+		isSpotLightEnabled = true;
+		spotLight->enable();
+	}
+	
+	void disableSpotLight() { 
+
+		isSpotLightEnabled = false;
+		spotLight->disable();
+	}
+
+	
 
 	void TIEsLightsOn();
 	void TIEsLightsOff();
@@ -79,7 +105,7 @@ protected:
 	std::vector<Abs_Entity*> gObjectsTranslucidos;  // Entities (graphic objects) of the scene
 	bool can_update=true;
 
-	bool areTIELightsEnabled = false;
+
 	bool isDirLightEnabled = false;
 	bool isPosLightEnabled = false;
 	bool isSpotLightEnabled = false;

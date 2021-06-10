@@ -70,7 +70,8 @@ Scene::Scene(){
 	//posLight->setDiff(diffuse);
 	//posLight->setSpec(specular);
 
-	spotLight = new SpotLight(fvec3(0,0,-1), 20, 5, fvec3(0, 0, 700));
+
+	spotLight= new SpotLight(fvec3(0,0,-1), 20, 5, fvec3(0, 0, 700));
 	//ambient = { 0, 0, 0, 1 };
 	//diffuse = { 0.3, 0.3, 0.3, 1 };
 	//specular = { 0.5, 1, 0.5, 0.5 };
@@ -238,21 +239,22 @@ void Scene::escenaLuces() {
 
 	Material* m = new Material();
 	m->setBrass();
-	Esfera* e = new Esfera(400, 100, 100);
+	Esfera* e = new Esfera(400, 500, 500);
 	e->setMaterial(m);
 	e->setColor(dvec3(0.5, 0.65, 0.65)); //e->setColor(dvec3(0, 1, 1));
 	gObjects.push_back(e);
 
-	TIEFormation* f = new TIEFormation(500);
+	TIEFormation* f = new TIEFormation(410);
 	gObjects.push_back(f);
 }
+
+
 
 
 void Scene::TIEsLightsOn()
 {
 	if (mId == 8)
 	{
-		areTIELightsEnabled = true;
 		//encender los focos de los tres TIE’s
 		static_cast<TIEFormation*>(gObjects.back())->turnLights(true);
 	}
@@ -262,7 +264,6 @@ void Scene::TIEsLightsOff()
 {
 	if (mId == 8)
 	{
-		areTIELightsEnabled = false;
 		//apagar los focos de los tres TIE’s
 		static_cast<TIEFormation*>(gObjects.back())->turnLights(false);
 	}
@@ -286,6 +287,11 @@ void Scene::free()
 	{
 		delete el;  el = nullptr;
 	}
+
+	delete dirLight;
+	delete posLight;
+	delete spotLight;
+
 	gObjects.clear();
 	gObjectsTranslucidos.clear();
 }
@@ -337,29 +343,15 @@ void Scene::render(Camera const& cam) const
 	//Luz
 	if (mId >= 2) {
 		// ¿Alguna luz de escena?
+
 		if (isDirLightEnabled || isPosLightEnabled || isSpotLightEnabled) {
 			glEnable(GL_LIGHTING);
 			
-			if (isDirLightEnabled) {		
-				dirLight->enable();
-				dirLight->upload(cam.viewMat());
-			}
-			else dirLight->disable();
-			
+			dirLight->upload(cam.viewMat());
+			posLight->upload(cam.viewMat());
+			spotLight->upload(cam.viewMat());
 
-			if (isPosLightEnabled) {
-				posLight->enable();
-				posLight->upload(cam.viewMat());
-			}
-			else posLight->disable();
 			
-			if (isSpotLightEnabled) {
-				spotLight->enable();
-				spotLight->upload(cam.viewMat());
-			}
-			else spotLight->disable();
-			
-
 			glMatrixMode(GL_MODELVIEW);
 			glLoadMatrixd(value_ptr(cam.viewMat()));
 		}
@@ -379,7 +371,7 @@ void Scene::render(Camera const& cam) const
 		glm::fvec4 amb = { 0.0, 0.0, 0.0, 1.0 };
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(amb));
 		
-		glDisable(GL_LIGHTING);
+		//glDisable(GL_LIGHTING);
 	}
 	cam.upload();
 

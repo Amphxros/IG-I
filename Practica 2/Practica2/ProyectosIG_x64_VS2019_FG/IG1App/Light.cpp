@@ -24,6 +24,7 @@ void Light::disable()
 {
 	if (id < GL_LIGHT0 + GL_MAX_LIGHTS) { 
 		glDisable(id);
+		//--cont;
 	}
 }
 

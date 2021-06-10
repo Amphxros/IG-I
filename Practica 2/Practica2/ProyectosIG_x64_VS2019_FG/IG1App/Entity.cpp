@@ -658,12 +658,9 @@ void CompoundEntity::render(glm::dmat4 const& modelViewMat) const
 
 	upload(aMat);
 
-	if(renderLights){
-		for(auto l : luces){
-			l->upload(modelViewMat);
-		}
+	for (auto& l : luces) {
+		l->upload(aMat);
 	}
-
 	//objetos no translucidos
 	for (Abs_Entity* ent : gObjectsCEntity) {
 		ent->render(aMat);
@@ -671,6 +668,22 @@ void CompoundEntity::render(glm::dmat4 const& modelViewMat) const
 	//renderizado objetos translucidos
 	for (Abs_Entity* entTrans : gObjectsTranslucidosCEntity) {
 		entTrans->render(aMat);
+	}
+}
+
+
+void CompoundEntity::enableLights()
+{
+	for (auto& l : luces) {
+		l->enable();
+	}
+}
+
+void CompoundEntity::disableLights()
+{
+
+	for (auto& l : luces) {
+		l->disable();
 	}
 }
 
@@ -693,6 +706,7 @@ void CompoundEntity::freeCEntity()
 		t = nullptr;
 	}
 	for (auto l : luces) {
+		l->disable();
 		delete l;
 		l = nullptr;
 	}
@@ -903,52 +917,28 @@ TIEFormation::TIEFormation(GLdouble rd): rd_Orbita(rd)
 	cmp->setModelMat(glm::translate(cmp->modelMat(),dvec3(0,rd_Orbita,0)));
 	cazas->addEntity(cmp);
 
-	TIE* cazaA = new TIE();
+	TIEIluminado* cazaA = new TIEIluminado();
+	cazaA->setModelMat(glm::translate(cazaA->modelMat(), dvec3(0, 0, 0)));
 	cazaA->setModelMat(glm::scale(cazaA->modelMat(), dvec3(0.1, 0.1, 0.1)));
-	cazaA->setModelMat(glm::translate(cazaA->modelMat(), dvec3(75, 0, 0)));
 	cmp->addEntity(cazaA);
 
-	TIE* cazaB = new TIE();
-	cazaB->setModelMat(glm::translate(cazaB->modelMat(), dvec3(0, 0, 75)));
-	cazaB->setModelMat(glm::rotate(cazaB->modelMat(), radians(-5.0), dvec3(0, 0, 1)));
+
+	TIEIluminado* cazaB = new
+		TIEIluminado();
+	cazaB->setModelMat(glm::translate(cazaB->modelMat(), dvec3(0, 0, -100)));
+	cazaB->setModelMat(glm::rotate(cazaB->modelMat(), radians(-5.0), dvec3(0, 1, 1)));
 	cazaB->setModelMat(glm::scale(cazaB->modelMat(), dvec3(0.1, 0.1, 0.1)));
 	cmp->addEntity(cazaB);
-	
-	TIE* cazaC = new TIE();
-	cazaC->setModelMat(glm::translate(cazaC->modelMat(), dvec3(0, 0, -75)));
-	cazaC->setModelMat(glm::rotate(cazaC->modelMat(), radians(5.0), dvec3(0, 0, 1)));
+
+
+	TIEIluminado* cazaC = new TIEIluminado();
+	cazaC->setModelMat(glm::translate(cazaC->modelMat(), dvec3(0, 0, 100)));
+	cazaC->setModelMat(glm::rotate(cazaC->modelMat(), radians(5.0), dvec3(0, 1, 1)));
 	cazaC->setModelMat(glm::scale(cazaC->modelMat(), dvec3(0.1, 0.1, 0.1)));
 	cmp->addEntity(cazaC);
 
 	glm::fvec4 ambient, diffuse, specular;
 
-	SpotLight* a = new SpotLight(glm::fvec3(0.0f,-1.0f,0.0f),glm::radians(20.0f),20,fvec3(0,-1,0));
-	ambient = { 0, 0, 0, 1 };
-	diffuse = { 0.3, 0.3, 0.3, 1 };
-	specular = { 0.5, 1, 0.5, 1 };
-	a->setAmb(ambient);
-	a->setDiff(diffuse);
-	a->setSpec(specular);
-	cazaA->addLight(a);
-
-	SpotLight* b = new SpotLight(glm::fvec3(0.0f,-1.0f,0.0f),glm::radians(20.0f),20, fvec3(0, -1, 0));
-	ambient = { 0, 0, 0, 1 };
-	diffuse = { 0.3, 0.3, 0.3, 1 };
-	specular = { 0.5, 1, 0.5, 1 };
-	b->setAmb(ambient);
-	b->setDiff(diffuse);
-	b->setSpec(specular);
-	cazaB->addLight(b);
-
-	SpotLight* c = new SpotLight(glm::fvec3(0.0f,-1.0f,0.0f),glm::radians(20.0f),20, fvec3(0, -1, 0));
-	ambient = { 0, 0, 0, 1 };
-	diffuse = { 0.3, 0.3, 0.3, 1 };
-	specular = { 0.5, 1, 0.5, 1 };
-	c->setAmb(ambient);
-	c->setDiff(diffuse);
-	c->setSpec(specular);
-	
-	cazaC->addLight(c);
 }
 
 void TIEFormation::rota()
@@ -975,9 +965,74 @@ void TIEFormation::orbita()
 void TIEFormation::turnLights(bool b)
 {
 	auto container = static_cast<CompoundEntity*>(gObjectsCEntity.back())->gEntities();
-	auto cazas= static_cast<CompoundEntity*>(container.back())->gEntities();
+	auto cazas = static_cast<CompoundEntity*>(container.back())->gEntities();
 
-	for(auto& e: cazas){
-		static_cast<CompoundEntity*>(e)->turnlights(b);
+	for (auto& e : cazas) {
+		if (b) {
+			static_cast<CompoundEntity*>(e)->enableLights();
+		}
+		else {
+			static_cast<CompoundEntity*>(e)->disableLights();
+		}
 	}
+}
+TIEIluminado::TIEIluminado()
+{
+	//textura que usamos
+	Texture* noche = new Texture();
+	noche->load("../BmpsP1/noche.bmp", 255 * 0.75);
+	gTextureCEntity.push_back(noche);
+
+	// Ala izda.
+	Disk* wingL = new Disk(0.0, 150.0, 6, 50);
+	wingL->setColor(dvec3(0.0, 0.25, 0.42));
+	wingL->setModelMat(glm::translate(wingL->modelMat(), dvec3(400, 300, 200)));
+	wingL->setModelMat(glm::rotate(wingL->modelMat(), radians(90.0), dvec3(0, 1, 0)));
+	wingL->setModelMat(glm::rotate(wingL->modelMat(), radians(90.0), dvec3(0, 0, 1)));
+	wingL->setModelMat(glm::scale(wingL->modelMat(), dvec3(1.75, 1.75, 1.0)));
+	wingL->setTexture(noche);
+	addEntityTranslucida(wingL);
+
+	// Ala dcha.
+	Disk* wingR = new Disk(0.0, 150.0, 6, 50);
+	wingR->setColor(dvec3(0.0, 0.25, 0.42));
+	wingR->setModelMat(glm::translate(wingR->modelMat(), dvec3(0, 300, 200)));
+	wingR->setModelMat(glm::rotate(wingR->modelMat(), radians(90.0), dvec3(0, 1, 0)));
+	wingR->setModelMat(glm::rotate(wingR->modelMat(), radians(90.0), dvec3(0, 0, 1)));
+	wingR->setModelMat(glm::scale(wingR->modelMat(), dvec3(1.75, 1.75, 1.0)));
+
+	wingR->setTexture(noche);
+	addEntityTranslucida(wingR);
+
+	// Núcleo
+	Sphere* core = new Sphere(100.0);
+	core->setColor(dvec3(0.0, 0.25, 0.42));
+	core->setModelMat(glm::translate(core->modelMat(), dvec3(200, 300, 200)));
+	addEntity(core);
+
+	// Eje
+	Cylinder* shaft = new Cylinder(25.0, 25.0, 400.0);
+	shaft->setColor(dvec3(0.0, 0.25, 0.42));
+	shaft->setModelMat(glm::translate(shaft->modelMat(), dvec3(0, 300, 200)));
+	shaft->setModelMat(glm::rotate(shaft->modelMat(), radians(90.0), dvec3(0, 1, 0)));
+	addEntity(shaft);
+
+	// Morro
+	CompoundEntity* front = new CompoundEntity();
+
+	Cylinder* frontCylinder = new Cylinder(60.0, 60.0, 20.0);
+	frontCylinder->setColor(dvec3(0.0, 0.25, 0.42));
+	frontCylinder->setModelMat(glm::translate(frontCylinder->modelMat(), dvec3(200, 300, 280)));
+	front->addEntity(frontCylinder);
+
+	Disk* frontRing = new Disk(0.0, 60.0);
+	frontRing->setColor(dvec3(0.0, 0.25, 0.42));
+	frontRing->setModelMat(glm::translate(frontRing->modelMat(), dvec3(200, 300, 300)));
+	front->addEntity(frontRing);
+
+	addEntity(front);
+
+	SpotLight* a = new SpotLight(fvec3(0, -1, 0), 20, 5, fvec3(0, 400, 0));
+	
+	addLight(a);
 }

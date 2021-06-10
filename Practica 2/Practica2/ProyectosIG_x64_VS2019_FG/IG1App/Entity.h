@@ -255,16 +255,20 @@ public:
 
 class CompoundEntity : public Abs_Entity {
 public:
-	CompoundEntity() : renderLights(true) {} ;
+	CompoundEntity() {} ;
 	~CompoundEntity() { freeCEntity(); };
 
 	void addEntity(Abs_Entity* ae) { gObjectsCEntity.push_back(ae); };
 	void addEntityTranslucida(Abs_Entity* ae) { gObjectsTranslucidosCEntity.push_back(ae); };
 	void addLight(Light* l) { luces.push_back(l); }
 	void render(glm::dmat4 const& modelViewMat) const override;
-	void turnlights(bool on) { renderLights = on; };
+
+	void enableLights();
+	void disableLights();
+
 	std::vector<Abs_Entity*> gEntities() { return gObjectsCEntity; }
 	std::vector<Abs_Entity*> gEntitiesT() { return gObjectsTranslucidosCEntity; }
+
 
 protected:
 	std::vector<Abs_Entity*> gObjectsCEntity;
@@ -273,7 +277,7 @@ protected:
 	void freeCEntity();
 
 	std::vector<Light*> luces;
-	bool renderLights;
+
 };
 
 class TIE:
@@ -281,6 +285,12 @@ class TIE:
 public:
 	TIE();
 	virtual ~TIE() {};
+};
+
+class TIEIluminado : public CompoundEntity {
+public:
+	TIEIluminado();
+	virtual ~TIEIluminado() {};
 };
 
 class TIEFormation :
@@ -291,6 +301,7 @@ public:
 	void rota();
 	void orbita();
 	void turnLights(bool b);
+	void uploadLights(glm::dmat4 const& modelViewMat);
 protected:
 	GLdouble rd_Orbita;
 	GLdouble rd_rotation;
