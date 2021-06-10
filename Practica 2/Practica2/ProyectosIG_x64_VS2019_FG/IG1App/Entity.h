@@ -286,7 +286,7 @@ public:
 class TIEFormation :
 	public CompoundEntity {
 public:
-	TIEFormation();
+	TIEFormation(GLdouble rd);
 	virtual ~TIEFormation() {};
 	void rota();
 	void orbita();

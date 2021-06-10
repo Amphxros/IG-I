@@ -9,7 +9,7 @@ Light::Light(): id(0)
 	if (cont < GL_MAX_LIGHTS) {
 		id = GL_LIGHT0 + cont;
 		++cont;
-		glEnable(id);
+		//glEnable(id); //recomendado por antonio
 	}
 }
 

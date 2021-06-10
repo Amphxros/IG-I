@@ -60,9 +60,9 @@ Scene::Scene(){
 	//luces
 	glm::fvec4 ambient, diffuse, specular;
 
-	dirLight = new DirLight(fvec3(1, 1, -1));
+	dirLight = new DirLight(fvec3(1, 1, 1));
 	
-	posLight = new PosLight(fvec3(-300, 0, 300));
+	posLight = new PosLight(fvec3(600, 600, 0));
 	//ambient = { 0.0, 0.0, 0.0, 1 };
 	//diffuse = { 1, 2, 0, 1 };
 	//specular = { 0.5, 0.5, 1.5, 1 };
@@ -70,7 +70,7 @@ Scene::Scene(){
 	//posLight->setDiff(diffuse);
 	//posLight->setSpec(specular);
 
-	spotLight = new SpotLight(fvec3(-1,0,1), 2.5, 3.0, fvec3(-100, 0, 50));
+	spotLight = new SpotLight(fvec3(0,0,-1), 20, 5, fvec3(0, 0, 700));
 	//ambient = { 0, 0, 0, 1 };
 	//diffuse = { 0.3, 0.3, 0.3, 1 };
 	//specular = { 0.5, 1, 0.5, 0.5 };
@@ -238,13 +238,12 @@ void Scene::escenaLuces() {
 
 	Material* m = new Material();
 	m->setBrass();
-	Esfera* e = new Esfera(1000, 100, 100);
+	Esfera* e = new Esfera(400, 100, 100);
 	e->setMaterial(m);
 	e->setColor(dvec3(0.5, 0.65, 0.65)); //e->setColor(dvec3(0, 1, 1));
 	gObjects.push_back(e);
 
-	TIEFormation* f = new TIEFormation();
-	f->setModelMat(glm::translate(f->modelMat(), dvec3(0, 1300, 0)));
+	TIEFormation* f = new TIEFormation(500);
 	gObjects.push_back(f);
 }
 
@@ -335,7 +334,6 @@ void Scene::resetGL()
 
 void Scene::render(Camera const& cam) const 
 {
-
 	//Luz
 	if (mId >= 2) {
 		// ¿Alguna luz de escena?

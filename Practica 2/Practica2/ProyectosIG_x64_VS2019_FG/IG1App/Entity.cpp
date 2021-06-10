@@ -548,7 +548,7 @@ void Disk::render(glm::dmat4 const& modelViewMat) const {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		gluQuadricTexture(q, GL_TRUE);
-		mTexture->bind(GL_REPLACE);
+		mTexture->bind(GL_MODULATE);
 	}
 	gluDisk(q, innerR_, outerR_, slices_, loops_);
 	// se debe recuperar el color:
@@ -892,42 +892,37 @@ GridCube::GridCube(GLdouble l, GLuint nDiv): CompoundEntity()
 	gXpos->setModelMat(translate(dmat4(1.0), dvec3(l / 2, l/2, 0)));
 	gXpos->setModelMat(rotate(gXpos->modelMat(), glm::radians(90.0), dvec3(0, 0, 1)));
 	addEntity(gXpos);
-
-
-
 }
 
-TIEFormation::TIEFormation()
+TIEFormation::TIEFormation(GLdouble rd): rd_Orbita(rd)
 {
 	CompoundEntity* cazas = new CompoundEntity();
 	addEntity(cazas);
 
 	CompoundEntity* cmp = new CompoundEntity();
+	cmp->setModelMat(glm::translate(cmp->modelMat(),dvec3(0,rd_Orbita,0)));
 	cazas->addEntity(cmp);
+
 	TIE* cazaA = new TIE();
-	cazaA->setModelMat(glm::scale(cazaA->modelMat(), dvec3(0.3, 0.3, 0.3)));
-	cazaA->setModelMat(glm::translate(cazaA->modelMat(), dvec3(150, 0, 0)));
+	cazaA->setModelMat(glm::scale(cazaA->modelMat(), dvec3(0.1, 0.1, 0.1)));
+	cazaA->setModelMat(glm::translate(cazaA->modelMat(), dvec3(75, 0, 0)));
 	cmp->addEntity(cazaA);
 
 	TIE* cazaB = new TIE();
-	cazaB->setModelMat(glm::translate(cazaB->modelMat(), dvec3(0, 0, 150)));
+	cazaB->setModelMat(glm::translate(cazaB->modelMat(), dvec3(0, 0, 75)));
 	cazaB->setModelMat(glm::rotate(cazaB->modelMat(), radians(-5.0), dvec3(0, 0, 1)));
-	cazaB->setModelMat(glm::scale(cazaB->modelMat(), dvec3(0.3, 0.3, 0.3)));
+	cazaB->setModelMat(glm::scale(cazaB->modelMat(), dvec3(0.1, 0.1, 0.1)));
 	cmp->addEntity(cazaB);
 	
 	TIE* cazaC = new TIE();
-	cazaC->setModelMat(glm::translate(cazaC->modelMat(), dvec3(0, 0, -150)));
+	cazaC->setModelMat(glm::translate(cazaC->modelMat(), dvec3(0, 0, -75)));
 	cazaC->setModelMat(glm::rotate(cazaC->modelMat(), radians(5.0), dvec3(0, 0, 1)));
-	cazaC->setModelMat(glm::scale(cazaC->modelMat(), dvec3(0.3, 0.3, 0.3)));
+	cazaC->setModelMat(glm::scale(cazaC->modelMat(), dvec3(0.1, 0.1, 0.1)));
 	cmp->addEntity(cazaC);
 
-	angle_Orbita = 0;
-	angle_rotation = 0;
-	rd_rotation = 0;
-	rd_Orbita = 25;
 	glm::fvec4 ambient, diffuse, specular;
 
-	SpotLight* a = new SpotLight(glm::fvec3(0.0f,-1.0f,0.0f),glm::radians(20.0f),20);
+	SpotLight* a = new SpotLight(glm::fvec3(0.0f,-1.0f,0.0f),glm::radians(20.0f),20,fvec3(0,-1,0));
 	ambient = { 0, 0, 0, 1 };
 	diffuse = { 0.3, 0.3, 0.3, 1 };
 	specular = { 0.5, 1, 0.5, 1 };
@@ -936,7 +931,7 @@ TIEFormation::TIEFormation()
 	a->setSpec(specular);
 	cazaA->addLight(a);
 
-	SpotLight* b = new SpotLight(glm::fvec3(0.0f,-1.0f,0.0f),glm::radians(20.0f),20);
+	SpotLight* b = new SpotLight(glm::fvec3(0.0f,-1.0f,0.0f),glm::radians(20.0f),20, fvec3(0, -1, 0));
 	ambient = { 0, 0, 0, 1 };
 	diffuse = { 0.3, 0.3, 0.3, 1 };
 	specular = { 0.5, 1, 0.5, 1 };
@@ -945,7 +940,7 @@ TIEFormation::TIEFormation()
 	b->setSpec(specular);
 	cazaB->addLight(b);
 
-	SpotLight* c = new SpotLight(glm::fvec3(0.0f,-1.0f,0.0f),glm::radians(20.0f),20);
+	SpotLight* c = new SpotLight(glm::fvec3(0.0f,-1.0f,0.0f),glm::radians(20.0f),20, fvec3(0, -1, 0));
 	ambient = { 0, 0, 0, 1 };
 	diffuse = { 0.3, 0.3, 0.3, 1 };
 	specular = { 0.5, 1, 0.5, 1 };
@@ -966,17 +961,14 @@ void TIEFormation::rota()
 
 void TIEFormation::orbita()
 {
-	GLdouble x;
-	GLdouble y;
-	angle_Orbita --;
-	rd_rotation++;
-	x = rd_Orbita * glm::cos(glm::radians(angle_Orbita));
-	y = rd_Orbita * glm::sin(glm::radians(angle_Orbita));
+	angle_Orbita+=0.1;
+
+	setModelMat(glm::rotate(mModelMat, radians(angle_Orbita), dvec3(0, 0, 1)));
 
 	for (auto& e : gObjectsCEntity) {
 		e->setModelMat(glm::rotate(dmat4(1.0), glm::radians(angle_Orbita), dvec3(0, 0, 1)));
 	}
-	setModelMat(glm::translate(mModelMat, dvec3(x, y, 0)));
+
 	
 }
 
